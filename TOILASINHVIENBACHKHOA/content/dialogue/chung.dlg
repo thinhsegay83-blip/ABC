@@ -1,0 +1,53 @@
+# Bước 7 — hội thoại mặc định của NPC (khi không có sự kiện @trigger interact nào khớp).
+# Giọng trung tính, câu ngắn. Tham khảo Stardew Valley / Kindergarten / Punch Club.
+
+== minh_chao_hoi
+minh: Ăn gì chưa? Tủ có mì gói, cứ lấy. [if flag.minh_trang_thai <= 1]
+minh: Mai mình có tiết sớm. Ngủ sớm thôi. [if flag.minh_trang_thai <= 1]
+minh: …Hả? À, mình hơi mệt. Làm thêm buổi tối ấy mà. [if flag.minh_trang_thai == 2]
+minh: Bạn đừng hỏi nữa. Mình ổn. [if flag.minh_trang_thai == 2 and rel.minh < 20]
+narrator: Minh không trả lời. Môi vẫn mấp máy theo một nhịp đều. [if flag.minh_trang_thai == 3]
+
+== ban_phong_chao
+narrator: Bạn cùng phòng đang đeo tai nghe, gật đầu chào.
+tuan: Nhà mình mới gửi mắm lên. Ăn cơm thì lấy. [if slot == TOI]
+khoa: Cà phê nhà trồng. Muốn uống thì pha. [if slot == DEM]
+
+== chu_quan_chao
+chu_quan: Ăn gì không? Hôm nay có cơm tấm.
+chu_quan: Sáng, Chiều phụ quán cơm: 120.000 đ một ca. Tối bưng cà phê: 100.000 đ, có tip. [if flag.lam_them_quan == 1]
+chu_quan: Làm vừa sức thôi. Đừng bỏ học. [if flag.lam_them_quan == 1]
+
+== k_chao
+k (cuoi): Chào em. Hôm nay em thế nào?
+k: Nhớ nhé: tuổi trẻ phải biết đầu tư vào chính mình. [if flag.gap_k == 1]
+~ set gap_k 1
+
+== tien_boi_chao
+tien_boi: Lại gặp em. Thư viện buổi tối là nơi yên nhất trường.
+tien_boi: Anh học năm mấy à? Bí mật. [if flag.nghe_truyen_thuyet == 1]
+
+== thu_khoa_chao
+thu_khoa: …Có việc gì không?
+thu_khoa: Nhớ công thức chưa đủ. Phải nhớ cả đơn vị.
+
+== giang_vien_chao
+giang_vien: Em có câu hỏi gì về bài hôm nay không?
+giang_vien: Về ôn lại phần đơn vị đo. Nhiều bạn sai chỗ đó.
+
+# --- Đi ăn vặt với Minh (E6) — buổi Tối, khi Minh còn bình thường ------------------
+== minh_ru_di_an
+@trigger interact minh
+@when slot == TOI and flag.minh_trang_thai <= 1 and flag.da_gop_quy == 1
+@daily
+@priority 1
+minh: Đói quá. Ra ngoài ăn vặt không? Mỗi người chừng 50.000 đ.
+* Đi -> minh_di_an [need money >= 50000 | Không đủ tiền]
+* Để hôm khác -> minh_khong_di
+
+== minh_di_an
+~ action di_choi minh
+minh (cuoi): Lâu lắm mới thấy vui thế này.
+
+== minh_khong_di
+minh: Ừ, hôm khác.

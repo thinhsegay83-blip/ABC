@@ -1,0 +1,69 @@
+# Bước 7 — Tuần 2: áp lực cơm áo. Vẫn đời thường; K. xuất hiện lần đầu.
+# Beat: tờ rơi (ngày 8), gặp K. (từ ngày 9, dự phòng ngày 13), truyền thuyết tiền bối (truyen_thuyet.dlg,
+# dự phòng ngày 21 ở tuan3.dlg), mẹ hỏi học phí (ngày 14 Tối), kết quả hạn học phí (ngày 15).
+
+== t2_to_roi_bang_tin
+@trigger day_start
+@when day == 8
+@once
+@required 8
+narrator: Bảng tin hành lang KTX có tờ rơi mới, màu vàng chói.
+narrator: "CLB TƯƠNG LAI VÀNG — Khởi nghiệp không cần vốn. Thu nhập 15–20 triệu/tháng."
+narrator: "Chỉ dành cho sinh viên có ý chí làm giàu. Liên hệ anh K."
+player: 15–20 triệu một tháng… cho sinh viên?
+~ set thay_to_roi 1
+
+== t2_gap_k
+@trigger interact k
+@when flag.gap_k == 0
+@priority 10
+~ set gap_k 1
+~ meet k
+k (cuoi): Em là tân sinh viên đúng không? Anh là K., năm trên.
+k: Anh thấy em hay đi làm quán cơm. Vất vả quá. [if flag.lam_them_quan == 1]
+k: Anh thấy em hay ngồi thư viện tới tối. Học nhiều mà túi vẫn rỗng, đúng không? [if flag.lam_them_quan == 0]
+k: Làm thuê thì cả đời làm thuê. Phải có mindset làm chủ.
+k: CLB bên anh dạy cách kiếm tiền thật. Network toàn người thành công.
+* Nghe cũng hay. Kể thêm đi anh -> t2_k_to_mo
+* Em bận lắm, để sau ạ -> t2_k_tu_choi
+* Vào CLB có phải đóng phí không anh? -> t2_k_hoi_phi
+
+== t2_k_to_mo
+~ k_involve 2
+k (cuoi): Đó, anh biết em khác mà. Tuần sau anh có việc này cho em.
+k: Mà chuyện này đừng kể với gia đình vội. Người lớn hay lo xa.
+
+== t2_k_tu_choi
+k: Không sao. Cơ hội không chờ ai đâu em.
+
+== t2_k_hoi_phi
+k: Gọi là "đầu tư vào chính mình" thôi. Ai thành công cũng phải bỏ vốn ban đầu.
+k: Em cứ đến buổi chia sẻ đã. Lúc đó em sẽ hiểu.
+player: (Không trả lời thẳng. Hỏi phí mà lại bảo "đến sẽ hiểu".)
+
+== t2_gap_k_du_phong
+@trigger day_start
+@when day >= 13 and flag.gap_k == 0
+@once
+narrator: Một đàn anh ăn mặc chỉn chu chặn bạn ở hành lang.
+~ goto t2_gap_k
+
+== t2_me_hoi_hoc_phi
+@trigger slot_start
+@when day == 14 and slot == TOI and flag.da_dong_hoc_phi == 0
+@once
+~ message me "Con đóng học phí chưa? Hạn là hết hôm nay đó con."
+
+== t2_tre_han
+@trigger day_start
+@when day == 15 and flag.hoc_phi_tre_han == 1
+@once
+~ message phong_dao_tao "Sinh viên chưa hoàn thành học phí HK1. Hạn gia hạn: hết Chủ Nhật tuần 4, kèm phí trễ hạn 500.000 đ."
+~ message me "Mẹ biết rồi. Con đừng lo quá. Cố từ từ, có gì nói mẹ."
+
+== t2_da_dong
+@trigger day_start
+@when flag.da_dong_hoc_phi == 1
+@once
+~ message me "Đóng học phí rồi hả con? Ba mẹ mừng lắm. Nhớ ăn uống đầy đủ nha."
+~ stat sanity 5

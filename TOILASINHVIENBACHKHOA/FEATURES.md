@@ -123,7 +123,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 |---|---|---|---|
 | F1 | Di chuyển góc nhìn từ trên xuống, va chạm, camera bám theo | MVP | [ĐX] |
 | F2 | Tương tác (đến gần, nhấn phím) | MVP | [ĐX] |
-| F3 | Chọn KTX Khu A hoặc Khu B lúc đầu game | MVP | [C1] |
+| F3 | ✅ Chọn KTX Khu A hoặc Khu B lúc đầu game (QĐ-7.1 = A: hai khu chỉ khác lời mô tả) | MVP | [C1] |
 | F4 | Khu vực MVP: phòng KTX, hành lang/cầu thang KTX, giảng đường, thư viện, quán làm thêm | MVP | [P][C1] |
 | F5 | Khu vực C1: hộp đêm, phòng hội thảo, nhà kho, đường hầm | C1 | [C1] |
 | F6 | Bản đồ có phiên bản ngày và đêm | MVP | [P] |
@@ -191,11 +191,11 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | J8 | ✅ Thông báo nhỏ (toast) | MVP | [ĐX] |
 | J9 | ✅ Tiện ích hội thoại: xem lại lịch sử, tua đoạn đã đọc, tự chạy chữ, chỉnh tốc độ chữ | MVP | [ĐX] |
 | J10 | ✅ Đặt tên nhân vật | MVP | [ĐX] |
-| J11 | Hướng dẫn chơi (tutorial) | MVP | [ĐX] |
+| J11 | ✅ Hướng dẫn chơi (tutorial) — 13 gợi ý, mỗi cái hiện 1 lần, tắt được trong Cài đặt | MVP | [ĐX] |
 | J12 | ✅ Menu debug: chỉnh chỉ số, nhảy ngày, bật/tắt cờ | MVP | [ĐX] |
 | J13 | ✅ Dữ liệu tách khỏi code (Godot Resource .tres: vật phẩm, hành động, NPC, sự kiện) | MVP | [ĐX] |
 | J14 | Màn hình Game Over / kết thúc / credits | C1 | [ĐX] |
-| J15 | Dòng tuyên bố hư cấu ở màn mở đầu | C1 | Đã chốt |
+| J15 | ✅ Dòng tuyên bố hư cấu ở màn mở đầu (làm luôn trong MVP — QĐ-7.2) | C1 | Đã chốt |
 | J16 | Hỗ trợ tay cầm, đổi phím | PH | [ĐX] |
 | J17 | Thành tựu Steam, lưu đám mây | PH | [ĐX] |
 | J18 | ✅ Chọn độ khó: Dễ / Khó / Cực khó (tiền ban đầu, tốc độ tụt chỉ số, lương) | MVP | [Bạn] |

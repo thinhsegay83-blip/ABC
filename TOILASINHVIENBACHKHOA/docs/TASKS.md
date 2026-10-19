@@ -13,7 +13,7 @@
 | 4 — Vòng lặp đời sinh viên (`BUOC_4.md`) | C1, C2, C3, D1, D6, D7, B2, B3, B4, B10 (+ hoàn thiện hậu quả A1–A3) | Bước 1–3 | Xong (logic + UI tạm; chờ bản đồ để gắn Interactable) | QĐ-4.1 → QĐ-4.7: dùng khuyến nghị |
 | 5 — NPC & sự kiện (`BUOC_5.md`) | E2, E3, E6, D3, D4, A8, H2, I1, I2 | Bước 1–4 | Xong (QĐ-5.1→5.3 theo khuyến nghị; sprite/anchor chờ bản đồ) | QĐ-5.1 → QĐ-5.3 |
 | 6 — Dị tượng (`BUOC_6.md`) | G1, G2, G3, G4 | Bước 1–5 | Xong (QĐ-6.1→6.3 theo khuyến nghị; cầu thang bản chữ, chờ bản đồ) | QĐ-6.1 → QĐ-6.3 |
-| 7 — Ghép nội dung tuần 1–4 (`BUOC_7.md`) | J11, F3 (+ J15), nội dung sự kiện/hội thoại tuần 1–4, màn "Còn tiếp…", chơi thử + cân bằng | Bước 1–6 | Chờ | QĐ-7.1 → QĐ-7.4 |
+| 7 — Ghép nội dung tuần 1–4 (`BUOC_7.md`) | J11, F3 (+ J15), nội dung sự kiện/hội thoại tuần 1–4, màn "Còn tiếp…", chơi thử + cân bằng | Bước 1–6 | **Xong — MVP sẵn sàng chơi thử** (bản menu chữ; QĐ-7.1 = A, QĐ-7.2→7.4 theo khuyến nghị) | QĐ-7.1 → QĐ-7.4 |
 
 - Thứ tự làm: tuần tự 2 → 7, mỗi bước dùng API của bước trước. Muốn rút ngắn thời gian: phần **logic thuần** của bước 3 (parser `.dlg`, điều kiện, runner, `PlayerName`) không phụ thuộc bước 2, có thể viết song song với bước 2.
 - Prompt bước 3–7 ghi tên API "dự kiến"; nếu `docs/ARCHITECTURE.md` thực tế khác thì AI code theo ARCHITECTURE.md và ghi chú chỗ lệch.
@@ -53,10 +53,10 @@ Chưa trả lời thì AI code dùng phương án **khuyến nghị** và ghi r�
 - [ ] **QĐ-6.3** Âm báo 25 Hz (loa laptop khó phát): âm tượng trưng nghe được + số Hz trên điện thoại + phụ đề / phát đúng 25 Hz. → **Khuyến nghị: âm tượng trưng.**
 
 ### Chặn bước 7
-- [ ] **QĐ-7.1** KTX Khu A/B khác nhau: chỉ trang trí / Khu B rẻ 250.000 nhưng đi xa −3 Thể lực mỗi chuyến / khác cả NPC (C1). → **Khuyến nghị: khác 1 thông số (phương án giữa).**
-- [ ] **QĐ-7.2** Dòng tuyên bố hư cấu (J15 = C1 nhưng đã chốt có ở màn mở đầu): làm luôn trong MVP / để C1. → **Khuyến nghị: làm luôn.**
-- [ ] **QĐ-7.3** Cao trào cầu thang: cố định Đêm ngày 28 / người chơi tự kích trong tuần 4 (hạn chót ngày 28). → **Khuyến nghị: cố định Đêm ngày 28.**
-- [ ] **QĐ-7.4** Sau "Còn tiếp…": về menu chính + giữ bản lưu kết thúc / chơi tự do tiếp. → **Khuyến nghị: về menu chính.**
+- [ ] **QĐ-7.1** KTX Khu A/B khác nhau: chỉ trang trí / Khu B rẻ 250.000 nhưng đi xa −3 Thể lực mỗi chuyến / khác cả NPC (C1). → **Khuyến nghị: khác 1 thông số (phương án giữa).** _Bước 7 tạm làm phương án đầu (chỉ khác lời mô tả, cùng giá) — **lệch khuyến nghị, chờ người dùng chốt**; đổi sang phương án giữa cần sửa phí KTX + Thể lực khi đi lại và chạy lại bot._
+- [x] **QĐ-7.2** Dòng tuyên bố hư cấu (J15 = C1 nhưng đã chốt có ở màn mở đầu): làm luôn trong MVP / để C1. → **Khuyến nghị: làm luôn.** _Đã làm luôn._
+- [x] **QĐ-7.3** Cao trào cầu thang: cố định Đêm ngày 28 / người chơi tự kích trong tuần 4 (hạn chót ngày 28). → **Khuyến nghị: cố định Đêm ngày 28.** _Đã làm: Đêm ngày 28, hoặc khi đi ngủ sớm từ Tối ngày 28; kiệt sức/ngất không tua qua mốc này._
+- [x] **QĐ-7.4** Sau "Còn tiếp…": về menu chính + giữ bản lưu kết thúc / chơi tự do tiếp. → **Khuyến nghị: về menu chính.** _Đã làm: ghi ô Tự lưu (cờ `mvp_hoan_thanh`), tải lại thì hiện lại tổng kết._
 
 ### Còn mở từ tài liệu gốc (không chặn MVP)
 - [ ] Ngày hạn học phí HK2 (BALANCE.md ghi [CẦN QUYẾT ĐỊNH]) — thuộc Chapter 2 (B13 = SAU).
@@ -96,6 +96,7 @@ AI code dùng các giá trị này (đặt trong `.tres`, ghi vào BALANCE.md m�
 | 13 | FEATURES "Godot 4 bản stable mới nhất" vs ARCHITECTURE "Godot 4.4+" | Tương thích; giữ "viết cho 4.4, chạy được bản mới hơn" |
 | 14 | Code bước 1 đã có thêm `Game.FONT_BOLD_PATH`, `TestCase.after_each/assert_almost_eq/json_round_trip` nhưng ARCHITECTURE.md chưa ghi | AI code bước 1 đang cập nhật ARCHITECTURE.md — chỉ cần nhớ đồng bộ |
 | 15 | Ghi chú nghiên cứu (`truyen_thuyet_di_tuong.md`) có nhiều ý mang màu kinh dị (bóng đè, "nghe gọi đủ họ tên thì đừng quay lại", hồn ma) — trái dòng "Tông truyện" | Các prompt bước 6–7 chỉ lấy ý hợp tông, có bảng "Được / Không được" và test quét từ cấm |
+| 16 | `tien_boi_truyen_thuyet` (bước 6) không giới hạn ngày → kể được từ ngày 1, trái STORY "truyền thuyết tiền bối kể ở tuần 2" và lịch BUOC_7 (ngày 10–12) — bot chơi thử phát hiện | Đã sửa ở bước 7: `@when day >= 10 and …`; dự phòng tin nhắn ngày 21 giữ nguyên |
 
 ---
 

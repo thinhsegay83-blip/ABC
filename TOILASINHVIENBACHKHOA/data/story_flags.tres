@@ -25,5 +25,9 @@ flags = {
 "gap_tien_boi": "1 = đã gặp tiền bối năm n",
 "radar_lan_dau": "1 = điện thoại nhiễu lần đầu (G1)",
 "hieu_vong_lap": "1 = trả lời đúng câu hỏi Vật lý trong cầu thang",
-"sys_cau_thang_da_vao": "Hệ thống: đã vào cầu thang vô tận ít nhất 1 lần"
+"sys_cau_thang_da_vao": "Hệ thống: đã vào cầu thang vô tận ít nhất 1 lần",
+"sys_me_goi": "Hệ thống: đã nghe cuộc gọi đầu tiên của mẹ",
+"sys_k_moi": "Hệ thống: K. đã mời phát tờ rơi",
+"sys_cao_trao": "Hệ thống: cao trào Đêm ngày 28 đã bắt đầu",
+"mvp_hoan_thanh": "1 = đã xong bản chơi thử MVP (màn Còn tiếp…)"
 }

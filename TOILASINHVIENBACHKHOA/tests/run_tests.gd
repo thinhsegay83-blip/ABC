@@ -17,7 +17,7 @@ func _run_all() -> void:
 	var failed: int = 0
 	for file_name: String in _list_test_files():
 		var script: GDScript = load(TEST_DIR + file_name) as GDScript
-		if script == null:
+		if script == null or not script.can_instantiate():
 			print("FAIL %s (không nạp được script)" % file_name)
 			failed += 1
 			continue

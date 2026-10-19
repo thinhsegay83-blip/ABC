@@ -18,7 +18,10 @@ const CONTACT_NAMES: Dictionary = {
 	"me": "Mẹ",
 	"nhom_lop": "Nhóm lớp",
 	"bql_ktx": "Ban quản lý KTX",
+	"phong_dao_tao": "Phòng Đào tạo",
 }
+## Cao trào Đêm ngày 28 (bước 7): việc tua giờ không được vượt qua mốc này.
+const CLIMAX_KEY: int = 28 * 4 + 3
 const AREA_IDS: Array[String] = ["ktx_room", "ktx_hallway", "lecture_hall", "library", "food_shop"]
 
 var npcs: Dictionary = {}  # id -> NpcData
@@ -51,6 +54,7 @@ func _ready() -> void:
 	Game.time_changed.connect(_on_time_changed)
 	DialogueSystem.dialogue_finished.connect(_on_dialogue_finished)
 	StudentLife.add_sleep_interrupter(_on_sleep)
+	StudentLife.sim.time_barriers.append(CLIMAX_KEY)
 	_register_dialogue_hooks()
 
 
@@ -60,16 +64,27 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
+	pump()
+
+
+## Chạy sự kiện kế tiếp trong hàng đợi (nếu được). Trả true nếu vừa bắt đầu một hội thoại.
+## _process gọi mỗi khung hình; bot chơi thử gọi trực tiếp.
+func pump() -> bool:
 	if not Game.has_active_game() or not _blockers.is_empty() or DialogueSystem.is_active():
-		return
+		return false
 	while not _queue.is_empty():
 		var node_id: String = _queue.pop_front()
 		if _start_event(node_id, true):
-			return
-	if _sleep_pending:
+			return true
+	if _sleep_pending and not AnomalyDirector.loop.active and not AnomalyDirector.pending_start:
 		_sleep_pending = false
-		if StudentLife.sim.is_sleep_interrupted():
+		if StudentLife.sim.is_sleep_interrupted() and Game.state.flags.get_flag("mvp_hoan_thanh") == 0:
 			StudentLife.complete_sleep()
+	return false
+
+
+func has_pending() -> bool:
+	return not _queue.is_empty()
 
 
 # --- API ------------------------------------------------------------------
@@ -114,6 +129,21 @@ func phone_call(contact_id: String) -> bool:
 	if events.is_empty():
 		return false
 	return _start_event(events[0], false)
+
+
+## @required <ngày>: beat bắt buộc chưa chạy mà đã quá hạn → chạy bù (bỏ qua trigger và @when).
+func overdue_required(day: int) -> Array[String]:
+	var result: Array[String] = []
+	if not Game.has_active_game():
+		return result
+	for node: Dictionary in _triggered_nodes():
+		var values: Array = (node["meta"] as Dictionary).get("required", [])
+		if values.is_empty():
+			continue
+		var node_id: String = str(node["id"])
+		if not Game.state.story.events_fired.has(node_id) and day > str(values[0]).to_int():
+			result.append(node_id)
+	return result
 
 
 func has_call_event(contact_id: String) -> bool:
@@ -191,7 +221,11 @@ func _start_event(node_id: String, recheck: bool) -> bool:
 	if not library.has_dialogue(node_id):
 		return false
 	var node: Dictionary = library.get_dialogue(node_id)
-	if recheck and not EventSelector.conditions_hold(node, Game.state, Game.state.story):
+	# Beat bắt buộc đã quá hạn: chạy bù, bỏ qua @when (nhưng chỉ chạy một lần).
+	var required: Array = (node["meta"] as Dictionary).get("required", [])
+	var overdue: bool = not required.is_empty() and not Game.state.story.events_fired.has(node_id) \
+			and Game.state.clock.day > str(required[0]).to_int()
+	if recheck and not overdue and not EventSelector.conditions_hold(node, Game.state, Game.state.story):
 		return false
 	Game.state.story.events_fired[node_id] = Game.state.clock.day
 	_running_event = node_id
@@ -211,12 +245,19 @@ func _on_state_replaced() -> void:
 	_blockers.clear()
 	_sleep_pending = false
 	_running_event = ""
+	current_place = "ktx_room"
 	_bind_flags()
 	refresh_quests()
+	# Ván mới: chạy sự kiện day_start của ngày 1 (không có signal new_day cho ngày đầu).
+	var state: GameState = Game.state
+	if state != null and state.clock.day == 1 and state.clock.slot == GameClock.Slot.MORNING \
+			and state.story.events_fired.is_empty():
+		_enqueue(select("day_start"))
 
 
-func _on_new_day(_day: int) -> void:
+func _on_new_day(day: int) -> void:
 	_enqueue(select("day_start"))
+	_enqueue(overdue_required(day))
 	refresh_quests()
 
 

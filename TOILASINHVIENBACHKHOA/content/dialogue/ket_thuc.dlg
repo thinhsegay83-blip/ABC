@@ -1,0 +1,16 @@
+# Bước 7 — cảnh kết sau khi thoát cầu thang + màn "Còn tiếp…".
+# Hứa ít, trả đúng: nhắc lại canh_bao_minh, hieu_vong_lap, nhan_viec_to_roi, da_gop_quy.
+
+== t4_thoat_cau_thang
+@trigger flag_set thoat_cau_thang
+@once
+narrator: Ở chiếu nghỉ thật, Minh ngồi tựa tường, ngủ gục. Tay cầm một tờ rơi vàng, nhàu nát.
+minh: …Bạn nói đúng… CLB đó… [if flag.canh_bao_minh == 1]
+narrator: Minh mơ màng nắm lấy tay bạn. [if flag.canh_bao_minh == 1]
+narrator: Minh không tỉnh. Bạn dìu Minh về phòng. [if flag.canh_bao_minh == 0]
+player: Giải bằng Vật lý. Thầy mà biết chắc cười. [if flag.hieu_vong_lap == 1]
+narrator: Trên tờ rơi, dòng chữ "Rủ càng đông, thu nhập càng khủng" đã nhòe. [if flag.nhan_viec_to_roi == 1]
+narrator: Tuấn và Khoa vẫn ngủ say. Quạt trần vẫn kêu đều.
+narrator: Ngoài cửa sổ, trời bắt đầu sáng.
+~ set mvp_hoan_thanh 1
+~ emit to_be_continued

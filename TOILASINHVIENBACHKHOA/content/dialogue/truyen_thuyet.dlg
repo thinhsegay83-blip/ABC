@@ -4,7 +4,7 @@
 
 == tien_boi_truyen_thuyet
 @trigger interact tien_boi
-@when flag.nghe_truyen_thuyet == 0
+@when day >= 10 and flag.nghe_truyen_thuyet == 0
 @priority 5
 ~ quest start q_truyen_thuyet
 ~ set gap_tien_boi 1

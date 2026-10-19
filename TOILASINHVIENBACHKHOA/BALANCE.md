@@ -99,4 +99,26 @@ Cực khó  không                 15.813.200          -686.800            0
 Cực khó  có                    21.021.700        +4.521.700          100
 ```
 
-Nhận xét [CẦN QUYẾT ĐỊNH]: ở **Cực khó**, không nhận việc của K. thì tới ngày 28 vẫn **thiếu ~690.000 đ** — người chơi gần như bị ép vào việc của K. (đúng chủ đề cám dỗ, nhưng có thể thấy bất công). Nhận việc K. 2 ca/ngày thì Mức dính líu chạm 100 chỉ sau ~5 ngày. Chưa đổi số đã chốt; chờ người dùng chọn có giữ hay nới.
+Nhận xét: ở **Cực khó**, không nhận việc của K. thì tới ngày 28 vẫn **thiếu ~690.000 đ** — người chơi gần như bị ép vào việc của K. (đúng chủ đề cám dỗ, nhưng có thể thấy bất công). Nhận việc K. 2 ca/ngày thì Mức dính líu chạm 100 chỉ sau ~5 ngày. **Đã chốt: giữ nguyên** — Cực khó cố ý đẩy người chơi đối mặt lời dụ của K. (ghi rõ trong mô tả chế độ).
+
+## Dòng tiền 28 ngày (MVP) — bot chơi thử bằng logic game thật (bước 7)
+
+Thay cho việc mở rộng `tools/sim_cashflow.py`: bot `tests/mvp_bot.gd` chơi trọn ván bằng chính code game (TKB thật, Thể lực, đói, ngất, nội dung thoại thật), seed cố định. In ra khi chạy `tests/run_tests.gd`.
+
+Chiến lược: **Chăm học** = đủ tiết, tự học, 1 ca Tối/ngày tới khi đóng học phí, từ chối K., cảnh báo Minh. **Chăm làm** = đủ tiết, 2 ca/ngày, ăn mì gói, từ chối K. **Theo K.** = như Chăm làm nhưng nhận việc tờ rơi từ tuần 3 (ưu tiên tờ rơi), không cảnh báo Minh. Mọi chiến lược góp quỹ phòng 200.000 và đóng học phí khi đủ tiền + 100.000 dự phòng.
+
+| Chiến lược | Chế độ | Tiền cuối ngày 28 | Học phí | Trí tuệ | Dính líu K. |
+|---|---|---:|---|---:|---:|
+| Chăm học | Dễ | 101.000 | trễ hạn (gia hạn) | 100 | 0 |
+| Chăm học | Khó | 15.820.000 | CHƯA đóng | 100 | 0 |
+| Chăm học | Cực khó | 13.405.000 | CHƯA đóng | 100 | 0 |
+| Chăm làm | Dễ | 2.914.000 | đúng hạn | 67 | 0 |
+| Chăm làm | Khó | 1.926.000 | trễ hạn (gia hạn) | 62 | 0 |
+| Chăm làm | Cực khó | 15.396.000 | CHƯA đóng | 64 | 0 |
+| Theo K. | Dễ | 8.563.000 | đúng hạn | 67 | 100 |
+| Theo K. | Khó | 7.997.000 | trễ hạn (gia hạn) | 62 | 100 |
+| Theo K. | Cực khó | 3.885.000 | trễ hạn (gia hạn) | 64 | 100 |
+
+Không ván nào ngất hay kiệt sức tinh thần. Cả 9 ván tới màn "Còn tiếp…" ở Đêm ngày 28.
+
+Nhận xét — **khớp ý đồ**, test `test_playthrough_mvp.gd` khóa lại 4 điểm: Dễ + Chăm làm đóng kịp hạn chính; Khó + Chăm làm hụt hạn chính nhưng đóng được khi gia hạn; Cực khó + Chăm làm không đóng nổi tới ngày 28 (thiếu ~1,1 triệu, bot kém tối ưu hơn mô phỏng Python ~690.000); Cực khó + Theo K. đóng được trong gia hạn. Chăm học chỉ đóng nổi ở Dễ (trong gia hạn) — học nhiều thì thiếu tiền, đúng chủ đề. Không đổi giá.

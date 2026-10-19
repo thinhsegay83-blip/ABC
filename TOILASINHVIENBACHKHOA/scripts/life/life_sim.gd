@@ -24,6 +24,10 @@ var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## Trả true = có sự kiện; giấc ngủ dừng ở khung Đêm, sự kiện xong thì gọi complete_sleep().
 var sleep_interrupters: Array[Callable] = []
 
+## Mốc khung giờ (day * 4 + slot) mà việc tua giờ (kiệt sức ngủ li bì) không được vượt qua
+## — vd. cao trào Đêm ngày 28 (bước 7).
+var time_barriers: Array[int] = []
+
 var _collapsing: bool = false
 var _sleep_from_slot: int = -1
 
@@ -429,6 +433,8 @@ func check_collapse() -> bool:
 		var target_day: int = state.clock.day + 2
 		var guard: int = 0
 		while not (state.clock.day == target_day and state.clock.slot == GameClock.Slot.MORNING):
+			if time_barriers.has(current_key()):
+				break  # không tua qua mốc cốt truyện bắt buộc
 			advance_slot.call()
 			guard += 1
 			if guard > SLOTS_PER_DAY * 3:

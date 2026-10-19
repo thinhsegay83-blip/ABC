@@ -18,10 +18,15 @@ func _init(difficulty_id: String = "hard", schedule_seed: int = 12345) -> void:
 	state.setup_new_game(load("res://data/difficulty_%s.tres" % difficulty_id) as DifficultyConfig)
 	decay = load("res://data/time_decay.tres") as TimeDecayConfig
 	var catalog: LifeCatalog = LifeCatalogScript.load_default()
-	sim = LifeSimScript.new(catalog, func() -> void: state.advance_time(decay))
+	# Lambda chỉ bắt biến cục bộ (không bắt self) để fixture ↔ sim không thành vòng tham chiếu (rò rỉ).
+	var game_state: GameState = state
+	var time_decay: TimeDecayConfig = decay
+	var log_messages: Array[String] = messages
+	var log_summaries: Array[Dictionary] = summaries
+	sim = LifeSimScript.new(catalog, func() -> void: game_state.advance_time(time_decay))
 	sim.rng.seed = 7
-	sim.message_posted.connect(func(text: String) -> void: messages.append(text))
-	sim.day_summary_ready.connect(func(s: Dictionary) -> void: summaries.append(s))
+	sim.message_posted.connect(func(text: String) -> void: log_messages.append(text))
+	sim.day_summary_ready.connect(func(s: Dictionary) -> void: log_summaries.append(s))
 	sim.state = state
 	sim.start_new_life(schedule_seed)
 	sim.attach_clock(state.clock)

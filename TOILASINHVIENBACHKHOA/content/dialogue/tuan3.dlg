@@ -1,0 +1,91 @@
+# Bước 7 — Tuần 3: cám dỗ. Dị tượng bắt đầu, rất nhẹ.
+# Beat: K. mời phát tờ rơi (từ ngày 15, dự phòng ngày 17), Minh thâm quầng (ngày 16),
+# radar lần đầu (khi điện thoại nhiễu, dự phòng ngày 19), đêm ngày 18 (g4_dem_tuan3.dlg),
+# K. giao chỉ tiêu / Minh lảng tránh (ngày 20–21), dự phòng truyền thuyết (ngày 21).
+
+== t3_k_moi_to_roi
+@trigger interact k
+@when day >= 15 and flag.nhan_viec_to_roi == 0 and flag.sys_k_moi == 0
+@priority 10
+~ goto t3_k_loi_moi
+
+== t3_k_moi_du_phong
+@trigger day_start
+@when day >= 17 and flag.sys_k_moi == 0
+@once
+narrator: Sáng nay K. đứng chờ sẵn ở sảnh giảng đường.
+~ goto t3_k_loi_moi
+
+== t3_k_loi_moi
+~ set sys_k_moi 1
+~ set gap_k 1
+~ meet k
+k (cuoi): Em! Anh có việc cho em đây.
+k: Phát tờ rơi cho CLB. 350.000 đ một ca. Nhẹ hơn bưng bê nhiều.
+k: Làm tốt thì vào CLB. Ở đó thu nhập tính theo số người em rủ được.
+k: Rủ càng đông, thu nhập càng khủng.
+k: À, chuyện này đừng kể với gia đình vội.
+* Nhận việc -> t3_k_nhan
+* Từ chối -> t3_k_tu_choi
+
+== t3_k_nhan
+~ set nhan_viec_to_roi 1
+~ k_involve 5
+~ give xap_to_roi
+k (cuoi): Tốt lắm. Đứng ở sảnh giảng đường, ai đi qua thì phát.
+narrator: Phát tờ rơi tính là một ca làm thêm. Một ngày vẫn tối đa hai ca.
+
+== t3_k_tu_choi
+k: Không sao. Cửa luôn mở với em.
+
+== t3_minh_tham_quang
+@trigger day_start
+@when day == 16
+@once
+@required 16
+~ set minh_trang_thai 2
+narrator: Minh ngồi dậy muộn. Hai mắt thâm quầng.
+player: Tối qua bạn về lúc mấy giờ vậy?
+minh: Mình làm thêm buổi tối. Ổn mà.
+narrator: Trên bàn Minh có một tờ giấy vàng chói, gấp làm tư.
+
+== t3_radar_lan_dau
+@trigger flag_set radar_lan_dau
+@once
+narrator: Điện thoại bỗng mất sóng, rồi có lại. Vạch sóng nhảy loạn.
+player: Chắc tại mạng KTX.
+
+== t3_radar_du_phong
+@trigger day_start
+@when day >= 19 and flag.radar_lan_dau == 0
+@once
+~ set radar_lan_dau 1
+
+== t3_k_chi_tieu
+@trigger interact k
+@when day >= 20 and flag.nhan_viec_to_roi == 1
+@once
+@priority 11
+k (cuoi): Em làm tốt lắm. Anh nói với mọi người rồi.
+k: Tuần sau em thử dẫn thêm hai bạn tới buổi chia sẻ nhé.
+k: Đó là bước đầu để lên thành viên chính thức.
+player: (Thu nhập "từ việc rủ thêm người". Lại nữa.)
+
+== t3_minh_lang_tranh
+@trigger interact minh
+@when day >= 20 and flag.minh_trang_thai == 2
+@daily
+@priority 4
+player: Minh, CLB của anh K. là gì vậy?
+minh: …Không có gì đâu. Học kỹ năng thôi.
+minh: Bạn đừng nói với Tuấn với Khoa nhé.
+
+== t3_truyen_thuyet_du_phong
+@trigger day_start
+@when day >= 21 and flag.nghe_truyen_thuyet == 0
+@once
+~ message tien_boi "Em ơi, anh kể chuyện này cho vui. Cầu thang KTX lúc khuya có khi đi mãi không tới tầng."
+~ message tien_boi "Lỡ gặp thì nhìn chiếu nghỉ cho kỹ. Thấy khác lúc nãy thì đi xuống, y như cũ thì đi lên. Đúng liền bốn lần là ra."
+~ message tien_boi "Nghe tiếng ù nữa: giếng cầu thang như cái ống bịt một đầu. Tầng cao 3,43 mét, biển kỹ thuật có ghi."
+~ set nghe_truyen_thuyet 1
+~ quest done q_truyen_thuyet

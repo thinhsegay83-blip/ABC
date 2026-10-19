@@ -29,6 +29,8 @@ var skip_unread: bool = false
 var reduce_screen_noise: bool = false
 ## Bước 6: phụ đề cho âm thanh dị tượng.
 var audio_subtitles: bool = true
+## Bước 7: hiện bảng hướng dẫn chơi.
+var show_tutorial: bool = true
 
 
 func _ready() -> void:
@@ -57,6 +59,7 @@ func load_settings() -> void:
 	skip_unread = _read_bool(config, SECTION_DIALOGUE, "skip_unread", skip_unread)
 	reduce_screen_noise = _read_bool(config, SECTION_ACCESS, "reduce_screen_noise", reduce_screen_noise)
 	audio_subtitles = _read_bool(config, SECTION_ACCESS, "audio_subtitles", audio_subtitles)
+	show_tutorial = _read_bool(config, SECTION_ACCESS, "show_tutorial", show_tutorial)
 
 
 func save_settings() -> void:
@@ -70,6 +73,7 @@ func save_settings() -> void:
 	config.set_value(SECTION_DIALOGUE, "skip_unread", skip_unread)
 	config.set_value(SECTION_ACCESS, "reduce_screen_noise", reduce_screen_noise)
 	config.set_value(SECTION_ACCESS, "audio_subtitles", audio_subtitles)
+	config.set_value(SECTION_ACCESS, "show_tutorial", show_tutorial)
 	var err: Error = config.save(SETTINGS_PATH)
 	if err != OK:
 		push_warning("Settings: không lưu được %s (%s)" % [SETTINGS_PATH, error_string(err)])

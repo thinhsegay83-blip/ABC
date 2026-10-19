@@ -13,6 +13,9 @@ func _ready() -> void:
 	if not Game.has_active_game():
 		Game.new_game(FALLBACK_DIFFICULTY_ID)
 	_hint_label.text = _build_hint()
+	# Tải bản lưu kết thúc MVP → hiện lại màn tổng kết.
+	if Game.state.flags.get_flag("mvp_hoan_thanh") == 1:
+		get_tree().call_group.call_deferred(&"ending", &"show_summary", false)
 
 
 static func _build_hint() -> String:

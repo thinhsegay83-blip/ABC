@@ -33,6 +33,8 @@ var hum_hz: float = 0.0
 var in_zone: bool = false
 ## Đã hỏi câu Vật lý trong lần vào vòng lặp này chưa.
 var question_asked: bool = false
+## Lệnh "~ stair_loop start" chạy giữa hội thoại → chờ hội thoại xong mới vào vòng lặp.
+var pending_start: bool = false
 
 var _drain: DrainCounter = DrainCounter.new(1, 5.0, 10)
 var _update_timer: float = 0.0
@@ -170,6 +172,17 @@ func begin_stair_loop() -> void:
 		Game.state.flags.set_flag(LOOP_FLAG, 1)
 		DialogueSystem.start("cau_thang_bat_dau")
 	stair_landing_changed.emit(loop.landing_index)
+
+
+## Vào vòng lặp nếu có lệnh đang chờ và không còn hội thoại nào chạy.
+func start_pending() -> void:
+	if not pending_start:
+		return
+	if DialogueSystem.is_active():
+		start_pending.call_deferred()  # thử lại khung hình sau
+		return
+	pending_start = false
+	begin_stair_loop()
 
 
 ## "up"/"down". Trả "correct" / "wrong" / "escaped".
@@ -348,6 +361,7 @@ func _update_overlay(bar_count: int) -> void:
 
 
 func _on_state_replaced() -> void:
+	pending_start = false
 	abort_loop()
 	SaveGate.clear()
 	bars = 0
@@ -362,7 +376,8 @@ func _register_dialogue_hooks() -> void:
 	DialogueSystem.register_command("stair_loop", func(args: PackedStringArray, _state: GameState) -> void:
 		var mode: String = args[0] if not args.is_empty() else "start"
 		if mode == "start":
-			begin_stair_loop.call_deferred()
+			pending_start = true
+			start_pending.call_deferred()
 		elif mode == "escape":
 			abort_loop()
 	)

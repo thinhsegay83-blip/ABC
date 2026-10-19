@@ -1,0 +1,88 @@
+# Bước 7 — Tuần 4: dị tượng đầu tiên. Bí ẩn nhẹ, Minh là nạn nhân, không đáng sợ.
+# Beat: Minh úp mặt vào tường (từ ngày 23 Tối), cảnh báo Minh (lựa chọn), K. ép nâng cấp (từ ngày 24),
+# cao trào Đêm ngày 28 → cầu thang vô tận (cau_thang.dlg).
+
+== t4_minh_up_mat
+@trigger slot_start
+@when day >= 23 and slot >= TOI and flag.minh_trang_thai == 2
+@once
+@required 24
+~ set minh_trang_thai 3
+narrator: Hành lang KTX. Minh đứng sát tường, quay lưng lại.
+minh: …đạo hàm của thành công theo thời gian… đầu tư vào chính mình…
+narrator: Điện thoại rung nhẹ. Có tiếng ù rất trầm.
+player: Minh?
+narrator: Minh không quay lại. Môi vẫn mấp máy theo một nhịp đều.
+
+== t4_canh_bao_minh
+@trigger interact minh
+@when flag.minh_trang_thai == 3 and flag.canh_bao_minh == 0
+@priority 6
+player: Minh. Minh ơi.
+minh: …Hả? Mình đứng đây lâu chưa?
+player: Lâu rồi. Dạo này bạn lạ lắm.
+* Nói thẳng về CLB của K. -> t4_canh_bao_noi
+* Để Minh nghỉ -> t4_canh_bao_thoi
+
+== t4_canh_bao_noi
+player: CLB đó bắt đóng phí, rồi bảo rủ thêm người mới có tiền. Việc thật đâu có vậy.
+player: Đừng vay tiền để đóng. Nói với ba mẹ, hoặc lên phòng công tác sinh viên hỏi thử.
+minh: …Mình đóng rồi. Hai triệu rưỡi.
+minh: Mình sợ ba mẹ biết.
+player: Có gì mình đi cùng bạn.
+~ set canh_bao_minh 1
+~ rel minh 5
+narrator: Minh không nói gì nữa. Nhưng lần đầu tiên sau nhiều ngày, Minh nhìn thẳng vào bạn.
+
+== t4_canh_bao_thoi
+player: Thôi, bạn đi ngủ đi.
+narrator: Minh gật đầu, nhưng vẫn đứng yên.
+
+== t4_k_ep
+@trigger interact k
+@when day >= 24 and flag.nhan_viec_to_roi == 1
+@once
+@priority 12
+k (cuoi): Em ơi, tới lúc nâng cấp rồi. Thành viên chính thức: 2.500.000 đ.
+k: Hoàn vốn sau hai tháng thôi. Ai cũng làm vậy.
+k: Không đủ thì vay app, nhanh lắm. Tháng sau là trả được.
+* Em nghỉ phát tờ rơi -> t4_k_nghi
+* Để em tính -> t4_k_tinh
+
+== t4_k_nghi
+~ set nhan_viec_to_roi 2
+~ take xap_to_roi
+k: …Tùy em. Người không dám đầu tư thì mãi nghèo.
+player: (Bắt đóng tiền, xúi vay, hứa hoàn vốn. Đủ rồi.)
+
+== t4_k_tinh
+~ k_involve 5
+k (cuoi): Đúng rồi. Suy nghĩ như người làm chủ.
+
+# --- Cao trào Đêm ngày 28 (QĐ-7.3 = A): hai lối vào, cùng một nội dung ------------------
+== t4_cao_trao_dem
+@trigger slot_start
+@when day == 28 and slot == DEM and flag.sys_cao_trao == 0
+@priority 100
+@required 28
+~ goto t4_cao_trao_noi_dung
+
+== t4_cao_trao_ngu
+@trigger sleep
+@when day == 28 and flag.sys_cao_trao == 0
+@priority 100
+~ goto t4_cao_trao_noi_dung
+
+== t4_cao_trao_noi_dung
+~ set sys_cao_trao 1
+~ night_wake
+narrator: Đêm Chủ Nhật. Điện thoại rung liên tục. Bốn vạch nhiễu.
+narrator: Giường Minh trống.
+~ change_area ktx_hallway corridor_from_room
+narrator: Cuối hành lang, Minh đi chậm về phía cửa cầu thang.
+~ npc_move minh cua_cau_thang 3
+~ npc_hide minh
+narrator: Cửa cầu thang mở hé. Tiếng ù rõ hơn mọi lần.
+player: Minh!
+narrator: Bạn chạy theo, bước lên cầu thang.
+~ stair_loop start

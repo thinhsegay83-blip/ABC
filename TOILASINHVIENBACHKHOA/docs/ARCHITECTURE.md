@@ -603,3 +603,38 @@ begin_stair_loop(), stair_choose("up"/"down"), show_hint(), call_senior(), ask_p
 - Cài đặt mới `[accessibility]`: `reduce_screen_noise`, `audio_subtitles`. Phím `hint` = G.
 - Nội dung lõi: `content/dialogue/truyen_thuyet.dlg` (tiền bối, đủ 3 ý lời giải), `cau_thang.dlg` (bắt đầu/sai/đúng/thoát, gợi ý 3 mức, gọi tiền bối, câu hỏi Vật lý), `g4_dem_tuan3.dlg` (sự kiện đêm ngày 18 + sáng hôm sau).
 - Giao diện cầu thang hiện là **bản chữ** (`scripts/ui/stair_loop_ui.gd`): liệt kê 8 chi tiết chiếu nghỉ, so với bản gốc; bước 2 thay bằng cảnh thật dùng cùng `AnomalyDirector`.
+
+---
+
+## Bước 7 — Ghép nội dung tuần 1–4 (đã làm)
+
+MVP chơi được từ "Chơi mới" tới màn "Còn tiếp…" bằng menu chữ (Q / Tab / cầu thang dạng chữ). Lớp mới: TutorialHints 15, EndingScreen 95 (đều trong `game.tscn`).
+
+### Nội dung (`content/dialogue/`)
+- `tuan1.dlg` … `tuan4.dlg`, `chung.dlg` (thoại mặc định NPC + Minh rủ đi ăn), `tin_nhan.dlg` (tin nhắn theo ngày), `ket_thuc.dlg` (cảnh sau khi thoát cầu thang → `~ set mvp_hoan_thanh 1`, `~ emit to_be_continued`). Nội dung lõi bước 6 giữ nguyên luật; chỉ thêm `day >= 10` cho truyền thuyết (tuần 2).
+- Demo bước 3/5 chuyển vào `content/dialogue/_demo/` — `DialogueLibrary.load_dir` không quét thư mục con nên không còn được nạp.
+- Màn mở đầu `intro_mo_dau`: dòng tuyên bố hư cấu (J15) + chọn KTX → cờ `ktx_khu` (1 = A, 2 = B). QĐ-7.1 tạm = A: hai khu chỉ khác lời mô tả.
+
+### Lịch beat bắt buộc
+- Metadata mới **`@required <ngày>`**: beat phải chạy. `EventDirector.overdue_required(day)` trả beat chưa chạy mà `day > ngày` → được xếp hàng ở `new_day` và chạy **bỏ qua @when** (vẫn chỉ một lần). Beat bắt buộc: `intro_mo_dau`, `t1_gap_minh` (1), `t2_to_roi_bang_tin` (8), `t3_minh_tham_quang` (16), `t4_minh_up_mat` (24), `t4_cao_trao_dem` (28). Beat khác có node dự phòng (`*_du_phong`, tin nhắn).
+- Cao trào: `t4_cao_trao_dem` (slot_start Đêm ngày 28) hoặc `t4_cao_trao_ngu` (trigger sleep ngày 28, khi ngủ sớm từ Tối) → `t4_cao_trao_noi_dung` → `~ stair_loop start`.
+- **`LifeSim.time_barriers: Array[int]`** (khóa `day*4+slot`): ngủ li bì do kiệt sức tinh thần dừng ở mốc. EventDirector thêm `CLIMAX_KEY = 28*4+3`.
+- `EventDirector.pump()` (gọi trong `_process`; bot gọi trực tiếp): chạy sự kiện kế tiếp trong hàng đợi; hết hàng đợi thì hoàn tất giấc ngủ bị ngắt — trừ khi đang ở cầu thang, có lệnh vào cầu thang đang chờ, hoặc đã `mvp_hoan_thanh`. `has_pending()`.
+- `AnomalyDirector.pending_start` + `start_pending()`: `~ stair_loop start` chỉ đặt cờ chờ; vào vòng lặp khi hội thoại hiện tại kết thúc.
+- `_on_state_replaced` (ván mới, ngày 1 Sáng, chưa có sự kiện nào) tự xếp hàng `day_start` ngày 1 (không có signal `new_day` cho ngày đầu). Liên lạc mới `phong_dao_tao`.
+
+### Màn "Còn tiếp…" — `scripts/ui/ending_screen.gd` (CanvasLayer 95, group `ending`)
+- Bắt `dialogue_event("to_be_continued")` → khi hội thoại xong: đặt `mvp_hoan_thanh = 1`, ghi ô Tự lưu, hiện tổng kết, nút "Về menu chính" (QĐ-7.4).
+- Hàm thuần (test được): `build_summary(state) -> [{text, size?, color?}]`, `tuition_line(state)` (đúng hạn / gia hạn / CHƯA ĐÓNG), `choices_recap(state)`.
+- `GameScene._ready`: tải bản lưu có `mvp_hoan_thanh == 1` → hiện lại tổng kết (không ghi lưu).
+
+### Hướng dẫn chơi (J11) — `scripts/ui/tutorial_hints.gd` (CanvasLayer 15)
+- `data/tutorial_hints.tres` (`TutorialHintSet.hints: [{id, text}]`, 13 gợi ý). `trigger(id)`: đặt cờ `tut_<id>` (lưu cùng save), chỉ xếp hàng hiển thị khi `Settings.show_tutorial`; mỗi gợi ý hiện 1 lần, ~6 giây, không chen giữa hội thoại.
+- Điều kiện hiện nằm trong code (nối signal: hội thoại, tin nhắn, tổng kết ngày, đổi giờ, chỉ số, vào cầu thang).
+- Cài đặt mới `[accessibility] show_tutorial` (checkbox "Hiện hướng dẫn").
+
+### Test & bot chơi thử
+- `tests/mvp_bot.gd` (không phải file test): bot chơi trọn một ván bằng autoload thật, đồng bộ (tự gọi `pump()`, `start_pending()`, `check_collapse()`), 3 chiến lược "Chăm học" / "Chăm làm" / "Theo K.", chọn lựa chọn theo chuỗi con của nội dung.
+- `test_playthrough_mvp.gd` (3 × 3 chế độ: tới "Còn tiếp…" ngày 28, đủ beat bắt buộc, ý đồ học phí BALANCE), `test_calendar_content.gd`, `test_required_beats.gd`, `test_ktx_choice.gd`, `test_ending_summary.gd`, `test_tutorial_hints.gd`.
+- `run_tests.gd` báo FAIL (không treo) khi một file test lỗi cú pháp.
+- **Lưu ý xuất bản (export):** `.dlg` không phải resource → khi tạo export preset phải thêm `content/dialogue/*.dlg` vào "Filters to export non-resource files", nếu không bản build sẽ không có thoại.

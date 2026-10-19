@@ -1,0 +1,25 @@
+# Bước 7 — sự kiện chỉ gửi tin nhắn (làm thế giới sống động, không bắt buộc).
+
+== tn_bql_ktx_ngay_4
+@trigger day_start
+@when day == 4
+@once
+~ message bql_ktx "KTX thông báo: cắt nước từ 8h đến 10h sáng thứ Năm để bảo trì. Sinh viên chủ động trữ nước."
+
+== tn_nhom_lop_ngay_10
+@trigger day_start
+@when day == 10
+@once
+~ message nhom_lop "Thầy dặn ôn kỹ phần đơn vị và động lượng của Vật lý 1, thi giữa kỳ hay ra."
+
+== tn_me_ngay_12
+@trigger slot_start
+@when day == 12 and slot == TOI
+@once
+~ message me "Mẹ gửi thêm thùng xốp lên rồi. Có gạo với ít đồ khô. Con nhớ ăn uống cho đủ nha."
+
+== tn_nhom_lop_ngay_22
+@trigger day_start
+@when day == 22
+@once
+~ message nhom_lop "Có ai thấy mấy tờ rơi vàng trong lớp không? Ai mời đóng phí thì cẩn thận nha mọi người."

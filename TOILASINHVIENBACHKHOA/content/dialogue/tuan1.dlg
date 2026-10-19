@@ -1,0 +1,153 @@
+# Bước 7 — Tuần 1: nhập học. Hoàn toàn đời thường.
+# Beat: mở đầu + chọn KTX (ngày 1), gặp Minh (ngày 1), TKB (ngày 1 Chiều), góp quỹ (ngày 1–7),
+# buổi học đầu + nữ thủ khoa (tiết đầu tiên), mẹ gọi (ngày 2 Tối), xin việc ở quán (từ ngày 3).
+
+== intro_mo_dau
+@trigger day_start
+@when day == 1
+@once
+@priority 100
+@required 1
+narrator: Mọi nhân vật, tổ chức, sự kiện trong trò chơi đều là hư cấu.
+narrator: Tháng Chín. Bạn xuống xe buýt với một chiếc vali và một thùng xốp mẹ gói.
+narrator: Trong thùng: gạo, mắm, một hũ thịt kho. Và một mảnh giấy: "Ăn uống đầy đủ nha con."
+narrator: Học phí học kỳ này là 16.000.000 đ. Cả nhà gom góp mới được một phần.
+player: Phải cố thôi.
+narrator: Văn phòng Ký túc xá xếp phòng. Bạn được chọn khu.
+* KTX Khu A — tòa cũ, gần cổng, cây xanh nhiều -> intro_khu_a
+* KTX Khu B — tòa mới, phòng sáng, hơi xa căng tin -> intro_khu_b
+
+== intro_khu_a
+~ set ktx_khu 1
+~ goto intro_vao_phong
+
+== intro_khu_b
+~ set ktx_khu 2
+~ goto intro_vao_phong
+
+== intro_vao_phong
+~ set minh_trang_thai 1
+narrator: Phòng 412, tầng 4. Bốn giường tầng, một chiếc quạt trần.
+narrator: Tiền KTX tháng đầu đã trừ vào tài khoản.
+
+== t1_gap_minh
+@trigger day_start
+@when day == 1
+@once
+@priority 90
+@required 1
+~ meet minh
+~ meet tuan
+~ meet khoa
+minh (cuoi): Chào bạn! Mình là Minh, giường dưới. Ở Long An lên.
+tuan: Tuấn. Cần Thơ. Nhà mình hay gửi mắm, ăn chung nhé.
+khoa: Khoa. Đắk Lắk.
+player: Mình là {player_name}. Rất vui được ở chung.
+minh: Bàn học có dán thời khóa biểu. Lịch học trong điện thoại cũng có.
+minh: Căng tin hơi đắt. Quán cơm ngoài cổng rẻ hơn.
+minh: À, ở đây ai cũng làm thêm. Không thì khó sống lắm.
+~ rel minh 5
+
+== t1_nhan_tkb
+@trigger slot_start
+@when day == 1 and slot >= CHIEU
+@once
+~ message nhom_lop "Thời khóa biểu học kỳ 1 đã có trên cổng sinh viên. Tiết đầu tiên từ ngày mai nhé cả lớp."
+
+== t1_minh_gop_quy
+@trigger interact minh
+@when day <= 7 and flag.da_gop_quy == 0
+@daily
+@priority 3
+minh: Phòng mình góp quỹ chung để mua nước, giấy, thuốc muỗi.
+minh: 200.000 đ một tháng. Tuấn với Khoa góp rồi. Bạn góp không?
+* Góp 200.000 đ -> t1_gop_quy_dong_y [need money >= 200000 | Không đủ tiền]
+* Để mai -> t1_gop_quy_de_mai
+
+== t1_gop_quy_dong_y
+~ set da_gop_quy 1
+~ quest done q_quy_phong
+~ rel minh 5
+minh (cuoi): Cảm ơn bạn. Mình ghi sổ đàng hoàng.
+
+== t1_gop_quy_de_mai
+~ quest start q_quy_phong
+minh: Ừ, không gấp.
+
+== t1_buoi_hoc_dau
+@trigger slot_start
+@when day >= 2 and class_now == 1
+@once
+~ meet giang_vien
+narrator: Tiết học đầu tiên. Giảng đường đông kín.
+giang_vien: Chào các em. Ở trường này, ai qua môn ngay lần đầu thì được gọi là "quái vật".
+giang_vien: Thầy mong cả lớp đều là quái vật.
+narrator: Cả lớp cười. Ai đó thở dài.
+giang_vien: Câu hỏi đầu tiên: đơn vị của động lượng là gì?
+narrator: Một bạn nữ bàn đầu trả lời ngay.
+thu_khoa: Ki-lô-gam mét trên giây, thưa thầy.
+giang_vien: Đúng. Em tên gì?
+thu_khoa: Ngọc Hân ạ.
+narrator: Bạn có tiết lúc này. Vào học thì được điểm danh, bỏ thì bị trừ chuyên cần.
+~ meet thu_khoa
+
+== t1_goi_me_bao
+@trigger slot_start
+@when day == 2 and slot == TOI
+@once
+~ ring me
+
+== t1_goi_ve_que
+@trigger phone_call me
+@when flag.sys_me_goi == 0
+@once
+~ set sys_me_goi 1
+me: Alo, con hả? Ở trên đó quen chưa?
+player: Dạ, con quen rồi. Phòng có bốn người.
+me: Ừ. Ở nhà vẫn ổn. Ba con vừa nhận thêm việc phụ hồ.
+me: Học phí phải đóng trước hết tuần sau đó con. Hạn cuối tuần 2.
+me: Nhà gửi được bao nhiêu thì gửi rồi. Phần còn lại…
+* Con sẽ đi làm thêm -> t1_me_lam_them
+* Con lo được, mẹ yên tâm -> t1_me_yen_tam
+
+== t1_me_lam_them
+me: Làm vừa sức thôi. Đừng bỏ học.
+~ stat sanity 5
+
+== t1_me_yen_tam
+me: Ừ. Có gì thì gọi mẹ nha.
+~ stat sanity 5
+
+== t1_me_nhan_du_phong
+@trigger day_start
+@when day == 3 and flag.sys_me_goi == 0
+@once
+~ message me "Hôm qua mẹ gọi con không nghe. Học phí hạn cuối tuần sau nha con. Rảnh thì gọi lại mẹ."
+
+== t1_xin_viec
+@trigger enter_area food_shop
+@when day >= 3 and flag.lam_them_quan == 0
+@once
+narrator: Trước quán có tấm bìa: "Cần người phụ quán. Ưu tiên sinh viên."
+chu_quan: Con hỏi việc hả? Quán đang thiếu người.
+chu_quan: Sáng, Chiều phụ quán cơm: 120.000 đ một ca.
+chu_quan: Tối bưng cà phê: 100.000 đ, khách cho tip thì con giữ.
+chu_quan: Một ngày làm tối đa hai ca thôi. Còn phải học.
+* Con làm -> t1_nhan_viec
+* Để con suy nghĩ -> t1_chua_nhan
+
+== t1_nhan_viec
+~ set lam_them_quan 1
+~ meet chu_quan
+~ rel chu_quan 5
+chu_quan (cuoi): Được. Mai bắt đầu luôn cũng được.
+
+== t1_chua_nhan
+~ meet chu_quan
+chu_quan: Ừ. Đổi ý thì quay lại.
+
+== t1_minh_nhac_quan
+@trigger day_start
+@when day == 5 and flag.lam_them_quan == 0
+@once
+~ message minh "Quán cơm ngoài cổng đang tuyển người phụ đó. Ghé hỏi thử đi."

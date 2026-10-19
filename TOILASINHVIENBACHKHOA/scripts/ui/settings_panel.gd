@@ -20,6 +20,7 @@ var _auto_value: Label
 var _skip_unread_check: CheckBox
 var _noise_check: CheckBox
 var _subtitle_check: CheckBox
+var _tutorial_check: CheckBox
 
 
 func _ready() -> void:
@@ -69,6 +70,7 @@ func _sync_from_settings() -> void:
 	_skip_unread_check.button_pressed = Settings.skip_unread
 	_noise_check.button_pressed = Settings.reduce_screen_noise
 	_subtitle_check.button_pressed = Settings.audio_subtitles
+	_tutorial_check.button_pressed = Settings.show_tutorial
 	_syncing = false
 	_update_value_labels()
 	_update_resolution_enabled()
@@ -183,6 +185,15 @@ func _build_dialogue_rows() -> void:
 		Settings.apply()
 	)
 	_add_grid_row(grid, "", _subtitle_check, Control.new())
+	_tutorial_check = CheckBox.new()
+	_tutorial_check.text = "Hiện hướng dẫn"
+	_tutorial_check.toggled.connect(func(on: bool) -> void:
+		if _syncing:
+			return
+		Settings.show_tutorial = on
+		Settings.apply()
+	)
+	_add_grid_row(grid, "", _tutorial_check, Control.new())
 
 
 static func _add_grid_row(grid: GridContainer, title: String, control: Control, tail: Control) -> void:

@@ -54,6 +54,11 @@ func before_each() -> void:
 	runner.finished.connect(func(id: String) -> void: finished.append(id))
 
 
+## Lambda ở trên bắt self → bỏ runner để test ↔ runner không giữ nhau (rò rỉ lúc thoát).
+func after_each() -> void:
+	runner = null
+
+
 func test_missing_node() -> void:
 	assert_false(runner.start("khong_co"))
 
