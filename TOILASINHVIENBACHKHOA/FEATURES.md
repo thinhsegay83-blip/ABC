@@ -135,10 +135,10 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| G1 | **Khả năng đặc biệt = radar điện thoại**: điện thoại nhiễu khi dị tượng ở gần | MVP | [P][ĐX] |
-| G2 | Âm thanh báo hiệu: nhạc tần số lạ = vùng đang trừ Sanity | MVP | [C1] |
-| G3 | Dị tượng cầu thang vô tận + câu đố logic để thoát | MVP | [C1] |
-| G4 | Sự kiện đêm trong phòng (bị đánh thức, thấy Minh) | MVP | [C1] |
+| G1 | ✅ **Khả năng đặc biệt = radar điện thoại**: điện thoại nhiễu khi dị tượng ở gần | MVP | [P][ĐX] |
+| G2 | ✅ Âm thanh báo hiệu: nhạc tần số lạ = vùng đang trừ Sanity | MVP | [C1] |
+| G3 | ✅ Dị tượng cầu thang vô tận + câu đố logic để thoát | MVP | [C1] |
+| G4 | ✅ Sự kiện đêm trong phòng (bị đánh thức, thấy Minh) | MVP | [C1] |
 | G5 | Dị tượng mạnh dần theo tuần | C1 | [C1] |
 | G6 | Dị tượng xe buýt lạc vào sương mù | C1 | [C1] |
 | G7 | Hành lang méo / không gian biến dạng | C1 | [C1] |

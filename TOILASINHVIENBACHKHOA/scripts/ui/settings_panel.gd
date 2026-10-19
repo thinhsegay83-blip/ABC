@@ -18,6 +18,8 @@ var _speed_option: OptionButton
 var _auto_slider: HSlider
 var _auto_value: Label
 var _skip_unread_check: CheckBox
+var _noise_check: CheckBox
+var _subtitle_check: CheckBox
 
 
 func _ready() -> void:
@@ -65,6 +67,8 @@ func _sync_from_settings() -> void:
 	_speed_option.select(speed_index if speed_index >= 0 else 1)
 	_auto_slider.value = Settings.auto_delay
 	_skip_unread_check.button_pressed = Settings.skip_unread
+	_noise_check.button_pressed = Settings.reduce_screen_noise
+	_subtitle_check.button_pressed = Settings.audio_subtitles
 	_syncing = false
 	_update_value_labels()
 	_update_resolution_enabled()
@@ -159,6 +163,26 @@ func _build_dialogue_rows() -> void:
 		Settings.apply()
 	)
 	_add_grid_row(grid, "Tua", _skip_unread_check, Control.new())
+
+	# Trợ năng (bước 6).
+	_noise_check = CheckBox.new()
+	_noise_check.text = "Giảm hiệu ứng nhiễu màn hình"
+	_noise_check.toggled.connect(func(on: bool) -> void:
+		if _syncing:
+			return
+		Settings.reduce_screen_noise = on
+		Settings.apply()
+	)
+	_add_grid_row(grid, "Trợ năng", _noise_check, Control.new())
+	_subtitle_check = CheckBox.new()
+	_subtitle_check.text = "Phụ đề âm thanh"
+	_subtitle_check.toggled.connect(func(on: bool) -> void:
+		if _syncing:
+			return
+		Settings.audio_subtitles = on
+		Settings.apply()
+	)
+	_add_grid_row(grid, "", _subtitle_check, Control.new())
 
 
 static func _add_grid_row(grid: GridContainer, title: String, control: Control, tail: Control) -> void:

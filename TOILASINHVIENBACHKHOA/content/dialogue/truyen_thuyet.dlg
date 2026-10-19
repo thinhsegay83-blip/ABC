@@ -1,0 +1,23 @@
+# Bước 6 — nội dung thật: tiền bối kể truyền thuyết cầu thang (bước 7 chỉ đặt lịch kích hoạt).
+# Phải chứa đủ 3 ý của lời giải: luật (khác → xuống, giống → lên, đúng 4 lần), Vật lý (ống kín một đầu), số liệu (3,43 m).
+# Tông: kể chuyện vui, hơi bí ẩn, không dọa. Giọng trung tính, câu ngắn.
+
+== tien_boi_truyen_thuyet
+@trigger interact tien_boi
+@when flag.nghe_truyen_thuyet == 0
+@priority 5
+~ quest start q_truyen_thuyet
+~ set gap_tien_boi 1
+tien_boi: Ngồi đi. Anh kể chuyện này, nghe cho vui thôi.
+tien_boi: Có người bảo cầu thang KTX lúc khuya đi mãi không tới tầng nào.
+tien_boi: Lỡ gặp thì đừng chạy. Nhìn chiếu nghỉ cho kỹ.
+tien_boi: Thấy chỗ nào khác lúc nãy, dù nhỏ thôi, thì quay xuống. Thấy y như cũ thì cứ đi lên.
+tien_boi: Đúng liền bốn lần là ra.
+player: Nghe giống truyện ma quá.
+tien_boi (cuoi): Anh thấy nó giống bài tập Vật lý hơn.
+tien_boi: Nghe tiếng ù trong đó. Giếng cầu thang giống cái ống bịt một đầu.
+tien_boi: Nó chỉ ngân được ở tần số hợp với chiều dài của nó. Chiều dài đổi là tiếng đổi.
+tien_boi: Mắt có thể lừa. Số đo thì không.
+tien_boi: À, tầng KTX mình cao 3,43 mét. Biển kỹ thuật ở chiếu nghỉ có ghi đó.
+~ set nghe_truyen_thuyet 1
+~ quest done q_truyen_thuyet

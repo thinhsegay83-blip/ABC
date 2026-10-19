@@ -65,6 +65,9 @@ func open_menu() -> void:
 	if _leaving or not Game.has_active_game():
 		return
 	get_tree().paused = true
+	_save_button.disabled = SaveGate.is_blocked()
+	_save_button.tooltip_text = "Không thể lưu lúc này" if SaveGate.is_blocked() else ""
+	_save_button.text = "Lưu game (không thể lưu lúc này)" if SaveGate.is_blocked() else "Lưu game"
 	_menu_panel.show()
 	_root.show()
 	_resume_button.grab_focus()
@@ -82,6 +85,8 @@ func resume() -> void:
 # --- Nút menu ---------------------------------------------------------------
 
 func _on_save_pressed() -> void:
+	if SaveGate.is_blocked():
+		return
 	_open_slots(SaveSlotsPanelScript.Mode.SAVE)
 
 

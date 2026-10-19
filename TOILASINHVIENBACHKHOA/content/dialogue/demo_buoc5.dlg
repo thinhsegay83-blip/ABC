@@ -113,17 +113,7 @@ minh (cuoi): Lâu lắm mới thấy vui như vầy.
 == minh_khong_di
 minh: Ừ, hôm khác.
 
-# --- interact: tiền bối (nhiệm vụ) -------------------------------------------
-== tien_boi_truyen_thuyet
-@trigger interact tien_boi
-@when flag.nghe_truyen_thuyet == 0
-@priority 5
-~ quest start q_truyen_thuyet
-~ set gap_tien_boi 1
-tien_boi: Ngồi đi. Anh kể chuyện này, nghe cho vui thôi.
-tien_boi: Có người bảo cầu thang KTX lúc khuya đi mãi không hết.
-tien_boi: Họ dặn: thấy gì khác thường thì quay lại. Không có gì lạ thì cứ đi tiếp.
-~ set nghe_truyen_thuyet 1
+# --- interact: tiền bối — xem truyen_thuyet.dlg (nội dung thật của bước 6) ---
 
 # --- hội thoại mặc định còn thiếu ---------------------------------------------
 == giang_vien_chao

@@ -37,6 +37,7 @@ func _ready() -> void:
 	EventDirector.calls_changed.connect(_refresh_badge)
 	Game.state_replaced.connect(_refresh_badge)
 	Game.stats_changed.connect(_refresh_if_open)
+	AnomalyDirector.radar_changed.connect(_on_radar_changed)
 	_refresh_badge()
 
 
@@ -135,7 +136,7 @@ func _render() -> void:
 			_render_inventory()
 		"radar":
 			_title_label.text = "Radar"
-			_body.add_child(_label("Không phát hiện tín hiệu lạ.", 16, MUTED))
+			_render_radar()
 
 
 func _render_home() -> void:
@@ -158,6 +159,34 @@ func _render_home() -> void:
 
 
 # --- Ứng dụng -------------------------------------------------------------
+
+func _render_radar() -> void:
+	var bars: int = AnomalyDirector.bars
+	var meter: String = ""
+	for i in 4:
+		meter += "▮" if i < bars else "▯"
+	_body.add_child(_label(meter, 34, ACCENT if bars > 0 else MUTED))
+	_body.add_child(_label(RadarMath.describe(bars), 16, Color.WHITE))
+	if AnomalyDirector.hum_hz > 0.0:
+		_body.add_child(_label("Tiếng ù: " + StairPhysics.format_hz(AnomalyDirector.hum_hz), 20, ACCENT))
+	if AnomalyDirector.loop.active:
+		_body.add_child(_label("Nhiệt kế: 20 °C (mát lạnh lạ thường)", 14, MUTED))
+		var think: Button = _button("Suy nghĩ (G)", 15)
+		think.pressed.connect(func() -> void:
+			close()
+			AnomalyDirector.show_hint()
+		)
+		_body.add_child(think)
+
+
+func _on_radar_changed(bars: int, _hum_hz: float) -> void:
+	# Ô sóng nhảy vạch khi có tín hiệu lạ (G1).
+	var glyphs: Array[String] = ["▂▄▆ 4G", "▂▄▁ 4G", "▂▁▁ …", "▁▁▁ ?", "▆▁▄ ?!"]
+	_signal_label.text = glyphs[clampi(bars, 0, 4)] + "  ▮▮▮"
+	_signal_label.add_theme_color_override("font_color", ACCENT if bars > 0 else MUTED)
+	if is_open() and _app == "radar":
+		_render()
+
 
 func _render_messages() -> void:
 	var story: StoryState = Game.state.story
@@ -308,6 +337,13 @@ func _render_contacts() -> void:
 	for npc_id: String in story.known_npcs:
 		if not ids.has(npc_id):
 			ids.append(npc_id)
+	if AnomalyDirector.can_call_senior():
+		var senior: Button = _button("Gọi tiền bối (Sanity −5)", 15)
+		senior.pressed.connect(func() -> void:
+			close()
+			AnomalyDirector.call_senior()
+		)
+		_body.add_child(senior)
 	if ids.is_empty():
 		_body.add_child(_label("Danh bạ trống. Hãy làm quen với mọi người.", 15, MUTED))
 	for contact_id: String in ids:

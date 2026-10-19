@@ -1,0 +1,43 @@
+# Bước 6 — G4: sự kiện đêm trong phòng, tuần 3.
+# Tông: yên tĩnh, ánh trăng xanh, không âm thanh đột ngột. Minh là nạn nhân, không đáng sợ.
+
+== t3_dem_minh_ra_ngoai
+@trigger sleep
+@when week == 3 and day >= 18 and flag.minh_trang_thai >= 2
+@once
+~ night_wake
+narrator: Bạn tỉnh giấc. Điện thoại báo 02:14.
+narrator: Giường Minh trống. Cửa phòng khép hờ.
+narrator: Điện thoại hiện một vạch nhiễu.
+* Đi xem sao -> t3_dem_di_xem
+* Chắc Minh đi vệ sinh. Ngủ tiếp -> t3_dem_ngu_tiep
+
+== t3_dem_di_xem
+~ change_area ktx_hallway corridor_from_room
+narrator: Hành lang về đêm. Ánh trăng xanh nhạt trên nền gạch.
+~ npc_move minh minh_dem_1 0
+narrator: Cuối hành lang, Minh đi chậm về phía cửa cầu thang.
+~ npc_move minh cua_cau_thang 3
+~ npc_hide minh
+narrator: Minh khuất sau cửa.
+narrator: Bạn đi tới cửa cầu thang.
+narrator: Cửa cầu thang khép. Bên trong lạnh và im, chỉ có tiếng ù rất nhỏ.
+narrator: Bạn quay về giường. Một lúc lâu mới ngủ lại được.
+~ set thay_minh_ra_ngoai 1
+~ stat sanity -5
+~ sleep_resume 0.7
+
+== t3_dem_ngu_tiep
+narrator: Bạn kéo chăn lên. Ngoài hành lang im lặng.
+~ set thay_minh_ra_ngoai 2
+~ stat sanity -2
+~ sleep_resume 0.85
+
+== t3_sang_minh_choi
+@trigger day_start
+@when flag.thay_minh_ra_ngoai >= 1
+@once
+narrator: Sáng. Minh đang nằm trên giường như chưa có gì xảy ra.
+player: Tối qua bạn đi đâu vậy?
+minh: Mình đi vệ sinh thôi mà.
+narrator: Minh quay mặt vào tường, kéo chăn trùm kín.

@@ -31,6 +31,8 @@ var _triggered: Array[Dictionary] = []
 var _bound_flags: FlagStore = null
 var _sleep_pending: bool = false
 var _running_event: String = ""
+## Giá trị cờ đã biết — để trigger flag_set chỉ kích khi cờ chuyển từ 0 sang khác 0.
+var _flag_cache: Dictionary = {}
 ## Nơi người chơi đang ở (bước 2 cập nhật khi chuyển khu; LifeUI tạm cập nhật khi chọn nơi).
 var current_place: String = "ktx_room"
 
@@ -241,11 +243,16 @@ func _bind_flags() -> void:
 	if _bound_flags != null and _bound_flags.flag_changed.is_connected(_on_flag_changed):
 		_bound_flags.flag_changed.disconnect(_on_flag_changed)
 	_bound_flags = flags
+	_flag_cache = flags.to_dict() if flags != null else {}
 	if flags != null:
 		flags.flag_changed.connect(_on_flag_changed)
 
 
-func _on_flag_changed(_key: String, _value: int) -> void:
+func _on_flag_changed(key: String, value: int) -> void:
+	var old: int = int(_flag_cache.get(key, 0))
+	_flag_cache[key] = value
+	if old == 0 and value != 0:
+		_enqueue(select("flag_set", key))
 	# Trong hội thoại: đợi xong mới đánh giá (tránh toast chen giữa câu thoại).
 	if not DialogueSystem.is_active():
 		refresh_quests()

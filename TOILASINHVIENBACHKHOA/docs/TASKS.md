@@ -12,7 +12,7 @@
 | 3 — Hội thoại & cờ (`BUOC_3.md`) | E1, H1, J9, J10 | Bước 1, 2 | Xong (chưa nối Interactable — chờ bản đồ) | QĐ-3.1, QĐ-3.2 |
 | 4 — Vòng lặp đời sinh viên (`BUOC_4.md`) | C1, C2, C3, D1, D6, D7, B2, B3, B4, B10 (+ hoàn thiện hậu quả A1–A3) | Bước 1–3 | Xong (logic + UI tạm; chờ bản đồ để gắn Interactable) | QĐ-4.1 → QĐ-4.7: dùng khuyến nghị |
 | 5 — NPC & sự kiện (`BUOC_5.md`) | E2, E3, E6, D3, D4, A8, H2, I1, I2 | Bước 1–4 | Xong (QĐ-5.1→5.3 theo khuyến nghị; sprite/anchor chờ bản đồ) | QĐ-5.1 → QĐ-5.3 |
-| 6 — Dị tượng (`BUOC_6.md`) | G1, G2, G3, G4 | Bước 1–5 | Chờ | QĐ-6.1 → QĐ-6.3 |
+| 6 — Dị tượng (`BUOC_6.md`) | G1, G2, G3, G4 | Bước 1–5 | Xong (QĐ-6.1→6.3 theo khuyến nghị; cầu thang bản chữ, chờ bản đồ) | QĐ-6.1 → QĐ-6.3 |
 | 7 — Ghép nội dung tuần 1–4 (`BUOC_7.md`) | J11, F3 (+ J15), nội dung sự kiện/hội thoại tuần 1–4, màn "Còn tiếp…", chơi thử + cân bằng | Bước 1–6 | Chờ | QĐ-7.1 → QĐ-7.4 |
 
 - Thứ tự làm: tuần tự 2 → 7, mỗi bước dùng API của bước trước. Muốn rút ngắn thời gian: phần **logic thuần** của bước 3 (parser `.dlg`, điều kiện, runner, `PlayerName`) không phụ thuộc bước 2, có thể viết song song với bước 2.

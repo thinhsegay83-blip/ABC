@@ -13,6 +13,7 @@ const RESOLUTIONS: Array[Vector2i] = [
 const SECTION_AUDIO: String = "audio"
 const SECTION_DISPLAY: String = "display"
 const SECTION_DIALOGUE: String = "dialogue"
+const SECTION_ACCESS: String = "accessibility"
 ## Tốc độ chữ (ký tự/giây): Chậm / Vừa / Nhanh / Tức thì (0).
 const TEXT_SPEEDS: Array[int] = [20, 40, 80, 0]
 const TEXT_SPEED_NAMES: Array[String] = ["Chậm", "Vừa", "Nhanh", "Tức thì"]
@@ -24,6 +25,10 @@ var resolution_index: int = 0
 var text_speed: int = 40
 var auto_delay: float = 1.2
 var skip_unread: bool = false
+## Bước 6: tắt lớp nhiễu mép màn hình (điện thoại vẫn báo).
+var reduce_screen_noise: bool = false
+## Bước 6: phụ đề cho âm thanh dị tượng.
+var audio_subtitles: bool = true
 
 
 func _ready() -> void:
@@ -50,6 +55,8 @@ func load_settings() -> void:
 	text_speed = maxi(0, _read_int(config, SECTION_DIALOGUE, "text_speed", text_speed))
 	auto_delay = clampf(_read_float(config, SECTION_DIALOGUE, "auto_delay", auto_delay), 0.5, 3.0)
 	skip_unread = _read_bool(config, SECTION_DIALOGUE, "skip_unread", skip_unread)
+	reduce_screen_noise = _read_bool(config, SECTION_ACCESS, "reduce_screen_noise", reduce_screen_noise)
+	audio_subtitles = _read_bool(config, SECTION_ACCESS, "audio_subtitles", audio_subtitles)
 
 
 func save_settings() -> void:
@@ -61,6 +68,8 @@ func save_settings() -> void:
 	config.set_value(SECTION_DIALOGUE, "text_speed", text_speed)
 	config.set_value(SECTION_DIALOGUE, "auto_delay", auto_delay)
 	config.set_value(SECTION_DIALOGUE, "skip_unread", skip_unread)
+	config.set_value(SECTION_ACCESS, "reduce_screen_noise", reduce_screen_noise)
+	config.set_value(SECTION_ACCESS, "audio_subtitles", audio_subtitles)
 	var err: Error = config.save(SETTINGS_PATH)
 	if err != OK:
 		push_warning("Settings: không lưu được %s (%s)" % [SETTINGS_PATH, error_string(err)])

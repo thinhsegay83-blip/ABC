@@ -152,6 +152,7 @@ func _ensure_input_actions() -> void:
 	_ensure_key_action(&"dialogue_history", KEY_L)
 	_ensure_key_action(&"phone", KEY_TAB)
 	_ensure_key_action(&"inventory", KEY_I)
+	_ensure_key_action(&"hint", KEY_G)
 
 
 func _ensure_key_action(action: StringName, key: Key) -> void:

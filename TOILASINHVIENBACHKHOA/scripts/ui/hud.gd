@@ -122,6 +122,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Mở menu hành động (tạm thời thay cho tương tác trên bản đồ của bước 2).
 func _on_action_pressed() -> void:
-	if Game.has_active_game() and not get_tree().paused and not DialogueSystem.is_active():
+	if Game.has_active_game() and not get_tree().paused and not DialogueSystem.is_active() \
+			and not AnomalyDirector.loop.active:
 		get_tree().call_group(&"phone", &"close")
 		get_tree().call_group(&"life_ui", &"toggle_actions")

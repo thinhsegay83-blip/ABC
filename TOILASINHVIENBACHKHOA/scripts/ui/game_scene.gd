@@ -9,6 +9,7 @@ const FALLBACK_DIFFICULTY_ID: String = "hard"
 
 func _ready() -> void:
 	get_tree().paused = false
+	SaveGate.clear()
 	if not Game.has_active_game():
 		Game.new_game(FALLBACK_DIFFICULTY_ID)
 	_hint_label.text = _build_hint()

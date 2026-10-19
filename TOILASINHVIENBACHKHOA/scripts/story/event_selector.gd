@@ -4,7 +4,7 @@ extends RefCounted
 ## @trigger <loại> [đối số], @when <đk> (nhiều dòng = and), @priority <số>, @once, @daily.
 
 const TRIGGERS: Array[String] = [
-	"day_start", "slot_start", "enter_area", "interact", "sleep", "phone_call",
+	"day_start", "slot_start", "enter_area", "interact", "sleep", "phone_call", "flag_set",
 ]
 
 

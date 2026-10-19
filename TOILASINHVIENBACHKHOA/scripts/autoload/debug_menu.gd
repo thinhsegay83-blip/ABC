@@ -147,6 +147,13 @@ func _build_ui() -> void:
 		["Tới ngày 14 — Tối", _goto_day14_evening],
 		["Đóng học phí (debug, cộng đủ tiền)", _debug_pay_tuition],
 		["Nạp lại hội thoại", func() -> void: DialogueSystem.reload_content()],
+		["Bắt đầu cầu thang vô tận", func() -> void:
+			close()
+			AnomalyDirector.begin_stair_loop()],
+		["Xem chiếu nghỉ hiện tại", func() -> void:
+			var anomaly: String = AnomalyDirector.loop.current_anomaly
+			Toast.show_message("Chiếu nghỉ: " + ("bình thường" if anomaly.is_empty() else "có lệch — " + anomaly))],
+		["Thoát cầu thang ngay", func() -> void: AnomalyDirector.abort_loop()],
 	]:
 		var life_button: Button = Button.new()
 		life_button.text = entry[0]

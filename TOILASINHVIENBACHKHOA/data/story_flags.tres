@@ -20,7 +20,10 @@ flags = {
 "gap_k": "1 = đã gặp K.",
 "quy_phong": "Số dư quỹ phòng (VND)",
 "nghe_truyen_thuyet": "1 = đã nghe tiền bối kể truyền thuyết cầu thang",
-"thay_minh_ra_ngoai": "1 = đã thấy Minh lén ra ngoài lúc đêm",
+"thay_minh_ra_ngoai": "Đêm tuần 3: 1 = đi theo thấy Minh vào cầu thang, 2 = ngủ tiếp",
 "sys_quy_phong_ngay_gop": "Hệ thống: ngày bắt đầu góp quỹ phòng (0 = chưa)",
-"gap_tien_boi": "1 = đã gặp tiền bối năm n"
+"gap_tien_boi": "1 = đã gặp tiền bối năm n",
+"radar_lan_dau": "1 = điện thoại nhiễu lần đầu (G1)",
+"hieu_vong_lap": "1 = trả lời đúng câu hỏi Vật lý trong cầu thang",
+"sys_cau_thang_da_vao": "Hệ thống: đã vào cầu thang vô tận ít nhất 1 lần"
 }

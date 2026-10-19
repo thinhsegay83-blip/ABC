@@ -1,0 +1,97 @@
+# Bước 6 — cầu thang vô tận (G3). Nội dung lõi; bước 7 nối cảnh mở đầu/kết.
+# Vật lý: giếng cầu thang ≈ ống kín một đầu, f = v/(4L); 20 °C → v ≈ 343 m/s; L = 3,43 m → 25,0 Hz.
+# Tông: bí ẩn nhẹ — lệch nhỏ trên đồ vật quen thuộc, không dọa.
+
+== cau_thang_bat_dau
+narrator: Bạn bước lên. Chiếu nghỉ tầng 4 hiện ra.
+narrator: Bạn bước lên tiếp. Lại là chiếu nghỉ tầng 4.
+narrator: Không khí mát lạnh. Có tiếng ù rất trầm, đều đều.
+player: …Truyền thuyết của anh tiền bối?
+narrator: Hãy nhìn kỹ chiếu nghỉ này. Đây là "bản gốc". [if flag.nghe_truyen_thuyet == 1]
+narrator: Điện thoại có thể đo tiếng ù. Biển kỹ thuật ghi chiều cao tầng.
+
+== cau_thang_sai_1
+narrator: Tiếng ù trầm xuống một chút. Hình như mình lại về chỗ cũ.
+
+== cau_thang_sai_2
+narrator: Chiếu nghỉ tầng 4. Lần nữa. Bình tĩnh, nhìn kỹ lại.
+
+== cau_thang_sai_3
+narrator: Đôi chân hơi mỏi. Không sao, cứ thử lại.
+
+== cau_thang_dung_1
+narrator: Tiếng ù nhỏ đi một chút.
+
+== cau_thang_dung_2
+narrator: Tiếng ù yếu hẳn. Điện thoại bớt nhiễu.
+
+== cau_thang_dung_3
+narrator: Chỉ còn một lần nữa thôi.
+
+== cau_thang_thoat
+narrator: Đèn hành lang bật sáng bình thường. Tiếng ù tắt hẳn.
+narrator: Biển tầng ghi số 4. Lần này là tầng 4 thật.
+player: …Ra rồi.
+
+# --- Gợi ý 3 mức (người chơi chủ động mở) ---------------------------------------
+== goi_y_1
+player: Chiếu nghỉ này… giống hệt lúc nãy? Hay khác một chút?
+player: Anh tiền bối dặn: khác thì đi xuống, giống thì đi lên.
+
+== goi_y_2
+player: Tiếng ù như phát ra từ một cái ống kín một đầu.
+player: Ống kín một đầu chỉ ngân ở tần số f = v/(4L).
+player: Chiếu nghỉ bình thường thì L đúng bằng chiều cao một tầng.
+player: Đo tần số là biết chiều dài có bị "kéo méo" không.
+
+== goi_y_3
+player: Tầng cao L = 3,43 m. Trong này 20 °C nên v ≈ 343 m/s.
+player: f = 343 / (4 × 3,43) = 25,0 Hz.
+player: Điện thoại đo lệch khỏi 25,0 Hz từ 1 Hz trở lên → chiếu nghỉ đã bị méo → đi xuống.
+player: Đúng 25,0 Hz → đi lên.
+
+# --- Gọi tiền bối (sau 8 lần sai) -------------------------------------------------
+== goi_tien_boi
+tien_boi: Alo? Kẹt trong đó hả? Đừng lo.
+tien_boi: Tả anh nghe chiếu nghỉ đi… Ừ.
+tien_boi: Chỗ này có gì đó khác rồi. Đi xuống. [if stair.anomaly == 1]
+tien_boi: Chỗ này y như cũ. Đi lên. [if stair.anomaly == 0]
+tien_boi: Từ từ thôi. Mai kể anh nghe.
+
+# --- Câu hỏi Vật lý tùy chọn -------------------------------------------------------
+== cau_thang_cau_hoi
+narrator: Ghi chú Vật lý trong điện thoại:
+narrator: Tiếng ù đo được 25,0 Hz. Giếng cầu thang như ống kín một đầu, v = 343 m/s.
+narrator: Chiều dài "ống" L bằng bao nhiêu?
+* 3,43 m -> cau_hoi_dung
+* 6,86 m -> cau_hoi_sai_ong_ho
+* 13,72 m -> cau_hoi_sai_buoc_song
+* 1,72 m -> cau_hoi_sai_chia_8
+
+== cau_hoi_dung
+player: L = v/(4f) = 343/100 = 3,43 m.
+player: Đúng bằng chiều cao một tầng! Mình đang đi vòng trong đúng một tầng.
+~ set hieu_vong_lap 1
+~ stat sanity 5
+
+== cau_hoi_sai_ong_ho
+narrator: 6,86 m là v/(2f) — công thức của ống hở hai đầu.
+narrator: Ống kín một đầu thì λ = 4L, nên L = v/(4f).
+~ goto cau_hoi_lai
+
+== cau_hoi_sai_buoc_song
+narrator: 13,72 m là bước sóng λ = v/f.
+narrator: Với ống kín một đầu, λ = 4L. Còn phải chia 4 nữa.
+~ goto cau_hoi_lai
+
+== cau_hoi_sai_chia_8
+narrator: 1,72 m là v/(8f) — chia nhầm cho 8.
+narrator: Ống kín một đầu: L = v/(4f).
+~ goto cau_hoi_lai
+
+== cau_hoi_lai
+* Trả lời lại -> cau_thang_cau_hoi
+* Để sau -> cau_hoi_de_sau
+
+== cau_hoi_de_sau
+narrator: Bạn cất điện thoại.

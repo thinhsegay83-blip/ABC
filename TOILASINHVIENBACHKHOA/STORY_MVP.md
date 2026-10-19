@@ -49,4 +49,4 @@ Phòng KTX · hành lang/cầu thang KTX · giảng đường · thư viện · 
 
 ## Còn mở
 - [ ] Bảng giá: học phí, lương mỗi ca, giá các món ăn, tiền góp quỹ. [CẦN QUYẾT ĐỊNH]
-- [ ] Nội dung cụ thể câu đố cầu thang (đi ngược chiều? đếm bậc?).
+- [x] Câu đố cầu thang: "Chiếu nghỉ lạ" — khác thì đi xuống, giống thì đi lên, đúng 4 lần liền là thoát; đo tiếng ù 25,0 Hz (ống kín một đầu, tầng 3,43 m). Chốt theo QĐ-6.1.

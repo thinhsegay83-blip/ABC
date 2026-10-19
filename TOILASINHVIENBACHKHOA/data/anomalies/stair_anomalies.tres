@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StairAnomalyCatalog" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/stair_anomaly_catalog.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+base_order = Array[String](["bien_tang", "dep", "binh_chua_chay", "ao_phoi", "dong_ho", "noi_quy", "mui", "bac_thang"])
+base_lines = {"bien_tang": "Biển tầng ghi số 4.", "dep": "Trước cửa phòng 412 có đôi dép tổ ong màu xanh.", "binh_chua_chay": "Bình chữa cháy màu đỏ treo cạnh cửa.", "ao_phoi": "Dây phơi có chiếc áo đồng phục quay mặt ra ngoài.", "dong_ho": "Đồng hồ treo tường chỉ 02:14, kim giây chạy đều.", "noi_quy": "Bảng nội quy KTX có 12 điều.", "mui": "Thoang thoảng mùi mì tôm từ phòng nào đó.", "bac_thang": "Đợt thang phía trước có 12 bậc."}
+tech_plate = "Biển kỹ thuật: Chiều cao tầng 3,43 m."
+anomalies = Array[Dictionary]([{"id": "bien_tang_phay", "element": "bien_tang", "text": "Biển tầng ghi số 4'.", "hum_length_m": 3.63, "mo_ta": "biển tầng ghi 4' thay vì 4"}, {"id": "dep_doi_mau", "element": "dep", "text": "Trước cửa phòng 412 có đôi dép quai hậu màu đỏ.", "hum_length_m": 3.23, "mo_ta": "dép đổi màu và đổi kiểu (không chỉ dựa vào màu)"}, {"id": "binh_chua_chay_mat", "element": "binh_chua_chay", "text": "Cạnh cửa chỉ còn một cái móc trống.", "hum_length_m": 3.73, "mo_ta": "bình chữa cháy biến mất"}, {"id": "ao_quay_vao", "element": "ao_phoi", "text": "Dây phơi có chiếc áo đồng phục quay mặt vào tường.", "hum_length_m": 3.13, "mo_ta": "áo phơi quay mặt vào tường"}, {"id": "dong_ho_nguoc", "element": "dong_ho", "text": "Đồng hồ treo tường chỉ 02:14, kim giây chạy ngược.", "hum_length_m": 3.83, "mo_ta": "kim đồng hồ chạy ngược"}, {"id": "noi_quy_dong_la", "element": "noi_quy", "text": "Bảng nội quy KTX có 13 điều. Điều 13: Không đếm bậc thang.", "hum_length_m": 3.03, "mo_ta": "bảng nội quy có thêm điều 13"}, {"id": "mi_tom_mat_mui", "element": "mui", "text": "Không còn mùi gì cả. Mùi mì tôm quen thuộc… không còn nữa.", "hum_length_m": 3.93, "mo_ta": "mất mùi mì tôm"}, {"id": "muoi_ba_bac", "element": "bac_thang", "text": "Đợt thang phía trước có 13 bậc.", "hum_length_m": 2.93, "mo_ta": "đợt thang 13 bậc"}])

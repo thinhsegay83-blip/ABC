@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PuzzleHintConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/puzzle_hint_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+level2_min = 25
+level3_min = 50
+mistakes_per_level = 3
+assist_after_mistakes = 8
+required_streak = 4
+wrong_sanity = -3
+assist_sanity = -5

@@ -569,3 +569,37 @@ Node `.dlg` có metadata: `@trigger day_start | slot_start | enter_area <khu> | 
 - Lệnh: `~ message <người_gửi> "chữ"`, `~ ring <liên_lạc>`, `~ quest start|done|fail <id>`, `~ k_involve <±n>`, `~ join_room_fund`, `~ npc_state <npc> <giá_trị>`, `~ meet <npc>`, `~ sleep [hệ số]`. Biến: `quest.<id>` (0/1/2/3), `npc_here.<id>`.
 - Điện thoại (`scripts/ui/phone.gd`, Tab; I mở Túi đồ): Tin nhắn, Ví (đóng học phí, quỹ phòng), Lịch học, Nhiệm vụ, Danh bạ (5 bậc quan hệ, Nghe/Gọi), Túi đồ, Radar (màn chờ — bước 6). `_signal_label` để bước 6 làm nhiễu.
 - Phím: Q = menu hành động (tạm, tới khi có bản đồ), Tab = điện thoại.
+
+---
+
+## Bước 6 — Dị tượng (đã làm)
+
+Thứ tự autoload: `…, StudentLife, EventDirector, AnomalyDirector, SceneLoader, Toast, DebugMenu`. Lớp mới: StairLoopUI 41, lớp phủ nhiễu + phụ đề 85 (trong AnomalyDirector).
+
+Chưa có bản đồ nên radar/vùng tính theo **nơi đang đứng** (`EventDirector.current_place`). Bước 2 có thể thay bằng vị trí thật: `RadarMath.signal_at(pos, [{position, strength, radius}])`.
+
+### Logic thuần (`scripts/anomaly/`)
+- `RadarMath.signal_at()`, `bars()` (ngưỡng 0,10/0,30/0,55/0,80), `describe()`.
+- `DrainCounter.update(delta, inside, controllable)` → Sanity cần trừ (1 mỗi 5 s, trần 10 mỗi lần vào vùng).
+- `StairPhysics`: v = 331 + 0,6·t (20 °C → 343 m/s); `closed_pipe_hz(L)` = v/(4L) làm tròn 0,1; gốc 3,43 m → 25,0 Hz; lệch ≥ 1 Hz = "méo".
+- `StairLoopState`: luật lệch → xuống / gốc → lên, đúng 4 lần liền → thoát; chiếu nghỉ đầu luôn gốc; ≤ 2 gốc liên tiếp; không lặp chỗ lệch tới khi hết danh sách, không 2 lần liền; `hint_level()` (Trí tuệ < 25 → 1, < 50 → 2, còn lại 3; +1 mỗi 3 lần sai liên tiếp, trần 3); `should_offer_assist()` sau 8 lần sai.
+- `SaveGate` (static `block/unblock/is_blocked/clear`) — PauseMenu làm mờ "Lưu game"; `GameScene._ready` gọi `clear()`.
+
+### Dữ liệu
+- `data/anomalies/stair_anomalies.tres` (`StairAnomalyCatalog`): `base_order`, `base_lines` (8 chi tiết chiếu nghỉ), `tech_plate`, `anomalies: [{id, element, text, hum_length_m, mo_ta}]`. Tần số **tính** từ `hum_length_m`.
+- `data/puzzle_hints.tres` (`PuzzleHintConfig`): ngưỡng gợi ý, số lần sai, phạt Sanity.
+- Âm thanh `audio/sfx/` do `python3 tools/gen_audio.py` tạo (44,1 kHz, mono, 16 bit, đỉnh −6 dBFS): `hum_25hz_tuong_trung.wav` (sóng mang 200 Hz điều biên 25 Hz → 175/200/225 Hz, đúng 1,00 s, lặp bằng code), `radar_tick.wav`, `nhieu_nhe.wav`.
+
+### AnomalyDirector (API)
+```
+signal radar_changed(bars, hum_hz), stair_loop_started, stair_landing_changed(index), stair_loop_ended(escaped)
+signal night_scene(active), npc_moved(npc_id, anchor_id, seconds), npc_hidden(npc_id)   # cho bản đồ
+var bars, hum_hz, in_zone, loop: StairLoopState, catalog, hints
+begin_stair_loop(), stair_choose("up"/"down"), show_hint(), call_senior(), ask_physics_question(), abort_loop()
+```
+- Nguồn MVP: Minh (trạng thái ≥ 2: 0,3; quay mặt vào tường: 0,5 + vùng 25,0 Hz), K. (tuần ≥ 3: 0,35), cửa cầu thang ở hành lang (tuần ≥ 3, Đêm: 0,5 + vùng 25,0 Hz). Trong vòng lặp: radar = 4 − số lần đúng liên tiếp, không trừ Sanity theo giây (đã phạt −3 mỗi lần sai).
+- Lần đầu radar ≥ 1 vạch → cờ `radar_lan_dau`. Trigger mới **`flag_set <cờ>`** (EventDirector) kích khi cờ chuyển từ 0 sang khác 0.
+- Lệnh: `~ stair_loop start|escape`, `~ night_wake`, `~ change_area <khu> [spawn]`, `~ npc_move <npc> <anchor> [giây]`, `~ npc_hide <npc>`, `~ sleep_resume <hệ_số>`. Biến: `stair.anomaly`, `stair.active`, `stair.hint`.
+- Cài đặt mới `[accessibility]`: `reduce_screen_noise`, `audio_subtitles`. Phím `hint` = G.
+- Nội dung lõi: `content/dialogue/truyen_thuyet.dlg` (tiền bối, đủ 3 ý lời giải), `cau_thang.dlg` (bắt đầu/sai/đúng/thoát, gợi ý 3 mức, gọi tiền bối, câu hỏi Vật lý), `g4_dem_tuan3.dlg` (sự kiện đêm ngày 18 + sáng hôm sau).
+- Giao diện cầu thang hiện là **bản chữ** (`scripts/ui/stair_loop_ui.gd`): liệt kê 8 chi tiết chiếu nghỉ, so với bản gốc; bước 2 thay bằng cảnh thật dùng cùng `AnomalyDirector`.
