@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "xin_viec"
+display_name = "Hỏi xin việc làm thêm"
+place_id = "food_shop"
+category = "special"
+slot_cost = 0
+allowed_slots = Array[int]([0, 1, 2])
+requires = "flag.lam_them_quan == 0"
+hide_when_locked = true
+sets_flag = "lam_them_quan"
+wrong_slot_reason = "Quán đã đóng cửa"

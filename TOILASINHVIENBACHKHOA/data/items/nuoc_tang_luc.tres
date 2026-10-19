@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "nuoc_tang_luc"
+display_name = "Nước tăng lực"
+price = 15000
+category = "drink"
+stamina = 20
+sanity = -2
+effect_id = "cafein"

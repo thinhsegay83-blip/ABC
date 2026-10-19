@@ -192,11 +192,25 @@ theme_override_font_sizes/font_size = 16
 text = "10"
 horizontal_alignment = 2
 
-[node name="AdvanceButton" type="Button" parent="Margin/Panel/VBox"]
+[node name="NextClassLabel" type="Label" parent="Margin/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+text = "Tiết tiếp: —"
+
+[node name="TuitionLabel" type="Label" parent="Margin/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.45, 1)
+theme_override_font_sizes/font_size = 14
+text = "Học phí: —"
+
+[node name="ActionButton" type="Button" parent="Margin/Panel/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 focus_mode = 0
-tooltip_text = "Tạm thời: qua 1 khung giờ (Đói/Thể lực tụt theo chế độ chơi)."
+tooltip_text = "Mở menu hành động: đi học, làm thêm, ăn uống, ngủ… (phím Tab)"
 theme_override_font_sizes/font_size = 16
-text = "Nghỉ (qua khung giờ)"
+text = "Hành động (Tab)"

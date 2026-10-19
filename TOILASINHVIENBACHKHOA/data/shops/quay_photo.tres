@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShopData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/shop_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "quay_photo"
+display_name = "Quầy photo thư viện"
+place_id = "library"
+item_ids = Array[String](["giao_trinh_giai_tich_1", "giao_trinh_vat_ly_1", "giao_trinh_hoa_dai_cuong", "giao_trinh_nhap_mon_ky_thuat"])
+open_slots = Array[int]([0, 1, 2])

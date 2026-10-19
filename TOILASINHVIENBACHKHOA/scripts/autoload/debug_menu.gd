@@ -139,6 +139,17 @@ func _build_ui() -> void:
 	jump_button.pressed.connect(_jump_one_day)
 	box.add_child(jump_button)
 
+	# Bước 4 — đời sinh viên.
+	for entry: Array in [
+		["Mở khóa việc làm thêm", _unlock_job],
+		["Tới ngày 14 — Tối", _goto_day14_evening],
+		["Đóng học phí (debug, cộng đủ tiền)", _debug_pay_tuition],
+	]:
+		var life_button: Button = Button.new()
+		life_button.text = entry[0]
+		life_button.pressed.connect(entry[1])
+		box.add_child(life_button)
+
 	box.add_child(HSeparator.new())
 
 	# Cờ cốt truyện: tên + giá trị + nút đặt.
@@ -229,6 +240,30 @@ func _jump_one_day() -> void:
 	_refresh()
 
 
+func _unlock_job() -> void:
+	if Game.has_active_game():
+		Game.state.flags.set_flag("lam_them_quan", 1)
+		Toast.show_message("Đã mở khóa việc làm thêm ở quán")
+		_refresh()
+
+
+## Nhảy (không xử lý vắng tiết) tới Tối ngày 14 — để thử hạn học phí.
+func _goto_day14_evening() -> void:
+	if Game.has_active_game():
+		Game.state.clock.set_time(14, GameClock.Slot.EVENING)
+		_refresh()
+
+
+func _debug_pay_tuition() -> void:
+	if not Game.has_active_game():
+		return
+	var due: int = Tuition.amount_due(Game.state, StudentLife.catalog.economy)
+	if due > Game.state.stats.get_money():
+		Game.state.stats.set_money(due)
+	StudentLife.pay_tuition()
+	_refresh()
+
+
 func _set_flag() -> void:
 	if not Game.has_active_game():
 		return
@@ -292,6 +327,18 @@ func _build_summary(game_state: GameState) -> String:
 
 	lines.append("Quan hệ: %s" % _format_dict(stats.get_relationships()))
 	lines.append("Cờ: %s" % _format_dict(game_state.flags.to_dict()))
+	if StudentLife.has_game():
+		var sim: LifeSim = StudentLife.sim
+		var life: LifeState = game_state.life
+		lines.append("Tiết bây giờ: %s · Ca hôm nay: %d" % [
+			StudentLife.catalog.subject_name(sim.class_now()) if not sim.class_now().is_empty() else "không",
+			life.shifts_today,
+		])
+		lines.append(sim.tuition_text() if not sim.tuition_text().is_empty() else "Học phí: đã đóng")
+		var effects: PackedStringArray = PackedStringArray()
+		for effect: Dictionary in life.status_effects:
+			effects.append("%s (%d khung)" % [effect["id"], int(effect["slots_left"])])
+		lines.append("Hiệu ứng: %s" % (", ".join(effects) if not effects.is_empty() else "không"))
 	return "\n".join(lines)
 
 

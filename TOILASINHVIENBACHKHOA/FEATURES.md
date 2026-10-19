@@ -59,15 +59,15 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
 | B1 | ✅ 4 khung giờ/ngày (Sáng, Chiều, Tối, Đêm), ngày → tuần → học kỳ | MVP | [P] |
-| B2 | Thời khóa biểu ngẫu nhiên đầu game | MVP | [C1] |
-| B3 | Hạn đóng học phí đầu năm | MVP | [C1] |
-| B4 | Tiền trọ/KTX định kỳ | MVP | [P] |
+| B2 | ✅ Thời khóa biểu ngẫu nhiên đầu game | MVP | [C1] |
+| B3 | ✅ Hạn đóng học phí đầu năm | MVP | [C1] |
+| B4 | ✅ Tiền trọ/KTX định kỳ | MVP | [P] |
 | B5 | Hạn bài tập lớn / đồ án | C1 | [P] |
 | B6 | Thi giữa kỳ | C1 | [C1] |
 | B7 | Tua nhanh (montage) từ tuần 6 tới lúc công bố điểm học kỳ 1 | C1 | [ĐX] |
 | B8 | Thi cuối kỳ đầy đủ | SAU | [ĐX] |
 | B9 | Đăng ký tín chỉ dạng minigame tranh slot | SAU | [P] |
-| B10 | Màn tổng kết cuối ngày (thu, chi, thay đổi chỉ số) | MVP | [ĐX] |
+| B10 | ✅ Màn tổng kết cuối ngày (thu, chi, thay đổi chỉ số) | MVP | [ĐX] |
 | B11 | Lịch dạng tháng trên điện thoại | C1 | [ĐX] |
 | B12 | Thời tiết: mưa ảnh hưởng đi lại và tâm trạng | SAU | [ĐX] |
 | B13 | Học phí HK2 (16.000.000, đóng đầu HK2); 1 năm = 2 học kỳ | SAU | [Bạn] |
@@ -76,9 +76,9 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| C1 | Hành động: đi học, tự học ở thư viện | MVP | [P] |
-| C2 | Điểm danh — trốn học bị trừ điểm chuyên cần | MVP | [ĐX] |
-| C3 | Điểm riêng từng môn (Giải tích, Vật lý, Đồ án…) → GPA | MVP | [P] |
+| C1 | ✅ Hành động: đi học, tự học ở thư viện | MVP | [P] |
+| C2 | ✅ Điểm danh — trốn học bị trừ điểm chuyên cần | MVP | [ĐX] |
+| C3 | ✅ Điểm riêng từng môn (Giải tích, Vật lý, Đồ án…) → GPA | MVP | [P] |
 | C4 | Thức trắng chạy đồ án/ôn thi: tăng nhiều tiến độ, trừ nặng Thể lực và Sanity | C1 | [P] |
 | C5 | Bảng điểm cuối học kỳ | C1 | [C1] |
 | C6 | Học bổng chia mức: khuyến khích từng kỳ; toàn phần cho True Ending | C1 / SAU | [P] |
@@ -89,13 +89,13 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| D1 | Việc làm thêm: phụ quán cơm, bưng cà phê | MVP | [C1] |
+| D1 | ✅ Việc làm thêm: phụ quán cơm, bưng cà phê | MVP | [C1] |
 | D2 | Việc làm thêm: gia sư, bồi bàn, trực lab, shipper | SAU | [P] |
 | D3 | Việc tà đạo: phát tờ rơi dụ dỗ (MVP), phục vụ hộp đêm (C1) — hoa hồng cao, tăng A8, bật cờ cốt truyện | MVP / C1 | [C1] |
 | D4 | Quỹ chung của phòng KTX — các thành viên góp tiền | MVP | [ĐX] |
 | D5 | Gửi tiền về quê | C1 | [C1] |
-| D6 | Cửa hàng: đồ ăn, giáo trình, vật liệu chế tạo | MVP | [ĐX] |
-| D7 | Món ăn có hiệu ứng riêng: cơm tấm (Đói), trà sữa (Sanity), cà phê cóc (Thể lực tạm thời) | MVP | [P] |
+| D6 | ✅ Cửa hàng: đồ ăn, giáo trình, vật liệu chế tạo | MVP | [ĐX] |
+| D7 | ✅ Món ăn có hiệu ứng riêng: cơm tấm (Đói), trà sữa (Sanity), cà phê cóc (Thể lực tạm thời) | MVP | [P] |
 | D8 | Việc làm có cấp bậc — làm lâu lương tăng | SAU | [ĐX] |
 | D9 | Trực lab: có lương + được vào phòng lab ban đêm | SAU | [P] |
 

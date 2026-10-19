@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ShopData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/shop_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "may_ban_nuoc"
+display_name = "Máy bán nước KTX"
+place_id = "ktx_hallway"
+item_ids = Array[String](["nuoc_tang_luc", "mi_goi"])
+open_slots = Array[int]([])

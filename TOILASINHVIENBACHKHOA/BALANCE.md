@@ -45,3 +45,42 @@ Làm tối đa 2 ca/ngày ≈ 14 × 2 × 110.000 = **3.080.000** (lương ×1,0)
 | Cực khó | 5.480.000 | Hụt ~2.400.000 (lương ×0,9 còn hụt hơn) → gần như chắc phải gia hạn, áp lực dồn vào tuần 3 khi K. mời phát tờ rơi |
 
 Ghi chú: phép tính chưa trừ khung giờ đi học bắt buộc theo thời khóa biểu; khi có TKB thật cần tính lại số ca tối đa. [CẦN KIỂM TRA ở bước 4]
+
+## Đề xuất bước 4 [ĐX] — số liệu trong `data/*.tres`
+
+| Khoản | Giá trị |
+|---|---|
+| Mì gói | 8.000 đ (Đói +12) |
+| Giáo trình bản photo | 80.000 đ/môn — tự học môn đó +5 thay vì +3 |
+| Phụ quán cơm | Sáng/Chiều, Thể lực −15, Đói −5 |
+| Bưng cà phê | Tối, Thể lực −12, Đói −5 |
+| Tối đa ca làm/ngày | 2 (QĐ-4.7) |
+| 1 tháng (thu KTX) | 28 ngày (QĐ-4.6) |
+| Phạt trễ học phí | cộng vào khoản phải đóng → 16.500.000 (QĐ-4.2); Sanity −10 |
+| Cafein (cà phê, nước tăng lực) | +20 Thể lực ngay, hết sau 2 khung giờ thì −10 (QĐ-4.3) |
+| Đói < 20 | học ×0,5; Thể lực −3 thêm mỗi khung; ngủ hồi một nửa |
+| Đói = 0 | Thể lực −6 thêm mỗi khung |
+| Thể lực = 0 | ngất: mất 1 khung, Thể lực = 30, Sanity −5 |
+| Sanity = 0 | ngủ li bì tới sáng ngày kia, Sanity = 30, Thể lực = 60 (QĐ-4.4) |
+| Lương | (lương + tip) × hệ số chế độ, làm tròn 1.000 đ (hệ số áp cả cho tip) |
+
+## Kiểm tra dòng tiền 14 ngày — tính lại ở bước 4 (có TKB)
+
+Chạy `python3 tools/sim_cashflow.py` (20 seed TKB, chiến lược chăm chỉ: đi học đủ, tối đa 2 ca/ngày, ăn món rẻ nhất giữ Đói ≥ 40):
+
+```
+Mô phỏng tới hết ngày 14 — chiến lược chăm chỉ (đi học đủ, tối đa 2 ca/ngày, ăn rẻ nhất giữ Đói ≥ 40)
+Học phí cần: 16.000.000 đ · 20 seed TKB
+
+Chế độ   Quỹ phòng    Tiền ngày 15 (TB)   So với học phí  Ca/14 ngày  Thể lực min  Ngất
+Dễ       không               17.385.850       +1.385.850        25.0           49   0.0
+Dễ       có                  17.185.850       +1.185.850        25.0           49   0.0
+Khó      không               16.313.850         +313.850        25.0           45   0.0
+Khó      có                  16.113.850         +113.850        25.0           45   0.0
+Cực khó  không               13.945.900       -2.054.100        25.0           41   0.0
+Cực khó  có                  13.745.900       -2.254.100        25.0           41   0.0
+```
+
+Mô phỏng bằng logic game thật (`tests/test_cashflow_sim.gd`, 1 seed, ăn cơm tấm): Dễ 17.086.000 · Khó 15.994.000 · Cực khó 13.550.000.
+
+Nhận xét: khớp ý đồ — **Dễ** dư; **Khó** sát nút, chỉ kịp nếu ăn tiết kiệm (mì gói) hoặc làm đủ ca; **Cực khó** hụt ~2 triệu → gần như chắc phải gia hạn. Không đổi giá đã chốt.

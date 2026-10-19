@@ -13,6 +13,8 @@ const DEFAULT_DIFFICULTY_ID: String = "hard"
 var stats: PlayerStats
 var clock: GameClock
 var flags: FlagStore
+## Đời sinh viên (bước 4): TKB, điểm danh, túi đồ, sổ thu chi…
+var life: LifeState
 var difficulty_id: String = DEFAULT_DIFFICULTY_ID
 var decay_multiplier: float = 1.0
 var wage_multiplier: float = 1.0
@@ -22,6 +24,7 @@ func _init() -> void:
 	stats = PlayerStats.new()
 	clock = GameClock.new()
 	flags = FlagStore.new()
+	life = LifeState.new()
 	# Ván "trắng" dùng sẵn chỉ số khởi đầu (tiền = 0 tới khi chọn chế độ).
 	stats.from_dict(_start_stats_dict(0))
 
@@ -42,6 +45,7 @@ func setup_new_game(difficulty: DifficultyConfig) -> void:
 	stats.from_dict(_start_stats_dict(money))  # cũng xóa quan hệ NPC
 	clock.set_time(1, GameClock.Slot.MORNING)
 	flags.clear()
+	life = LifeState.new()  # StudentLife khởi tạo lại khi thấy initialized = false
 
 
 ## Trừ chỉ số theo cấu hình × hệ số chế độ (làm tròn tới số nguyên gần nhất).
@@ -68,6 +72,7 @@ func to_dict() -> Dictionary:
 		"stats": stats.to_dict(),
 		"clock": clock.to_dict(),
 		"flags": flags.to_dict(),
+		"life": life.to_dict(),
 	}
 
 
@@ -80,6 +85,9 @@ func from_dict(data: Dictionary) -> void:
 	stats.from_dict(_get_dict(data, "stats"))
 	clock.from_dict(_get_dict(data, "clock"))
 	flags.from_dict(_get_dict(data, "flags"))
+	# Save cũ (bước 1) thiếu "life" → LifeState mới, chưa khởi tạo.
+	life = LifeState.new()
+	life.from_dict(_get_dict(data, "life"))
 
 
 # --- Nội bộ ---------------------------------------------------------------

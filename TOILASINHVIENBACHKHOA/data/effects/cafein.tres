@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/status_effect_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "cafein"
+display_name = "Cafein"
+duration_slots = 2
+on_end_stamina = -10
+end_message = "Hết cafein — bạn thấy uể oải"

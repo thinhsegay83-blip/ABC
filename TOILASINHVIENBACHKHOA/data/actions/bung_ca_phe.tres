@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "bung_ca_phe"
+display_name = "Bưng cà phê"
+place_id = "food_shop"
+category = "work"
+allowed_slots = Array[int]([2])
+stamina = -12
+hunger = -5
+base_wage = 100000
+tip_max = 30000
+counts_as_shift = true
+requires = "flag.lam_them_quan == 1"
+requires_reason = "Chưa xin được việc ở quán"
+wrong_slot_reason = "Quán cà phê chỉ cần người buổi Tối"

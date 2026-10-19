@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "tu_hoc"
+display_name = "Tự học"
+place_id = "library"
+category = "study"
+allowed_slots = Array[int]([0, 1, 2])
+stamina = -6
+sanity = -2
+knowledge = 3
+wrong_slot_reason = "Thư viện đã đóng cửa"

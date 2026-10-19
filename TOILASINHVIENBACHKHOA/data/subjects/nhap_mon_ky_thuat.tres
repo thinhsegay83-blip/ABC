@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SubjectData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/subject_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "nhap_mon_ky_thuat"
+display_name = "Nhập môn kỹ thuật"
+credits = 3
+sessions_per_week = 1

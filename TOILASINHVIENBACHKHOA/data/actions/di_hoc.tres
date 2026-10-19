@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "di_hoc"
+display_name = "Vào học"
+place_id = "lecture_hall"
+category = "class"
+allowed_slots = Array[int]([0, 1])
+stamina = -8
+knowledge = 2
+wrong_slot_reason = "Không có tiết lúc này"

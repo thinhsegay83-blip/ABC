@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "ngu"
+display_name = "Đi ngủ"
+place_id = "ktx_room"
+category = "sleep"
+allowed_slots = Array[int]([2, 3])
+stamina = 60
+sanity = 10
+wrong_slot_reason = "Chưa tới giờ ngủ"

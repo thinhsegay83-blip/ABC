@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EconomyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/economy_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+tuition_amount = 16000000
+tuition_due_day = 14
+tuition_extended_due_day = 28
+tuition_late_penalty = 500000
+tuition_late_sanity = -10
+tuition_reminder_days = Array[int]([8, 12, 13, 14])
+tuition_extended_reminder_days = Array[int]([22, 26, 27, 28])
+ktx_fee = 300000
+room_fund_fee = 200000
+month_length_days = 28
+max_shifts_per_day = 2
+wage_round_to = 1000
+classes_start_day = 2
+hungry_threshold = 20
+hungry_stamina_per_slot = 3
+starving_stamina_per_slot = 6
+early_sleep_bonus_stamina = 15
+faint_stamina = 30
+faint_sanity = -5
+rest_sanity = 30
+rest_stamina = 60

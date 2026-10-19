@@ -445,3 +445,48 @@ pause={
 - Test chỉ dùng logic thuần + SaveSystem tạo bằng `load("res://scripts/autoload/save_system.gd").new()` với `save_dir = "user://test_saves/"` (dọn dẹp sau test). Không phụ thuộc autoload.
 - Trong test, nạp class bằng `preload("res://scripts/core/...")` thay vì class_name để chạy được cả khi cache class chưa dựng.
 - Trước khi chạy test lần đầu cần `godot --headless --path . --import` (hoặc mở project bằng Editor một lần).
+
+---
+
+## Bước 4 — Đời sinh viên (đã làm)
+
+Logic thuần trong `scripts/life/` (test được không cần autoload); autoload `StudentLife` chỉ nối signal.
+
+### Dữ liệu (`scripts/data/` + `data/`)
+- `EconomyConfig` → `data/economy.tres` (học phí, phí KTX, số ca tối đa, ngưỡng đói, hậu quả…)
+- `ActionData` → `data/actions/*.tres` (`place_id`, `category`: class/study/work/rest/sleep/special, `allowed_slots`, `requires` dạng `flag.x == 1`, delta chỉ số, lương)
+- `ItemData` → `data/items/*.tres`, `ShopData` → `data/shops/*.tres`, `SubjectData` → `data/subjects/*.tres`, `StatusEffectData` → `data/effects/cafein.tres`
+- `LifeCatalog.load_default()` nạp tất cả (danh sách id cố định trong `life_catalog.gd` — thêm dữ liệu mới thì thêm id ở đó).
+
+### Trạng thái lưu
+- `GameState.life: LifeState` (khóa save `"life"`). Save cũ thiếu khóa → `LifeState` mới với `initialized = false` → `StudentLife` khởi tạo (TKB, thu phí ngày đầu). Không tăng `SAVE_VERSION`.
+- `Inventory` (mô hình túi đồ) nằm trong `LifeState.inventory`.
+
+### Autoload
+Thứ tự: `AudioManager, Settings, SaveSystem, Game, StudentLife, SceneLoader, Toast, DebugMenu`.
+```
+StudentLife:
+  signal day_summary_ready(summary), action_performed(action_id, result), collapsed(kind)
+  var catalog: LifeCatalog, sim: LifeSim
+  has_game(), get_place_actions(place_id), perform_action(id, params), get_shop_items(shop_id),
+  buy_item(shop_id, item_id), pay_tuition()
+```
+
+### Trình tự xử lý
+- `Game.state_replaced` → `sim.bind(state)`; nếu `life.initialized == false` → `start_new_life()`.
+- `Game.time_changed(day, slot)` → nếu là khung kế tiếp đúng thứ tự → xử lý khung vừa hết (vắng tiết, hiệu ứng hết hạn, hậu quả đói); nhảy giờ (tải game/debug) → chỉ đồng bộ. Sau đó `check_collapse` chạy deferred.
+- `Game.new_day(day)` → tổng kết ngày cũ (`day_summary_ready`) → xóa sổ ngày → chụp chỉ số đầu ngày → thu phí định kỳ → kiểm hạn học phí. Tất cả chạy **trước** khi `Game` tự lưu.
+
+### Nơi chốn & UI
+- `place_id`: `ktx_room`, `ktx_hallway`, `lecture_hall`, `library`, `food_shop` (khớp id khu vực bước 2).
+- `scripts/ui/life_ui.gd` (CanvasLayer 40, group `life_ui`, đặt sau PauseMenu): `open_place(place_id)`, `toggle_actions()`, `close_all()`. **Bước 2 gắn Interactable → `get_tree().call_group(&"life_ui", &"open_place", "<place_id>")`.** Hiện tạm mở bằng nút "Hành động"/phím Tab trên HUD.
+- HUD có thêm `%NextClassLabel`, `%TuitionLabel`, `%ActionButton` (thay `%AdvanceButton`).
+
+### API cho bước 5–6
+- `sim.charges.register({id, label, amount, period_days, first_day, condition_flag})` — vd. quỹ phòng (D4) với `condition_flag = "da_gop_quy"`.
+- `Economy.earn/spend/charge(state, amount, label)` — mọi thay đổi tiền phải qua đây để vào sổ thu chi.
+- Cờ học phí: `da_dong_hoc_phi`, `hoc_phi_tre_han`, `hoc_phi_qua_han`; việc làm: `lam_them_quan`.
+- `LifeSim.collapsed(kind)` ("faint"/"rest") — bước 2 dùng để đưa nhân vật về giường.
+
+### Công cụ
+- `python3 tools/sim_cashflow.py` — mô phỏng dòng tiền 14 ngày cho 3 chế độ (đọc số từ `data/*.tres`).
