@@ -620,7 +620,8 @@ MVP chơi được từ "Chơi mới" tới màn "Còn tiếp…" bằng menu ch
 - Cao trào: `t4_cao_trao_dem` (slot_start Đêm ngày 28) hoặc `t4_cao_trao_ngu` (trigger sleep ngày 28, khi ngủ sớm từ Tối) → `t4_cao_trao_noi_dung` → `~ stair_loop start`.
 - **`LifeSim.time_barriers: Array[int]`** (khóa `day*4+slot`): ngủ li bì do kiệt sức tinh thần dừng ở mốc. EventDirector thêm `CLIMAX_KEY = 28*4+3`.
 - `EventDirector.pump()` (gọi trong `_process`; bot gọi trực tiếp): chạy sự kiện kế tiếp trong hàng đợi; hết hàng đợi thì hoàn tất giấc ngủ bị ngắt — trừ khi đang ở cầu thang, có lệnh vào cầu thang đang chờ, hoặc đã `mvp_hoan_thanh`. `has_pending()`.
-- `AnomalyDirector.pending_start` + `start_pending()`: `~ stair_loop start` chỉ đặt cờ chờ; vào vòng lặp khi hội thoại hiện tại kết thúc.
+- `AnomalyDirector.pending_start` + `start_pending()`: `~ stair_loop start` chỉ đặt cờ chờ; vào vòng lặp khi hội thoại hiện tại kết thúc (đã về menu thì bỏ).
+- `AnomalyDirector.area_change_requested(area_id, spawn_id)`: phát khi kịch bản đổi khu (`~ change_area`, thoát cầu thang, `~ sleep_resume`) — bản đồ nghe để dịch chuyển nhân vật.
 - `_on_state_replaced` (ván mới, ngày 1 Sáng, chưa có sự kiện nào) tự xếp hàng `day_start` ngày 1 (không có signal `new_day` cho ngày đầu). Liên lạc mới `phong_dao_tao`.
 
 ### Màn "Còn tiếp…" — `scripts/ui/ending_screen.gd` (CanvasLayer 95, group `ending`)
@@ -635,6 +636,6 @@ MVP chơi được từ "Chơi mới" tới màn "Còn tiếp…" bằng menu ch
 
 ### Test & bot chơi thử
 - `tests/mvp_bot.gd` (không phải file test): bot chơi trọn một ván bằng autoload thật, đồng bộ (tự gọi `pump()`, `start_pending()`, `check_collapse()`), 3 chiến lược "Chăm học" / "Chăm làm" / "Theo K.", chọn lựa chọn theo chuỗi con của nội dung.
-- `test_playthrough_mvp.gd` (3 × 3 chế độ: tới "Còn tiếp…" ngày 28, đủ beat bắt buộc, ý đồ học phí BALANCE), `test_calendar_content.gd`, `test_required_beats.gd`, `test_ktx_choice.gd`, `test_ending_summary.gd`, `test_tutorial_hints.gd`.
+- `test_playthrough_mvp.gd` (3 × 3 chế độ: tới "Còn tiếp…" ngày 28, đủ beat bắt buộc, ý đồ học phí BALANCE), `test_calendar_content.gd` (gồm cờ chỉ đọc mà không ai đặt), `test_required_beats.gd`, `test_ktx_choice.gd`, `test_ending_summary.gd`, `test_tutorial_hints.gd`, `test_area_requests.gd`.
 - `run_tests.gd` báo FAIL (không treo) khi một file test lỗi cú pháp.
 - **Lưu ý xuất bản (export):** `.dlg` không phải resource → khi tạo export preset phải thêm `content/dialogue/*.dlg` vào "Filters to export non-resource files", nếu không bản build sẽ không có thoại.

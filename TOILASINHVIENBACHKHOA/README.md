@@ -4,7 +4,7 @@ Game 2D nhập vai + mô phỏng đời sinh viên + bí ẩn đô thị nhẹ. 
 
 - Tài liệu: `FEATURES.md`, `STORY_MVP.md`, `BALANCE.md`, `docs/ARCHITECTURE.md`, `docs/TASKS.md`, `docs/prompts/`
 - Chạy game: mở thư mục TOILASINHVIENBACHKHOA bằng Godot 4.4+ → F5.
-- Chạy test: `godot --headless --path . --import` (lần đầu) rồi `godot --headless --path . -s res://tests/run_tests.gd` (168 test, gồm bot chơi thử trọn MVP 3 chiến lược × 3 chế độ — `tests/test_playthrough_mvp.gd`)
+- Chạy test: `godot --headless --path . --import` (lần đầu) rồi `godot --headless --path . -s res://tests/run_tests.gd` (171 test, gồm bot chơi thử trọn MVP 3 chiến lược × 3 chế độ — `tests/test_playthrough_mvp.gd`)
 - Mô phỏng dòng tiền: `python3 tools/sim_cashflow.py`
 - Font tiếng Việt: xem `fonts/README.md`.
 - Âm thanh dị tượng: `python3 tools/gen_audio.py`

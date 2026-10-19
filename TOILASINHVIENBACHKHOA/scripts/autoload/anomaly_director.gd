@@ -14,6 +14,9 @@ signal stair_loop_ended(escaped: bool)
 signal night_scene(active: bool)
 signal npc_moved(npc_id: String, anchor_id: String, seconds: float)
 signal npc_hidden(npc_id: String)
+## Kịch bản đưa người chơi sang khu khác (cảnh đêm, cao trào, thoát cầu thang, ngủ tiếp).
+## Bản đồ nghe để dịch chuyển nhân vật; spawn_id rỗng = điểm vào mặc định của khu.
+signal area_change_requested(area_id: String, spawn_id: String)
 
 const CATALOG_PATH: String = "res://data/anomalies/stair_anomalies.tres"
 const HINTS_PATH: String = "res://data/puzzle_hints.tres"
@@ -158,7 +161,7 @@ func _is_controllable() -> bool:
 # --- Vòng lặp cầu thang (G3) ----------------------------------------------
 
 func begin_stair_loop() -> void:
-	if loop.active or catalog == null:
+	if loop.active or catalog == null or not Game.has_active_game():
 		return
 	loop.start(_rng.randi(), catalog.ids(), hints.required_streak)
 	question_asked = false
@@ -177,6 +180,9 @@ func begin_stair_loop() -> void:
 ## Vào vòng lặp nếu có lệnh đang chờ và không còn hội thoại nào chạy.
 func start_pending() -> void:
 	if not pending_start:
+		return
+	if not Game.has_active_game():
+		pending_start = false  # đã về menu chính trước khi kịp vào cầu thang
 		return
 	if DialogueSystem.is_active():
 		start_pending.call_deferred()  # thử lại khung hình sau
@@ -260,7 +266,7 @@ func _end_loop(escaped: bool) -> void:
 		Game.state.flags.set_flag("thoat_cau_thang", 1)
 		DialogueSystem.dialogue_event.emit("stair_loop_escaped", PackedStringArray())
 		DialogueSystem.start("cau_thang_thoat")
-	EventDirector.current_place = "ktx_hallway"
+	_request_area("ktx_hallway", "")
 	_recompute()
 	stair_loop_ended.emit(escaped)
 
@@ -370,6 +376,11 @@ func _on_state_replaced() -> void:
 	_drain = DrainCounter.new(1, 5.0, 10)
 
 
+func _request_area(area_id: String, spawn_id: String) -> void:
+	EventDirector.current_place = area_id
+	area_change_requested.emit(area_id, spawn_id)
+
+
 # --- Lệnh hội thoại -------------------------------------------------------
 
 func _register_dialogue_hooks() -> void:
@@ -386,7 +397,7 @@ func _register_dialogue_hooks() -> void:
 	)
 	DialogueSystem.register_command("change_area", func(args: PackedStringArray, _state: GameState) -> void:
 		if not args.is_empty():
-			EventDirector.current_place = args[0]
+			_request_area(args[0], args[1] if args.size() >= 2 else "")
 	)
 	DialogueSystem.register_command("npc_move", func(args: PackedStringArray, _state: GameState) -> void:
 		if args.size() >= 2:
@@ -398,7 +409,7 @@ func _register_dialogue_hooks() -> void:
 	)
 	DialogueSystem.register_command("sleep_resume", func(args: PackedStringArray, _state: GameState) -> void:
 		night_scene.emit(false)
-		EventDirector.current_place = "ktx_room"
+		_request_area("ktx_room", "")
 		StudentLife.complete_sleep(args[0].to_float() if not args.is_empty() else 1.0)
 	)
 	DialogueCondition.register_variable("stair.anomaly", func(_variable: String, _state: GameState) -> int:
