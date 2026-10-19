@@ -49,7 +49,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | A5 | ✅ **Tiền** — thu: lương, trợ cấp, học bổng; chi: trọ, ăn, giáo trình, học phí | MVP | [P] |
 | A6 | ✅ **Quan hệ theo từng NPC** — độ thân thiết riêng với mỗi người | MVP | [P] |
 | A7 | **Uy tín** — giảm khi làm việc tà đạo (dụ dỗ người khác) | C1 | [C1] |
-| A8 | **Mức dính líu với K.** — tăng khi nhận việc/đi hội thảo của K.; cao thì mở Bad Ending "con rối" | MVP | [C1] |
+| A8 | ✅ **Mức dính líu với K.** — tăng khi nhận việc/đi hội thảo của K.; cao thì mở Bad Ending "con rối" | MVP | [C1] |
 | A9 | **Trạng thái tạm thời** — no, buồn ngủ, cafein, cảm sốt | C1 | [ĐX] |
 | A10 | **Ốm** — kiệt sức hoặc dầm mưa thì nằm nhà 1–2 ngày | C1 | [ĐX] |
 
@@ -92,8 +92,8 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 |---|---|---|---|
 | D1 | ✅ Việc làm thêm: phụ quán cơm, bưng cà phê | MVP | [C1] |
 | D2 | Việc làm thêm: gia sư, bồi bàn, trực lab, shipper | SAU | [P] |
-| D3 | Việc tà đạo: phát tờ rơi dụ dỗ (MVP), phục vụ hộp đêm (C1) — hoa hồng cao, tăng A8, bật cờ cốt truyện | MVP / C1 | [C1] |
-| D4 | Quỹ chung của phòng KTX — các thành viên góp tiền | MVP | [ĐX] |
+| D3 | ✅ Việc tà đạo: phát tờ rơi dụ dỗ (MVP), phục vụ hộp đêm (C1) — hoa hồng cao, tăng A8, bật cờ cốt truyện | MVP / C1 | [C1] |
+| D4 | ✅ Quỹ chung của phòng KTX — các thành viên góp tiền | MVP | [ĐX] |
 | D5 | Gửi tiền về quê | C1 | [C1] |
 | D6 | ✅ Cửa hàng: đồ ăn, giáo trình, vật liệu chế tạo | MVP | [ĐX] |
 | D7 | ✅ Món ăn có hiệu ứng riêng: cơm tấm (Đói), trà sữa (Sanity), cà phê cóc (Thể lực tạm thời) | MVP | [P] |
@@ -105,11 +105,11 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
 | E1 | ✅ Hội thoại có chân dung, lựa chọn rẽ nhánh, mỗi lựa chọn đổi chỉ số/cờ | MVP | [P] |
-| E2 | Lịch trình NPC theo khung giờ | MVP | [ĐX] |
-| E3 | NPC đổi trạng thái theo cốt truyện (Minh: bình thường → thâm quầng → úp mặt vào tường → mất tích) | MVP | [C1] |
+| E2 | ✅ Lịch trình NPC theo khung giờ | MVP | [ĐX] |
+| E3 | ✅ NPC đổi trạng thái theo cốt truyện (Minh: bình thường → thâm quầng → úp mặt vào tường → mất tích) | MVP | [C1] |
 | E4 | Bạn cùng phòng mách mối làm thêm và tin đồn | C1 | [P] |
 | E5 | Cảnh báo Minh sớm → ảnh hưởng kết quả giải cứu | C1 | [C1] |
-| E6 | Đi chơi với bạn: hồi Sanity, tăng Quan hệ | MVP | [P] |
+| E6 | ✅ Đi chơi với bạn: hồi Sanity, tăng Quan hệ | MVP | [P] |
 | E7 | Gọi điện về quê | C1 | [C1] |
 | E8 | Giảng viên (hỏi bài, giới thiệu việc) | SAU | [P] |
 | E9 | Câu lạc bộ | SAU | [P] |
@@ -155,7 +155,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
 | H1 | ✅ Cờ cốt truyện (ghi nhớ lựa chọn) | MVP | [ĐX] |
-| H2 | Sổ nhiệm vụ | MVP | [ĐX] |
+| H2 | ✅ Sổ nhiệm vụ | MVP | [ĐX] |
 | H3 | Hội thảo của K. có lịch cố định | C1 | [C1] |
 | H4 | Đồ uống hộp đêm có tác dụng ẩn (trừ Sanity, tăng A8) | C1 | [C1] |
 | H5 | Minh mất tích cùng quỹ chung (D4) | C1 | [C1] |
@@ -172,8 +172,8 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| I1 | Túi đồ | MVP | [ĐX] |
-| I2 | Điện thoại: tin nhắn, ví, thời khóa biểu, radar (G1) | MVP | [ĐX] |
+| I1 | ✅ Túi đồ | MVP | [ĐX] |
+| I2 | ✅ Điện thoại: tin nhắn, ví, thời khóa biểu, radar (G1) | MVP | [ĐX] |
 | I3 | Điện thoại vỡ của K. (vật phẩm cốt truyện) | C1 | [C1] |
 | I4 | Kỹ năng phụ: nấu ăn, sửa đồ điện, lập trình | SAU | [ĐX] |
 

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "q_viec_lam"
+title = "Tìm việc làm thêm"
+description = "Cần thêm thu nhập để kịp đóng học phí."
+start_condition = "day >= 1"
+steps = Array[Dictionary]([{"text": "Hỏi xin việc ở quán cơm – cà phê", "done_condition": "flag.lam_them_quan == 1"}])
+deadline_day = 0
+deadline_extend_flag = ""
+extended_deadline_day = 0
+optional = false

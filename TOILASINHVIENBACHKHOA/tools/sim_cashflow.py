@@ -71,7 +71,9 @@ def make_schedule(seed):
 
 
 class Sim:
-    def __init__(self, diff, seed, room_fund):
+    def __init__(self, diff, seed, room_fund, flyer=False):
+        self.flyer = flyer
+        self.k_involvement = 0
         cfg = DIFF[diff]
         self.mult = cfg.get("decay_multiplier", 1.0)
         self.wage_mult = cfg.get("wage_multiplier", 1.0)
@@ -166,7 +168,10 @@ class Sim:
             elif self.slot == NIGHT:
                 self.sleep()
             elif self.shifts < ECO["max_shifts_per_day"] and self.st["stamina"] > 25:
-                if self.slot == EVENING:
+                if self.flyer and self.day >= 15:
+                    self.act("phat_to_roi")
+                    self.k_involvement = min(100, self.k_involvement + ACT["phat_to_roi"].get("adds_flag_amount", 0))
+                elif self.slot == EVENING:
                     self.act("bung_ca_phe")
                 else:
                     self.act("lam_quan_com")
@@ -196,5 +201,19 @@ def main():
                   f"{sum(r.faints for r in runs) / len(runs):>6.1f}")
 
 
+def main_extension():
+    due = ECO["tuition_amount"] + ECO["tuition_late_penalty"]
+    print(f"\nTới hết ngày 28 (hạn gia hạn, phải đóng {fmt(due)} đ) — có/không nhận việc phát tờ rơi cho K. từ ngày 15")
+    print(f"{'Chế độ':<9}{'Việc của K.':<13}{'Tiền ngày 29 (TB)':>19}{'So với cần đóng':>18}{'Dính líu K.':>13}")
+    for diff, label in (("easy", "Dễ"), ("hard", "Khó"), ("extreme", "Cực khó")):
+        for flyer in (False, True):
+            runs = [Sim(diff, seed, False, flyer).run(28) for seed in range(20)]
+            avg = sum(r.money for r in runs) // len(runs)
+            gap = avg - due
+            print(f"{label:<9}{'có' if flyer else 'không':<13}{fmt(avg):>19}{('+' if gap >= 0 else '') + fmt(gap):>18}"
+                  f"{sum(r.k_involvement for r in runs) // len(runs):>13}")
+
+
 if __name__ == "__main__":
     main()
+    main_extension()

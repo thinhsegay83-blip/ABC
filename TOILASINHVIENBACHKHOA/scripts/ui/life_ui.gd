@@ -47,6 +47,8 @@ func _unhandled_input(event: InputEvent) -> void:
 # --- API công khai --------------------------------------------------------
 
 func open_place(place_id: String) -> void:
+	if place_id != EventDirector.current_place:
+		EventDirector.enter_area(place_id)
 	_current_place = place_id
 	_info_panel.visible = false
 	_menu_panel.visible = true
@@ -139,6 +141,13 @@ func _refresh_menu() -> void:
 	_menu_body.add_child(place_bar)
 	_menu_body.add_child(HSeparator.new())
 
+	var people: Array[Dictionary] = EventDirector.npcs_at(_current_place)
+	if not people.is_empty():
+		_menu_body.add_child(_label("Ở đây có", 17, TITLE_COLOR))
+		for person: Dictionary in people:
+			_add_npc_row(person)
+		_menu_body.add_child(HSeparator.new())
+
 	for entry: Dictionary in sim.get_place_actions(_current_place):
 		var action: ActionData = entry["action"]
 		if action.category == "study":
@@ -165,6 +174,24 @@ func _refresh_menu() -> void:
 	var close_button: Button = _button("Đóng (Esc)", 15)
 	close_button.pressed.connect(close_all)
 	_menu_body.add_child(close_button)
+
+
+func _add_npc_row(person: Dictionary) -> void:
+	var npc: NpcData = person["npc"]
+	var info: Dictionary = person["info"]
+	var display: String = DialogueSystem.display_name_of(npc.character_id)
+	var button: Button = _button("Nói chuyện với %s" % display, 16)
+	button.pressed.connect(_talk.bind(npc.id))
+	_menu_body.add_child(button)
+	if info["behavior"] == "face_wall" and not npc.murmurs.is_empty():
+		var murmur: String = npc.murmurs[randi() % npc.murmurs.size()]
+		_menu_body.add_child(_label("   (đứng quay mặt vào tường, lẩm bẩm: %s)" % murmur, 13, MUTED_COLOR))
+
+
+func _talk(npc_id: String) -> void:
+	close_all()
+	if not EventDirector.interact(npc_id):
+		Toast.show_message("%s không muốn nói chuyện lúc này." % DialogueSystem.display_name_of(npc_id))
 
 
 func _add_action_row(entry: Dictionary, title: String, params: Dictionary) -> void:
@@ -219,8 +246,13 @@ func _add_item_row(shop_id: String, entry: Dictionary) -> void:
 	row.add_child(label)
 	var buy: Button = _button("Mua" if entry["enabled"] else str(entry["reason"]), 13)
 	buy.disabled = not entry["enabled"]
-	buy.pressed.connect(_buy.bind(shop_id, item.id))
+	buy.pressed.connect(_buy.bind(shop_id, item.id, false))
 	row.add_child(buy)
+	if item.can_carry and item.consume_on_buy:
+		var carry: Button = _button("Mang về", 13)
+		carry.disabled = not entry["enabled"]
+		carry.pressed.connect(_buy.bind(shop_id, item.id, true))
+		row.add_child(carry)
 	_menu_body.add_child(row)
 
 
@@ -252,8 +284,8 @@ func _do_action(action_id: String, params: Dictionary) -> void:
 		_refresh_if_open()
 
 
-func _buy(shop_id: String, item_id: String) -> void:
-	StudentLife.buy_item(shop_id, item_id)
+func _buy(shop_id: String, item_id: String, carry: bool) -> void:
+	StudentLife.buy_item(shop_id, item_id, carry)
 	_refresh_menu()
 
 
@@ -349,6 +381,7 @@ func _on_day_summary(summary: Dictionary) -> void:
 func _show_next_summary() -> void:
 	if _pending_summaries.is_empty():
 		_summary_panel.visible = false
+		EventDirector.unblock("summary")
 		_dim.visible = _menu_panel.visible or _info_panel.visible
 		return
 	# Ngủ li bì nhiều ngày: chỉ cần xem tổng kết mới nhất.
@@ -358,6 +391,7 @@ func _show_next_summary() -> void:
 	_info_panel.visible = false
 	_summary_panel.visible = true
 	_dim.visible = true
+	EventDirector.block("summary")
 	_clear(_summary_body)
 	_summary_body.add_child(_label(
 		"Tổng kết Ngày %d — %s" % [int(summary["day"]), summary["weekday_name"]], 22, TITLE_COLOR

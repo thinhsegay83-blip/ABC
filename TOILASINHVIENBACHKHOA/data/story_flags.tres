@@ -19,5 +19,8 @@ flags = {
 "thay_to_roi": "1 = đã thấy tờ rơi Tương Lai Vàng",
 "gap_k": "1 = đã gặp K.",
 "quy_phong": "Số dư quỹ phòng (VND)",
-"nghe_truyen_thuyet": "1 = đã nghe tiền bối kể truyền thuyết cầu thang"
+"nghe_truyen_thuyet": "1 = đã nghe tiền bối kể truyền thuyết cầu thang",
+"thay_minh_ra_ngoai": "1 = đã thấy Minh lén ra ngoài lúc đêm",
+"sys_quy_phong_ngay_gop": "Hệ thống: ngày bắt đầu góp quỹ phòng (0 = chưa)",
+"gap_tien_boi": "1 = đã gặp tiền bối năm n"
 }

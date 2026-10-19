@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="NpcData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/npc_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "tien_boi"
+character_id = "tien_boi"
+schedule = Array[Dictionary]([{"day_from": 1, "day_to": 0, "weekdays": [0, 1, 2, 3, 4], "slots": [2], "place": "library", "anchor": "senior_spot", "condition": "", "behavior": "stand"}])
+state_flag = ""
+default_dialogue = "tien_boi_chao"
+murmurs = Array[String]([])

@@ -9,3 +9,4 @@ display_name = "Bánh mì"
 price = 20000
 category = "food"
 hunger = 15
+can_carry = true

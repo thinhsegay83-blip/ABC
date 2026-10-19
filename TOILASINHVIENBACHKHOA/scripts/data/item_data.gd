@@ -18,3 +18,5 @@ extends Resource
 @export var consume_on_buy: bool = true
 ## Giáo trình của môn nào (tự học môn đó hiệu quả hơn).
 @export var study_subject: String = ""
+## Mua mang về được (vào túi đồ, dùng lúc nào cũng được).
+@export var can_carry: bool = false

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "q_hoc_phi"
+title = "Đóng học phí HK1"
+description = "Học phí học kỳ 1 là 16.000.000 đ. Đóng ở máy đóng học phí tại giảng đường."
+start_condition = "day >= 1"
+steps = Array[Dictionary]([{"text": "Đóng học phí ở máy tại giảng đường", "done_condition": "flag.da_dong_hoc_phi == 1"}])
+deadline_day = 14
+deadline_extend_flag = "hoc_phi_tre_han"
+extended_deadline_day = 28
+optional = false

@@ -30,6 +30,8 @@ var faint_slot_key: int = -1
 var charges_last_day: Dictionary = {}
 ## Cảnh báo ngưỡng đã báo (để chỉ báo lần đầu chạm ngưỡng).
 var warnings_shown: Dictionary = {}
+## NPC đã đi chơi cùng hôm nay (E6: 1 lần/ngày/NPC).
+var outings_today: Array[String] = []
 
 
 func to_dict() -> Dictionary:
@@ -51,6 +53,7 @@ func to_dict() -> Dictionary:
 		"faint_slot_key": faint_slot_key,
 		"charges_last_day": charges_last_day.duplicate(),
 		"warnings_shown": warnings_shown.duplicate(),
+		"outings_today": outings_today.duplicate(),
 	}
 
 
@@ -108,6 +111,7 @@ func from_dict(data: Dictionary) -> void:
 	var charges: Dictionary = _dict(data, "charges_last_day")
 	for key: Variant in charges.keys():
 		charges_last_day[str(key)] = int(charges[key])
+	outings_today = _string_array(data, "outings_today")
 	warnings_shown.clear()
 	var warnings: Dictionary = _dict(data, "warnings_shown")
 	for key: Variant in warnings.keys():

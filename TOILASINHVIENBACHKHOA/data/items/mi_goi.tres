@@ -9,3 +9,4 @@ display_name = "Mì gói"
 price = 8000
 category = "food"
 hunger = 12
+can_carry = true

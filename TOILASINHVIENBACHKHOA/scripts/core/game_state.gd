@@ -15,6 +15,8 @@ var clock: GameClock
 var flags: FlagStore
 ## Đời sinh viên (bước 4): TKB, điểm danh, túi đồ, sổ thu chi…
 var life: LifeState
+## Cốt truyện (bước 5): sự kiện đã chạy, nhiệm vụ, tin nhắn, danh bạ.
+var story: StoryState
 var difficulty_id: String = DEFAULT_DIFFICULTY_ID
 ## Tên nhân vật (J10). Save cũ thiếu → "" → nơi dùng thay bằng tên mặc định.
 var player_name: String = ""
@@ -27,6 +29,7 @@ func _init() -> void:
 	clock = GameClock.new()
 	flags = FlagStore.new()
 	life = LifeState.new()
+	story = StoryState.new()
 	# Ván "trắng" dùng sẵn chỉ số khởi đầu (tiền = 0 tới khi chọn chế độ).
 	stats.from_dict(_start_stats_dict(0))
 
@@ -48,6 +51,7 @@ func setup_new_game(difficulty: DifficultyConfig) -> void:
 	clock.set_time(1, GameClock.Slot.MORNING)
 	flags.clear()
 	life = LifeState.new()  # StudentLife khởi tạo lại khi thấy initialized = false
+	story = StoryState.new()
 
 
 ## Trừ chỉ số theo cấu hình × hệ số chế độ (làm tròn tới số nguyên gần nhất).
@@ -76,6 +80,7 @@ func to_dict() -> Dictionary:
 		"clock": clock.to_dict(),
 		"flags": flags.to_dict(),
 		"life": life.to_dict(),
+		"story": story.to_dict(),
 	}
 
 
@@ -93,6 +98,8 @@ func from_dict(data: Dictionary) -> void:
 	# Save cũ (bước 1) thiếu "life" → LifeState mới, chưa khởi tạo.
 	life = LifeState.new()
 	life.from_dict(_get_dict(data, "life"))
+	story = StoryState.new()
+	story.from_dict(_get_dict(data, "story"))
 
 
 # --- Nội bộ ---------------------------------------------------------------

@@ -1,0 +1,134 @@
+# DEMO bước 5 — bước 7 sẽ thay bằng nội dung thật.
+# Mỗi loại @trigger một sự kiện mẫu. Giọng thoại trung tính, câu ngắn.
+
+# --- day_start ---------------------------------------------------------------
+== t_tin_nhan_ngay_2
+@trigger day_start
+@when day == 2
+@once
+~ message me "Con tới trường chưa? Nhớ ăn uống đầy đủ nha."
+~ message nhom_lop "Lớp ơi, mai có tiết đầu tiên. Nhớ xem thời khóa biểu."
+
+== t_me_goi_ngay_3
+@trigger day_start
+@when day == 3
+@once
+~ ring me
+
+# --- phone_call --------------------------------------------------------------
+== goi_me_tuan_1
+@trigger phone_call me
+@once
+me: Alo, con hả? Ở trên đó quen chưa?
+player: Dạ, con quen rồi. Phòng có bốn người.
+me: Học phí có lo được không con?
+* Con đang đi làm thêm -> goi_me_lam_them
+* Con lo được, mẹ yên tâm -> goi_me_yen_tam
+
+== goi_me_lam_them
+me: Làm vừa sức thôi. Sức khỏe là trên hết.
+~ stat sanity 8
+
+== goi_me_yen_tam
+me: Ừ. Có gì thì gọi mẹ.
+~ stat sanity 8
+
+# --- slot_start --------------------------------------------------------------
+== t_nhac_an
+@trigger slot_start
+@when stat.hunger < 30
+@daily
+narrator: Bụng réo một tiếng. Nên ăn gì đó.
+
+# --- enter_area --------------------------------------------------------------
+== t_bang_tin_to_roi
+@trigger enter_area ktx_hallway
+@when day >= 8
+@once
+narrator: Bảng tin hành lang có tờ rơi mới, màu vàng chói.
+narrator: "CLB TƯƠNG LAI VÀNG — Khởi nghiệp không cần vốn. Thu nhập 15–20 triệu/tháng."
+~ set thay_to_roi 1
+
+# --- interact: K -------------------------------------------------------------
+== k_moi_to_roi
+@trigger interact k
+@when day >= 15 and flag.nhan_viec_to_roi == 0
+@daily
+@priority 10
+k (cuoi): Em là tân sinh viên đúng không? Anh để ý em lâu rồi.
+k: Bên anh cần người phát tờ rơi. 350.000 đ một ca. Nhẹ nhàng.
+k: Làm tốt thì anh giới thiệu vào CLB. Ở đó mới là tiền thật.
+* Nhận việc -> k_nhan_viec
+* Để em suy nghĩ -> k_tu_choi
+
+== k_nhan_viec
+~ set nhan_viec_to_roi 1
+~ set gap_k 1
+~ k_involve 5
+~ give xap_to_roi
+k (cuoi): Tốt lắm. Cứ đứng ở sảnh giảng đường, ai đi qua thì phát.
+
+== k_tu_choi
+~ set gap_k 1
+k: Không sao. Cơ hội không chờ ai đâu em.
+
+== k_chao
+k (cuoi): Chào em. Anh là K., năm trên.
+k: Đi học vất vả quá ha. Có muốn kiếm thêm thu nhập không?
+~ set gap_k 1
+
+# --- interact: Minh ----------------------------------------------------------
+== minh_trang_thai_3
+@trigger interact minh
+@when flag.minh_trang_thai == 3
+@priority 5
+narrator: Minh đứng sát tường, quay lưng lại, miệng lẩm bẩm.
+minh: …đầu tư vào chính mình… đạo hàm của thành công…
+* Gọi Minh -> minh_tt3_goi
+* Để Minh yên -> minh_tt3_de_yen
+
+== minh_tt3_goi
+player: Minh. Minh ơi.
+minh: …Hả? Mình đứng đây lâu chưa?
+player: Lâu rồi. Dạo này bạn sao vậy?
+minh: Không sao. Chỉ hơi mệt.
+~ set canh_bao_minh 1
+
+== minh_tt3_de_yen
+narrator: Bạn quay về giường. Tiếng lẩm bẩm vẫn còn.
+
+== minh_ru_di_an
+@trigger interact minh
+@when slot == TOI and flag.minh_trang_thai <= 1
+@daily
+@priority 1
+minh: Đói quá. Ra ngoài ăn vặt không? Mỗi người chừng 50.000 đ.
+* Đi -> minh_di_an [need money >= 50000 | Không đủ tiền]
+* Thôi, để hôm khác -> minh_khong_di
+
+== minh_di_an
+~ action di_choi minh
+minh (cuoi): Lâu lắm mới thấy vui như vầy.
+
+== minh_khong_di
+minh: Ừ, hôm khác.
+
+# --- interact: tiền bối (nhiệm vụ) -------------------------------------------
+== tien_boi_truyen_thuyet
+@trigger interact tien_boi
+@when flag.nghe_truyen_thuyet == 0
+@priority 5
+~ quest start q_truyen_thuyet
+~ set gap_tien_boi 1
+tien_boi: Ngồi đi. Anh kể chuyện này, nghe cho vui thôi.
+tien_boi: Có người bảo cầu thang KTX lúc khuya đi mãi không hết.
+tien_boi: Họ dặn: thấy gì khác thường thì quay lại. Không có gì lạ thì cứ đi tiếp.
+~ set nghe_truyen_thuyet 1
+
+# --- hội thoại mặc định còn thiếu ---------------------------------------------
+== giang_vien_chao
+giang_vien: Em có câu hỏi gì về bài hôm nay không?
+giang_vien: Về ôn lại phần đơn vị đo. Nhiều bạn sai chỗ đó.
+
+== ban_phong_chao
+narrator: Bạn cùng phòng đang đeo tai nghe, gật đầu chào.

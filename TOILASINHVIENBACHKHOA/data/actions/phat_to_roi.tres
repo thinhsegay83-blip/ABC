@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "phat_to_roi"
+display_name = "Phát tờ rơi cho K."
+place_id = "lecture_hall"
+category = "work"
+allowed_slots = Array[int]([0, 1, 2])
+requires = "flag.nhan_viec_to_roi == 1 and week >= 3"
+requires_reason = "Chưa nhận việc phát tờ rơi"
+hide_when_locked = true
+stamina = -10
+base_wage = 350000
+counts_as_shift = true
+wrong_slot_reason = "Khuya rồi, không ai nhận tờ rơi"
+adds_flag = "dinh_lieu_k"
+adds_flag_amount = 10

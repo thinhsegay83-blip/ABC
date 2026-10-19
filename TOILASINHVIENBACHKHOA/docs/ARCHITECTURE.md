@@ -532,3 +532,40 @@ DialogueSystem:
 - Dữ liệu: `CharacterData` (`data/characters/*.tres`, chân dung để trống tới khi có đồ họa), `StoryFlagRegistry` (`data/story_flags.tres`), `PlayerDefaults` (`data/player_defaults.tres`).
 - **Export**: thêm `*.dlg` vào *Export → Resources → Filters to export non-resource files*.
 - Giọng thoại: trung tính, câu ngắn, xưng "mình/bạn" (tham khảo Stardew Valley, Kindergarten, Punch Club).
+
+---
+
+## Bước 5 — NPC & sự kiện (đã làm)
+
+Thứ tự autoload: `AudioManager, Settings, SaveSystem, Game, DialogueSystem, StudentLife, EventDirector, SceneLoader, Toast, DebugMenu`.
+
+Lớp CanvasLayer: Hud 10 · DialogueBox 30 · LifeUI (menu hành động/quầy/TKB/tổng kết) 40 · Phone 48 · PauseMenu 50 · Toast 90 · SceneLoader 100 · DebugMenu 120. Trong `game.tscn`, LifeUI/DialogueBox/Phone đặt **sau** PauseMenu để nhận phím trước.
+
+### Save
+`GameState.story: StoryState` (khóa `"story"`): `events_fired`, `quests`, `messages`, `known_npcs`, `pending_calls`. `LifeState.outings_today`. Save cũ thiếu → mặc định.
+
+### NPC theo lịch (E2, E3)
+- `NpcData` (`data/npcs/*.tres`): `schedule: Array[Dictionary]` — mỗi mục `{day_from, day_to, weekdays, slots, place, anchor, condition, behavior}`, **mục đầu tiên khớp thắng**, `place = ""` = vắng mặt. `state_flag`, `default_dialogue`, `murmurs`.
+- `NpcSchedule.resolve(npc, state)` → `{place, anchor, behavior}` hoặc `{}`. `place` = id khu (`ktx_room`, `ktx_hallway`, `lecture_hall`, `library`, `food_shop`), `anchor` = điểm đứng trên bản đồ (bước 2 đặt Marker2D cùng tên: `seat_minh, minh_desk, minh_bed, minh_wall, counter, flyer_spot, k_spot, k_library, senior_spot, seat_front, podium, bed_tuan, bed_khoa`).
+- Minh: `minh_trang_thai` 1 bình thường · 2 thâm quầng (bước 2 đổi sprite) · 3 Tối/Đêm đứng quay mặt vào tường ở hành lang (`behavior = face_wall`, bong bóng `murmurs`) · 4 vắng mặt (C1).
+- `EventDirector.npcs_at(place_id)`; bước 2 dùng để sinh NPC ở anchor khi `Game.time_changed`/chuyển khu/cờ đổi.
+
+### Sự kiện (storylet)
+Node `.dlg` có metadata: `@trigger day_start | slot_start | enter_area <khu> | interact <npc> | sleep | phone_call <liên_lạc>`, `@when <đk>` (nhiều dòng = and), `@priority <số>`, `@once`, `@daily`.
+- `EventSelector.select(...)` lọc + sắp ưu tiên (bằng nhau → thứ tự file/dòng); `conditions_hold` kiểm tra lại lúc thật sự chạy.
+- `EventDirector`: `day_start` chạy **sau khi** đóng màn tổng kết (LifeUI gọi `block("summary")`/`unblock`); `interact` chỉ chạy sự kiện ưu tiên cao nhất, không có thì `default_dialogue`; `sleep`: có sự kiện → giấc ngủ dừng ở khung Đêm, sự kiện xong tự ngủ tiếp (`StudentLife.complete_sleep()` / lệnh `~ sleep [hệ số]`).
+- API: `interact(id)`, `enter_area(area_id)` (cập nhật `current_place`), `phone_call(contact_id)`, `block/unblock(key)`, `refresh_quests()`; signal `messages_changed`, `quests_changed`, `calls_changed`.
+- **Bước 2 cần gọi**: Interactable của NPC → `EventDirector.interact(npc_id)`; sau khi chuyển khu → `EventDirector.enter_area(area_id)`.
+
+### Kinh tế phụ
+- Phát tờ rơi cho K. (`data/actions/phat_to_roi.tres`): sảnh giảng đường, 350.000 × hệ số, tính vào 2 ca/ngày, `dinh_lieu_k +10/ca` (kẹp 0–100). Nhận việc qua hội thoại: `~ set nhan_viec_to_roi 1`, `~ k_involve 5`, `~ give xap_to_roi`.
+- A8 ẩn (QĐ-5.1 = A): danh bạ hiện câu mô tả theo bậc (`StoryVars.k_contact_note`).
+- Quỹ phòng (`RoomFund`): cờ `da_gop_quy` → 1 (hoặc `~ join_room_fund`) → thu 200.000 ngay + khoản 28 ngày; quỹ (`quy_phong`) += 4 × 200.000 mỗi kỳ (bạn + Minh + Tuấn + Khoa). **Nội dung chỉ đặt cờ, không `~ money`.**
+- Đi chơi (`di_choi`, gọi từ hội thoại `~ action di_choi <npc>`): Tối, 50.000 đ, Sanity +15, quan hệ +5, 1 lần/ngày/NPC.
+- Mua mang về (`ItemData.can_carry`) + dùng từ túi (`StudentLife.use_item`).
+
+### Nhiệm vụ, tin nhắn, điện thoại
+- `QuestData` (`data/quests/*.tres`): `start_condition`, `steps: [{text, done_condition}]`, hạn + hạn gia hạn theo cờ. `QuestLog.evaluate()` chạy khi cờ/thời gian đổi và sau mỗi hội thoại.
+- Lệnh: `~ message <người_gửi> "chữ"`, `~ ring <liên_lạc>`, `~ quest start|done|fail <id>`, `~ k_involve <±n>`, `~ join_room_fund`, `~ npc_state <npc> <giá_trị>`, `~ meet <npc>`, `~ sleep [hệ số]`. Biến: `quest.<id>` (0/1/2/3), `npc_here.<id>`.
+- Điện thoại (`scripts/ui/phone.gd`, Tab; I mở Túi đồ): Tin nhắn, Ví (đóng học phí, quỹ phòng), Lịch học, Nhiệm vụ, Danh bạ (5 bậc quan hệ, Nghe/Gọi), Túi đồ, Radar (màn chờ — bước 6). `_signal_label` để bước 6 làm nhiễu.
+- Phím: Q = menu hành động (tạm, tới khi có bản đồ), Tab = điện thoại.

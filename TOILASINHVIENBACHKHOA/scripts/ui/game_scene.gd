@@ -19,5 +19,6 @@ static func _build_hint() -> String:
 	hints.append("Esc: tạm dừng")
 	if OS.is_debug_build():
 		hints.append("F1: menu debug")
-	hints.append("Tab / nút “Hành động”: đi học, làm thêm, ăn, ngủ")
+	hints.append("Q: hành động (học, làm thêm, ăn, ngủ, nói chuyện)")
+	hints.append("Tab: điện thoại")
 	return "   ·   ".join(hints)

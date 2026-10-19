@@ -9,6 +9,7 @@ signal collapsed(kind: String)
 
 var catalog: LifeCatalog
 var sim: LifeSim
+var _bound_flags: FlagStore = null
 
 
 func _ready() -> void:
@@ -55,11 +56,29 @@ func get_shop_items(shop_id: String) -> Array[Dictionary]:
 	return sim.get_shop_items(shop_id)
 
 
-func buy_item(shop_id: String, item_id: String) -> Dictionary:
+func buy_item(shop_id: String, item_id: String, carry: bool = false) -> Dictionary:
 	_sync_state()
-	var result: Dictionary = sim.buy_item(shop_id, item_id)
+	var result: Dictionary = sim.buy_item(shop_id, item_id, carry)
 	_show_result(result)
 	return result
+
+
+func use_item(item_id: String) -> Dictionary:
+	_sync_state()
+	var result: Dictionary = sim.use_item(item_id)
+	_show_result(result)
+	return result
+
+
+## Bước 6 (G4): handler(context: Dictionary) -> bool. true = có sự kiện đêm, ngủ dừng ở khung Đêm.
+func add_sleep_interrupter(handler: Callable) -> void:
+	sim.sleep_interrupters.append(handler)
+
+
+## Ngủ tiếp sau sự kiện đêm.
+func complete_sleep(recovery_multiplier: float = 1.0) -> void:
+	_sync_state()
+	sim.complete_sleep(recovery_multiplier)
 
 
 func pay_tuition() -> Dictionary:
@@ -93,6 +112,18 @@ func _register_dialogue_hooks() -> void:
 		if not args.is_empty():
 			state.life.inventory.remove(args[0], args[1].to_int() if args.size() >= 2 else 1)
 	)
+	DialogueSystem.register_command("join_room_fund", func(_args: PackedStringArray, state: GameState) -> void:
+		state.flags.set_flag(RoomFund.JOIN_FLAG, 1)  # _on_flag_changed thu tiền
+		if sim.state == state:
+			RoomFund.join(state, catalog.economy, sim.charges)
+	)
+	DialogueSystem.register_command("k_involve", func(args: PackedStringArray, state: GameState) -> void:
+		if not args.is_empty():
+			StoryVars.add_k_involvement(state, args[0].to_int())
+	)
+	DialogueSystem.register_command("sleep", func(args: PackedStringArray, _state: GameState) -> void:
+		complete_sleep(args[0].to_float() if not args.is_empty() else 1.0)
+	)
 	DialogueSystem.register_command("pay_tuition", func(_args: PackedStringArray, _state: GameState) -> void:
 		pay_tuition()
 	)
@@ -105,9 +136,11 @@ func _register_dialogue_hooks() -> void:
 		return state.life.inventory.count(variable.substr(5))
 	)
 	DialogueCondition.register_variable("class_now", func(_variable: String, state: GameState) -> int:
-		if sim.state != state:
+		var clock: GameClock = state.clock
+		if clock.day < catalog.economy.classes_start_day:
 			return 0
-		return 0 if sim.class_now().is_empty() else 1
+		var subject: String = ScheduleGenerator.subject_at(state.life.schedule, clock.get_weekday(), clock.slot)
+		return 0 if subject.is_empty() else 1
 	)
 	DialogueCondition.register_variable("shifts_today", func(_variable: String, state: GameState) -> int:
 		return state.life.shifts_today
@@ -118,6 +151,23 @@ func _register_dialogue_hooks() -> void:
 func _sync_state() -> void:
 	if sim.state != Game.state:
 		sim.bind(Game.state)
+	var flags: FlagStore = Game.state.flags if Game.state != null else null
+	if flags != _bound_flags:
+		if _bound_flags != null and _bound_flags.flag_changed.is_connected(_on_flag_changed):
+			_bound_flags.flag_changed.disconnect(_on_flag_changed)
+		_bound_flags = flags
+		if flags != null:
+			flags.flag_changed.connect(_on_flag_changed)
+
+
+## D4: cờ da_gop_quy bật → thu phần góp đầu tiên + đăng ký khoản tháng (idempotent).
+func _on_flag_changed(key: String, value: int) -> void:
+	if key == RoomFund.JOIN_FLAG and value == 1 and sim.state != null:
+		if RoomFund.join(sim.state, catalog.economy, sim.charges):
+			Toast.show_message("Góp quỹ phòng: −%s · Quỹ phòng: %s" % [
+				MoneyFormat.format_vnd(catalog.economy.room_fund_fee),
+				MoneyFormat.format_vnd(sim.state.flags.get_flag(RoomFund.BALANCE_FLAG)),
+			])
 
 
 func _on_time_changed(day: int, slot: int) -> void:

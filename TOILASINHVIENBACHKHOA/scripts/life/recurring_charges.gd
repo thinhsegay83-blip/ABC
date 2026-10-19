@@ -3,6 +3,7 @@ extends RefCounted
 ## Phí định kỳ (B4): tiền KTX mỗi tháng (28 ngày). Bước 5 thêm quỹ phòng bằng register().
 ## Mỗi khoản: {id, label, amount, period_days, first_day, condition_flag}
 ## condition_flag rỗng = luôn thu; có tên cờ = chỉ thu khi cờ đó == 1.
+## on_charge (tùy chọn): Callable(state) gọi sau khi thu (vd. quỹ phòng tăng).
 
 var entries: Array[Dictionary] = []
 
@@ -58,6 +59,8 @@ func process_day(state: GameState, day: int) -> Array[String]:
 		var amount: int = int(entry["amount"])
 		Economy.charge(state, amount, str(entry["label"]))
 		state.life.charges_last_day[id] = day
+		if entry.has("on_charge"):
+			(entry["on_charge"] as Callable).call(state)
 		if state.stats.get_money() < 0:
 			messages.append("%s: −%s — số dư đang âm!" % [entry["label"], MoneyFormat.format_vnd(amount)])
 		else:

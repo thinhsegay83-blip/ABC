@@ -5,12 +5,13 @@ extends RefCounted
 
 const ECONOMY_PATH: String = "res://data/economy.tres"
 const ACTION_IDS: Array[String] = [
-	"di_hoc", "tu_hoc", "xin_viec", "lam_quan_com", "bung_ca_phe", "nghi", "ngu",
+	"di_hoc", "tu_hoc", "xin_viec", "lam_quan_com", "bung_ca_phe", "phat_to_roi", "nghi", "ngu",
+	"di_choi",
 ]
 const ITEM_IDS: Array[String] = [
 	"banh_mi", "com_tam", "pho", "ca_phe_coc", "nuoc_tang_luc", "tra_sua", "mi_goi",
 	"giao_trinh_giai_tich_1", "giao_trinh_vat_ly_1", "giao_trinh_hoa_dai_cuong",
-	"giao_trinh_nhap_mon_ky_thuat",
+	"giao_trinh_nhap_mon_ky_thuat", "xap_to_roi",
 ]
 const SUBJECT_IDS: Array[String] = [
 	"giai_tich_1", "vat_ly_1", "hoa_dai_cuong", "nhap_mon_ky_thuat",

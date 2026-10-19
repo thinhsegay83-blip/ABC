@@ -84,3 +84,19 @@ Cực khó  có                  13.745.900       -2.254.100        25.0        
 Mô phỏng bằng logic game thật (`tests/test_cashflow_sim.gd`, 1 seed, ăn cơm tấm): Dễ 17.086.000 · Khó 15.994.000 · Cực khó 13.550.000.
 
 Nhận xét: khớp ý đồ — **Dễ** dư; **Khó** sát nút, chỉ kịp nếu ăn tiết kiệm (mì gói) hoặc làm đủ ca; **Cực khó** hụt ~2 triệu → gần như chắc phải gia hạn. Không đổi giá đã chốt.
+
+## Kiểm tra tới hạn gia hạn (ngày 28) — bước 5 (có việc phát tờ rơi cho K.)
+
+```
+
+Tới hết ngày 28 (hạn gia hạn, phải đóng 16.500.000 đ) — có/không nhận việc phát tờ rơi cho K. từ ngày 15
+Chế độ   Việc của K.    Tiền ngày 29 (TB)   So với cần đóng  Dính líu K.
+Dễ       không                 19.692.150        +3.192.150            0
+Dễ       có                    25.471.850        +8.971.850          100
+Khó      không                 18.547.750        +2.047.750            0
+Khó      có                    24.327.450        +7.827.450          100
+Cực khó  không                 15.813.200          -686.800            0
+Cực khó  có                    21.021.700        +4.521.700          100
+```
+
+Nhận xét [CẦN QUYẾT ĐỊNH]: ở **Cực khó**, không nhận việc của K. thì tới ngày 28 vẫn **thiếu ~690.000 đ** — người chơi gần như bị ép vào việc của K. (đúng chủ đề cám dỗ, nhưng có thể thấy bất công). Nhận việc K. 2 ca/ngày thì Mức dính líu chạm 100 chỉ sau ~5 ngày. Chưa đổi số đã chốt; chờ người dùng chọn có giữ hay nới.

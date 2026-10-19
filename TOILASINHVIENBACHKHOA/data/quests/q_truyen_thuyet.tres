@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "q_truyen_thuyet"
+title = "Truyền thuyết cầu thang"
+description = "Tiền bối nói KTX có chuyện lạ."
+start_condition = ""
+steps = Array[Dictionary]([{"text": "Nghe tiền bối kể chuyện ở thư viện", "done_condition": "flag.nghe_truyen_thuyet == 1"}])
+deadline_day = 0
+deadline_extend_flag = ""
+extended_deadline_day = 0
+optional = true

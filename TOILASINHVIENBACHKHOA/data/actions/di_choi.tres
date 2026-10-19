@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ActionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "di_choi"
+display_name = "Đi ăn vặt"
+category = "outing"
+allowed_slots = Array[int]([2])
+sanity = 15
+wrong_slot_reason = "Chỉ đi chơi buổi Tối"
+price = 50000
+relationship_delta = 5
+narration = Array[String](["Hai người ngồi quán bánh tráng nướng tới khi quán dọn.", "Trà sữa ven đường, chuyện trên trời dưới đất.", "Một nồi lẩu nhỏ chia đôi. Ấm bụng.", "Đi dạo quanh hồ, gió mát."])

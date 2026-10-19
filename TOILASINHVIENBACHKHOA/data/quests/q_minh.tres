@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "q_minh"
+title = "Chuyện của Minh"
+description = "Dạo này Minh có vẻ lạ."
+start_condition = "flag.minh_trang_thai >= 2"
+steps = Array[Dictionary]([{"text": "Để ý Minh dạo này", "done_condition": "flag.minh_trang_thai >= 2"}, {"text": "Minh hay ra ngoài lúc đêm…", "done_condition": "flag.thay_minh_ra_ngoai == 1"}, {"text": "Nói chuyện với Minh", "done_condition": "flag.canh_bao_minh == 1"}])
+deadline_day = 0
+deadline_extend_flag = ""
+extended_deadline_day = 0
+optional = false

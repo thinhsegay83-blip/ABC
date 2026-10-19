@@ -20,7 +20,12 @@ var charges: RecurringCharges
 var advance_slot: Callable
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
+## Hàm ngắt giấc ngủ (bước 6 — sự kiện đêm): Callable(context: Dictionary) -> bool.
+## Trả true = có sự kiện; giấc ngủ dừng ở khung Đêm, sự kiện xong thì gọi complete_sleep().
+var sleep_interrupters: Array[Callable] = []
+
 var _collapsing: bool = false
+var _sleep_from_slot: int = -1
 
 
 func _init(life_catalog: LifeCatalog, advancer: Callable) -> void:
@@ -35,7 +40,12 @@ func _init(life_catalog: LifeCatalog, advancer: Callable) -> void:
 ## Gắn với một ván. Ván mới (hoặc save cũ thiếu "life") → khởi tạo TKB, thu phí ngày đầu.
 func bind(new_state: GameState) -> void:
 	state = new_state
-	if state != null and not state.life.initialized:
+	charges = RecurringCharges.with_defaults(catalog.economy)
+	_sleep_from_slot = -1
+	if state == null:
+		return
+	RoomFund.register(state, catalog.economy, charges)
+	if not state.life.initialized:
 		start_new_life()
 
 
@@ -85,6 +95,8 @@ func handle_new_day(day: int) -> void:
 
 ## Danh sách hành động ở một nơi: [{action, enabled, reason, preview}].
 func get_place_actions(place_id: String) -> Array[Dictionary]:
+	if place_id.is_empty():
+		return []
 	var result: Array[Dictionary] = []
 	for action: ActionData in catalog.actions_at(place_id):
 		var requires_ok: bool = eval_requires(action.requires)
@@ -101,7 +113,7 @@ func get_place_actions(place_id: String) -> Array[Dictionary]:
 
 
 ## "" = làm được; ngược lại là lý do bằng tiếng Việt.
-func check_action(action: ActionData) -> String:
+func check_action(action: ActionData, params: Dictionary = {}) -> String:
 	if state == null:
 		return "Chưa có ván chơi"
 	if not eval_requires(action.requires):
@@ -118,6 +130,12 @@ func check_action(action: ActionData) -> String:
 				else "Không làm được vào lúc này"
 	if action.counts_as_shift and state.life.shifts_today >= catalog.economy.max_shifts_per_day:
 		return "Hôm nay bạn đã làm đủ %d ca" % catalog.economy.max_shifts_per_day
+	if action.price > 0 and state.stats.get_money() < action.price:
+		return "Thiếu %s" % MoneyFormat.format_vnd(action.price - state.stats.get_money())
+	if action.category == "outing":
+		var npc: String = str(params.get("npc", ""))
+		if state.life.outings_today.has(npc):
+			return "Hôm nay đã đi chơi cùng người này rồi"
 	return ""
 
 
@@ -132,6 +150,8 @@ func preview_action(action: ActionData) -> Dictionary:
 		parts.append("%d khung giờ" % action.slot_cost)
 	else:
 		parts.append("Không tốn thời gian")
+	if action.price > 0:
+		parts.append("−" + MoneyFormat.format_vnd(action.price))
 	if action.base_wage > 0:
 		wage_min = _wage(action.base_wage)
 		wage_max = _wage(action.base_wage + action.tip_max)
@@ -158,7 +178,7 @@ func perform_action(action_id: String, params: Dictionary = {}) -> Dictionary:
 	var action: ActionData = catalog.get_action(action_id)
 	if action == null:
 		return {"ok": false, "reason": "Không có hành động '%s'" % action_id, "message": "", "money": 0}
-	var reason: String = check_action(action)
+	var reason: String = check_action(action, params)
 	if not reason.is_empty():
 		return {"ok": false, "reason": reason, "message": "", "money": 0}
 	if action.category == "sleep":
@@ -186,6 +206,14 @@ func perform_action(action_id: String, params: Dictionary = {}) -> Dictionary:
 			Economy.earn(state, money, action.display_name)
 			life.shifts_today += 1
 			message = "%s: +%s" % [action.display_name, MoneyFormat.format_vnd(money)]
+		"outing":
+			var npc: String = str(params.get("npc", ""))
+			Economy.spend(state, action.price, action.display_name)
+			life.outings_today.append(npc)
+			if not npc.is_empty() and action.relationship_delta != 0:
+				stats.change_relationship(npc, action.relationship_delta)
+			message = action.narration[rng.randi_range(0, action.narration.size() - 1)] \
+					if not action.narration.is_empty() else action.display_name
 		"special":
 			if not action.sets_flag.is_empty():
 				state.flags.set_flag(action.sets_flag, 1)
@@ -202,6 +230,11 @@ func perform_action(action_id: String, params: Dictionary = {}) -> Dictionary:
 		message += " · Trí tuệ +%d" % knowledge_gain
 	if hungry and action.category in ["class", "study"]:
 		message += " (đói lả nên học kém)"
+	if not action.adds_flag.is_empty() and action.adds_flag_amount != 0:
+		if action.adds_flag == StoryVars.K_FLAG:
+			StoryVars.add_k_involvement(state, action.adds_flag_amount)
+		else:
+			state.flags.set_flag(action.adds_flag, state.flags.get_flag(action.adds_flag) + action.adds_flag_amount)
 
 	for _i in action.slot_cost:
 		advance_slot.call()
@@ -213,6 +246,31 @@ func perform_action(action_id: String, params: Dictionary = {}) -> Dictionary:
 
 func _sleep(action: ActionData) -> Dictionary:
 	var from_slot: int = state.clock.slot
+	for handler: Callable in sleep_interrupters:
+		if handler.call({"from_slot": from_slot, "day": state.clock.day}):
+			# Có sự kiện đêm: ngủ tới khung Đêm rồi dừng; sự kiện xong gọi complete_sleep().
+			_sleep_from_slot = from_slot
+			while state.clock.slot != GameClock.Slot.NIGHT:
+				advance_slot.call()
+			var interrupted: Dictionary = {"ok": true, "reason": "", "message": "", "money": 0, "interrupted": true}
+			action_performed.emit(action.id, interrupted)
+			return interrupted
+	return _finish_sleep(action, from_slot, 1.0)
+
+
+func is_sleep_interrupted() -> bool:
+	return _sleep_from_slot >= 0
+
+
+## Ngủ tiếp sau khi sự kiện đêm kết thúc (lệnh hội thoại "~ sleep [hệ số hồi]").
+func complete_sleep(recovery_multiplier: float = 1.0) -> Dictionary:
+	var action: ActionData = catalog.get_action("ngu")
+	var from_slot: int = _sleep_from_slot if _sleep_from_slot >= 0 else state.clock.slot
+	_sleep_from_slot = -1
+	return _finish_sleep(action, from_slot, recovery_multiplier)
+
+
+func _finish_sleep(action: ActionData, from_slot: int, recovery_multiplier: float) -> Dictionary:
 	var target_day: int = state.clock.day + 1
 	var guard: int = 0
 	while not (state.clock.day == target_day and state.clock.slot == GameClock.Slot.MORNING):
@@ -229,6 +287,7 @@ func _sleep(action: ActionData) -> Dictionary:
 		@warning_ignore("integer_division")
 		recovery = recovery / 2
 		message += " (bụng đói nên ngủ không ngon)"
+	recovery = roundi(recovery * recovery_multiplier)
 	state.stats.change_stat(PlayerStats.Stat.STAMINA, recovery)
 	state.stats.change_stat(PlayerStats.Stat.SANITY, action.sanity)
 	var result: Dictionary = {"ok": true, "reason": "", "message": message, "money": 0}
@@ -258,7 +317,7 @@ func get_shop_items(shop_id: String) -> Array[Dictionary]:
 
 
 ## Mua 1 món. Trả {ok, reason, message}.
-func buy_item(shop_id: String, item_id: String) -> Dictionary:
+func buy_item(shop_id: String, item_id: String, carry: bool = false) -> Dictionary:
 	var shop: ShopData = catalog.get_shop(shop_id)
 	var item: ItemData = catalog.get_item(item_id)
 	if shop == null or item == null or not shop.item_ids.has(item_id):
@@ -274,21 +333,45 @@ func buy_item(shop_id: String, item_id: String) -> Dictionary:
 		}
 	var parts: PackedStringArray = PackedStringArray()
 	parts.append("Đã mua %s (−%s)" % [item.display_name, MoneyFormat.format_vnd(item.price)])
-	if item.consume_on_buy:
-		state.stats.change_stat(PlayerStats.Stat.HUNGER, item.hunger)
-		state.stats.change_stat(PlayerStats.Stat.STAMINA, item.stamina)
-		state.stats.change_stat(PlayerStats.Stat.SANITY, item.sanity)
-		_append_delta(parts, "Đói", item.hunger)
-		_append_delta(parts, "Thể lực", item.stamina)
-		_append_delta(parts, "Sanity", item.sanity)
-		if not item.effect_id.is_empty():
-			add_effect(item.effect_id)
+	if item.consume_on_buy and not (carry and item.can_carry):
+		_apply_item(item, parts)
 	else:
 		state.life.inventory.add(item.id)
 		parts.append("đã cho vào túi")
 	if state.stats.get_stat(PlayerStats.Stat.HUNGER) >= catalog.economy.hungry_threshold:
 		state.life.warnings_shown.erase("hungry")
 	return {"ok": true, "reason": "", "message": " · ".join(parts)}
+
+
+## Dùng 1 món trong túi (I1). Trả {ok, reason, message}.
+func use_item(item_id: String) -> Dictionary:
+	var item: ItemData = catalog.get_item(item_id)
+	if item == null or state.life.inventory.count(item_id) <= 0:
+		return {"ok": false, "reason": "Không có món này trong túi", "message": ""}
+	if not can_use_item(item):
+		return {"ok": false, "reason": "Không dùng được", "message": ""}
+	state.life.inventory.remove(item_id)
+	var parts: PackedStringArray = PackedStringArray()
+	parts.append("Đã dùng %s" % item.display_name)
+	_apply_item(item, parts)
+	return {"ok": true, "reason": "", "message": " · ".join(parts)}
+
+
+static func can_use_item(item: ItemData) -> bool:
+	return item.category in ["food", "drink"]
+
+
+func _apply_item(item: ItemData, parts: PackedStringArray) -> void:
+	state.stats.change_stat(PlayerStats.Stat.HUNGER, item.hunger)
+	state.stats.change_stat(PlayerStats.Stat.STAMINA, item.stamina)
+	state.stats.change_stat(PlayerStats.Stat.SANITY, item.sanity)
+	_append_delta(parts, "Đói", item.hunger)
+	_append_delta(parts, "Thể lực", item.stamina)
+	_append_delta(parts, "Sanity", item.sanity)
+	if not item.effect_id.is_empty():
+		add_effect(item.effect_id)
+	if state.stats.get_stat(PlayerStats.Stat.HUNGER) >= catalog.economy.hungry_threshold:
+		state.life.warnings_shown.erase("hungry")
 
 
 func _shop_closed_reason(shop: ShopData) -> String:
@@ -468,6 +551,7 @@ func _begin_day(day: int) -> void:
 	life.shifts_today = 0
 	life.attended_today.clear()
 	life.missed_today.clear()
+	life.outings_today.clear()
 	life.day_start_stats = {
 		"stamina": state.stats.get_stat(PlayerStats.Stat.STAMINA),
 		"hunger": state.stats.get_stat(PlayerStats.Stat.HUNGER),

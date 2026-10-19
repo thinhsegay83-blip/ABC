@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="QuestData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/quest_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "q_quy_phong"
+title = "Góp quỹ phòng"
+description = "Minh rủ cả phòng góp quỹ chung 200.000 đ mỗi tháng."
+start_condition = ""
+steps = Array[Dictionary]([{"text": "Góp quỹ phòng với Minh", "done_condition": "flag.da_gop_quy == 1"}])
+deadline_day = 0
+deadline_extend_flag = ""
+extended_deadline_day = 0
+optional = true

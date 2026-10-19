@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/game_scene.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="2_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="3_pause"]
 [ext_resource type="Script" path="res://scripts/ui/life_ui.gd" id="4_life"]
 [ext_resource type="Script" path="res://scripts/ui/dialogue_box.gd" id="5_dialogue"]
+[ext_resource type="Script" path="res://scripts/ui/phone.gd" id="6_phone"]
 
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1_script")
@@ -62,3 +63,7 @@ script = ExtResource("4_life")
 [node name="DialogueBox" type="CanvasLayer" parent="."]
 layer = 30
 script = ExtResource("5_dialogue")
+
+[node name="Phone" type="CanvasLayer" parent="."]
+layer = 48
+script = ExtResource("6_phone")

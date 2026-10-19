@@ -6,7 +6,7 @@ extends Resource
 @export var display_name: String = ""
 ## Nơi làm được hành động: ktx_room, ktx_hallway, lecture_hall, library, food_shop.
 @export var place_id: String = ""
-## "class" (vào học) / "study" / "work" / "rest" / "sleep" / "special".
+## "class" (vào học) / "study" / "work" / "rest" / "sleep" / "special" / "outing" (đi chơi, gọi từ hội thoại).
 @export var category: String = "rest"
 @export var slot_cost: int = 1
 ## Khung giờ được phép (GameClock.Slot). Rỗng = mọi khung.
@@ -28,3 +28,12 @@ extends Resource
 @export var wrong_slot_reason: String = ""
 ## Hành động đặc biệt: đặt cờ này = 1 (vd. xin việc).
 @export var sets_flag: String = ""
+## Chi phí (đi chơi…), trả qua Economy; thiếu tiền thì không làm được.
+@export var price: int = 0
+## Cộng vào cờ mỗi lần làm (vd. dinh_lieu_k +10 khi phát tờ rơi cho K.).
+@export var adds_flag: String = ""
+@export var adds_flag_amount: int = 0
+## Quan hệ với NPC đi cùng (tham số "npc").
+@export var relationship_delta: int = 0
+## Câu narrator ngẫu nhiên khi làm (đi chơi…).
+@export var narration: Array[String] = []

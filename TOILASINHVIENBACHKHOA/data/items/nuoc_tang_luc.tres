@@ -11,3 +11,4 @@ category = "drink"
 stamina = 20
 sanity = -2
 effect_id = "cafein"
+can_carry = true

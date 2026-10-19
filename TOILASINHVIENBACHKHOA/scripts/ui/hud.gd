@@ -115,12 +115,13 @@ func _on_time_changed(_day: int, _slot: int) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event is InputEventKey and event.pressed and not event.echo \
-			and (event as InputEventKey).physical_keycode == KEY_TAB:
+			and (event as InputEventKey).physical_keycode == KEY_Q:
 		_on_action_pressed()
 		get_viewport().set_input_as_handled()
 
 
 ## Mở menu hành động (tạm thời thay cho tương tác trên bản đồ của bước 2).
 func _on_action_pressed() -> void:
-	if Game.has_active_game() and not get_tree().paused:
+	if Game.has_active_game() and not get_tree().paused and not DialogueSystem.is_active():
+		get_tree().call_group(&"phone", &"close")
 		get_tree().call_group(&"life_ui", &"toggle_actions")
