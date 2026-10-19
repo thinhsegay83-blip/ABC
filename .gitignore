@@ -1,0 +1,11 @@
+# Cache/import của Godot 4 (tự sinh lại khi mở Editor hoặc chạy --import)
+.godot/
+
+# File tạm (vd. save đang ghi dở *.json.tmp)
+*.tmp
+
+# Bản build Android do Godot tạo
+/android/
+
+# Cấu hình export (có thể chứa đường dẫn máy/khóa ký riêng)
+export_presets.cfg

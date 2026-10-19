@@ -1,0 +1,206 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/new_game_dialog.tscn" id="2_new_game"]
+[ext_resource type="PackedScene" path="res://scenes/ui/save_slots_panel.tscn" id="3_slots"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="4_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.105, 0.118, 0.165, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.36, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.18, 0.2, 0.27, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.25, 0.28, 0.38, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.13, 0.15, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.14, 0.15, 0.19, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_focus"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.78, 0.36, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="Theme" id="Theme_ui"]
+default_font_size = 18
+Button/colors/font_color = Color(0.92, 0.93, 0.96, 1)
+Button/colors/font_disabled_color = Color(0.48, 0.5, 0.56, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(0.96, 0.78, 0.36, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+Button/styles/focus = SubResource("StyleBoxFlat_btn_focus")
+Button/styles/hover = SubResource("StyleBoxFlat_btn_hover")
+Button/styles/normal = SubResource("StyleBoxFlat_btn_normal")
+Button/styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ui")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.067, 0.075, 0.106, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Menu" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="Center/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.78, 0.36, 1)
+theme_override_font_sizes/font_size = 46
+text = "TÔI LÀ SINH VIÊN BÁCH KHOA"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="Center/Menu"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.69, 0.78, 1)
+text = "Game nhập vai mô phỏng đời sinh viên"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Menu"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="NewGameButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Chơi mới"
+
+[node name="ContinueButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Tiếp tục"
+
+[node name="LoadButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Tải game"
+
+[node name="SettingsButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Cài đặt"
+
+[node name="QuitButton" type="Button" parent="Center/Menu"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Thoát"
+
+[node name="FooterLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -40.0
+offset_right = -16.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.45, 0.48, 0.56, 1)
+theme_override_font_sizes/font_size = 14
+text = "Bản thử nghiệm · Bước 1 (nền tảng)"
+horizontal_alignment = 2
+
+[node name="NewGameDialog" parent="." instance=ExtResource("2_new_game")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="SaveSlotsPanel" parent="." instance=ExtResource("3_slots")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="SettingsPanel" parent="." instance=ExtResource("4_settings")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1

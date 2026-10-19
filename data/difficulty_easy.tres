@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DifficultyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/difficulty_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "easy"
+display_name = "Dễ"
+starting_money = 15000000
+decay_multiplier = 0.75
+wage_multiplier = 1.0
+description = "Tiền ban đầu dư dả, Đói/Thể lực/Sanity tụt chậm (×0,75). Hợp để làm quen nhịp sống sinh viên."

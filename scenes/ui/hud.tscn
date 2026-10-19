@@ -1,0 +1,202 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_panel"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.06, 0.07, 0.1, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.2, 0.22, 0.28, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill_stamina"]
+bg_color = Color(0.36, 0.78, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill_hunger"]
+bg_color = Color(0.95, 0.62, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill_sanity"]
+bg_color = Color(0.64, 0.5, 0.94, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fill_knowledge"]
+bg_color = Color(0.36, 0.66, 0.96, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Hud" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 3
+anchors_preset = 0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="Panel" type="PanelContainer" parent="Margin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Margin/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TimeLabel" type="Label" parent="Margin/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Ngày 1 · Tuần 1 · Thứ Hai · Sáng"
+
+[node name="MoneyLabel" type="Label" parent="Margin/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.83, 0.42, 1)
+theme_override_font_sizes/font_size = 20
+text = "0 đ"
+
+[node name="Stats" type="GridContainer" parent="Margin/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="StaminaName" type="Label" parent="Margin/Panel/VBox/Stats"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Thể lực"
+
+[node name="StaminaBar" type="ProgressBar" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Thể lực: giảm khi làm việc, thức đêm; hồi khi ngủ/nghỉ."
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill_stamina")
+step = 1.0
+value = 100.0
+show_percentage = false
+
+[node name="StaminaValue" type="Label" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "100"
+horizontal_alignment = 2
+
+[node name="HungerName" type="Label" parent="Margin/Panel/VBox/Stats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Đói"
+
+[node name="HungerBar" type="ProgressBar" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Đói (độ no): 100 là no căng, 0 là đói lả. Tụt theo thời gian, ăn thì tăng."
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill_hunger")
+step = 1.0
+value = 80.0
+show_percentage = false
+
+[node name="HungerValue" type="Label" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "80"
+horizontal_alignment = 2
+
+[node name="SanityName" type="Label" parent="Margin/Panel/VBox/Stats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Sanity"
+
+[node name="SanityBar" type="ProgressBar" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Sanity: giảm do dị tượng, áp lực; hồi khi ngủ, đi chơi, gọi về nhà."
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill_sanity")
+step = 1.0
+value = 80.0
+show_percentage = false
+
+[node name="SanityValue" type="Label" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "80"
+horizontal_alignment = 2
+
+[node name="KnowledgeName" type="Label" parent="Margin/Panel/VBox/Stats"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Trí tuệ"
+
+[node name="KnowledgeBar" type="ProgressBar" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(170, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Trí tuệ: tăng khi đi học, tự học, làm bài tập; mở khóa gợi ý câu đố."
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fill_knowledge")
+step = 1.0
+value = 10.0
+show_percentage = false
+
+[node name="KnowledgeValue" type="Label" parent="Margin/Panel/VBox/Stats"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "10"
+horizontal_alignment = 2
+
+[node name="AdvanceButton" type="Button" parent="Margin/Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+tooltip_text = "Tạm thời: qua 1 khung giờ (Đói/Thể lực tụt theo chế độ chơi)."
+theme_override_font_sizes/font_size = 16
+text = "Nghỉ (qua khung giờ)"

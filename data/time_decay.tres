@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TimeDecayConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/time_decay_config.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+hunger_per_slot = 8
+stamina_per_slot = 5
+sanity_per_slot = 0
