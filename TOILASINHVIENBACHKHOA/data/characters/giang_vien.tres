@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "giang_vien"
+display_name = "Thầy"
+name_color = Color(0.75, 0.8, 0.9, 1)

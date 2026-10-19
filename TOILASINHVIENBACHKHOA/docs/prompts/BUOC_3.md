@@ -70,23 +70,23 @@ File UTF-8 trong `content/dialogue/` (mỗi file một nhóm cảnh, ví dụ `d
 == minh_chao_hoi
 @tag demo
 @trigger interact minh          # metadata: bước 3 chỉ lưu vào node.meta, bước 5 mới dùng
-minh: Ê, phòng 412 phải không? Tui là Minh.
-minh (cuoi): Quạt trần phòng này kêu như máy cày, quen là ngủ ngon.
+minh: Chào bạn. Mình là Minh, phòng 412.
+minh (cuoi): Quạt trần phòng này hơi ồn. Ở vài hôm là quen.
 player: Chào Minh, mình là {player_name}.
-narrator: Ngoài cửa sổ, ai đó rồ xe máy.
-minh: Tối nay góp quỹ phòng nha ông? [if flag.da_gop_quy == 0]
-* Góp 200.000 đ luôn -> minh_gop_quy [need money >= 200000 | Không đủ tiền]
-* Để mai tính -> minh_de_mai
+narrator: Ngoài cửa sổ, có tiếng xe máy chạy ngang.
+minh: Phòng đang góp quỹ chung. Bạn góp không? [if flag.da_gop_quy == 0]
+* Góp 200.000 đ -> minh_gop_quy [need money >= 200000 | Không đủ tiền]
+* Để mai -> minh_de_mai
 * (Im lặng) -> minh_im_lang [if stat.sanity < 30]
 
 == minh_gop_quy
 ~ money -200000 "Góp quỹ phòng"
 ~ set da_gop_quy 1
 ~ rel minh 5
-minh (cuoi): Chơi đẹp! Cuối tháng tui ghi sổ đàng hoàng.
+minh (cuoi): Cảm ơn bạn. Cuối tháng mình ghi sổ.
 
 == minh_de_mai
-minh: Ừ, tùy ông.
+minh: Ừ, không gấp.
 ~ end
 ```
 
@@ -160,7 +160,7 @@ Biến lạ → đánh giá là **false** + ghi lỗi (không crash).
 ### 3.3 Dữ liệu nhân vật (E1)
 
 - `scripts/data/character_data.gd` — `class_name CharacterData extends Resource`: `id`, `display_name`, `name_color: Color`, `portraits: Dictionary` (biểu cảm → Texture2D), `default_expression: String = "thuong"`.
-- `data/characters/<id>.tres` cho: `minh`, `k` (hiển thị "Anh K."), `chu_quan` ("Cô Ba chủ quán" — tên gợi ý, đổi được), `giang_vien` ("Thầy"), `thu_khoa` (tên hiển thị gợi ý "Ngọc Hân"), `tien_boi` ("Anh năm n"), `me` ("Mẹ" — cho cuộc gọi bước 7), `player` (tên lấy từ `GameState.player_name`).
+- `data/characters/<id>.tres` cho: `minh`, `k` (hiển thị "Anh K."), `chu_quan` ("Chủ quán"), `giang_vien` ("Thầy"), `thu_khoa` (tên hiển thị gợi ý "Ngọc Hân"), `tien_boi` ("Anh năm n"), `me` ("Mẹ" — cho cuộc gọi bước 7), `player` (tên lấy từ `GameState.player_name`).
 - Mở rộng `tools/gen_art.py`: chân dung `art/portraits/por_<id>_<biểu_cảm>.png` 64×64 (hiện ×3 = 192 px, lọc nearest). Biểu cảm tối thiểu: `thuong`, `cuoi`, `buon`, `ngac_nhien`; thêm `met` cho Minh (quầng thâm — bước 5 dùng). Không có chân dung đúng biểu cảm → dùng `default_expression`; không có cả hai → ẩn khung chân dung.
 
 ### 3.4 Autoload `DialogueSystem` — `scripts/autoload/dialogue_system.gd`
@@ -220,7 +220,7 @@ Biến lạ → đánh giá là **false** + ghi lỗi (không crash).
 
 - `Interactable`: thêm `@export var dialogue_node: String = ""`. Có giá trị → `interact()` gọi `DialogueSystem.start(dialogue_node)` thay cho toast; không có node đó → toast cảnh báo + `push_warning`.
 - `content/dialogue/demo_buoc3.dlg`: 4 đoạn ngắn cho Minh (có lựa chọn đổi cờ `da_gop_quy` + quan hệ + tiền), chủ quán, nữ thủ khoa, tiền bối — mỗi đoạn 3–6 câu, có `[if]`, `[need]`, `~ emit demo_event` để thử. Ghi đầu file: `# DEMO bước 3 — bước 7 sẽ thay bằng nội dung thật`.
-- Tông: đời thường, hài nhẹ; xưng hô sinh viên miền Nam tự nhiên (tui/ông, mình/bạn).
+- Giọng thoại: trung tính, câu ngắn, xưng "mình/bạn"; KHÔNG dùng giọng địa phương. Tham khảo Stardew Valley, Kindergarten, Punch Club.
 
 ### 3.10 Mở rộng `tools/check_project.py`
 

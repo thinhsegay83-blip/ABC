@@ -1,0 +1,57 @@
+# DEMO bước 3 — bước 7 sẽ thay bằng nội dung thật.
+# Định dạng: docs/ARCHITECTURE.md mục "Bước 3 — Hội thoại".
+# Giọng thoại: trung tính, câu ngắn, xưng "mình/bạn" (tham khảo Stardew Valley, Kindergarten, Punch Club).
+
+== minh_chao_hoi
+@tag demo
+minh (cuoi): Chào bạn. Mình là Minh, ở giường dưới.
+minh: Quạt trần phòng này hơi ồn. Ở vài hôm là quen.
+player: Mình là {player_name}.
+narrator: Ngoài cửa sổ, có tiếng xe máy chạy ngang.
+minh: Phòng đang góp quỹ chung, 200.000 đ một tháng. Bạn góp không? [if flag.da_gop_quy == 0]
+* Góp 200.000 đ -> minh_gop_quy [if flag.da_gop_quy == 0] [need money >= 200000 | Không đủ tiền]
+* Để mai -> minh_de_mai [if flag.da_gop_quy == 0]
+* Hỏi chuyện học -> minh_hoi_hoc
+
+== minh_gop_quy
+~ set da_gop_quy 1
+~ rel minh 5
+minh (cuoi): Cảm ơn bạn. Cuối tháng mình ghi sổ.
+
+== minh_de_mai
+minh: Ừ, không gấp.
+
+== minh_hoi_hoc
+minh: Giải tích 1 thầy giảng nhanh lắm. Mình ghi không kịp.
+minh: Đang có tiết đó. Đi học không? [if class_now == 1]
+~ emit demo_event minh
+
+== chu_quan_chao
+@tag demo
+chu_quan: Ăn gì không? Hôm nay có cơm tấm.
+chu_quan: Quán đang cần người phụ. [if flag.lam_them_quan == 0]
+* Xin làm thêm -> chu_quan_nhan_viec [if flag.lam_them_quan == 0]
+* Chỉ ghé ăn -> chu_quan_an
+
+== chu_quan_nhan_viec
+~ set lam_them_quan 1
+~ rel chu_quan 5
+chu_quan: Được. Sáng, Chiều phụ quán cơm: 120.000 đ một ca.
+chu_quan: Tối bưng cà phê: 100.000 đ, có tiền tip.
+chu_quan: Làm vừa sức thôi. Đừng bỏ học.
+
+== chu_quan_an
+chu_quan: Ngồi đi.
+
+== thu_khoa_chao
+@tag demo
+thu_khoa: …Có việc gì không?
+player: Mình hỏi bài Vật lý hôm qua.
+thu_khoa: Nhớ công thức chưa đủ. Phải nhớ cả đơn vị.
+~ rel thu_khoa 2
+
+== tien_boi_chao
+@tag demo
+tien_boi: Tân sinh viên à? Tối nay thư viện vắng, ngồi đâu cũng được.
+tien_boi: Trường này có nhiều chuyện lạ. Hôm nào rảnh anh kể.
+~ toast "Tiền bối có vẻ biết nhiều chuyện…"

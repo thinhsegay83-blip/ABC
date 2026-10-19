@@ -146,6 +146,12 @@ func _ensure_input_actions() -> void:
 	_ensure_key_action(&"pause", KEY_ESCAPE)
 	_ensure_key_action(&"debug", KEY_F1)
 	_ensure_key_action(&"interact", KEY_E)
+	_ensure_key_action(&"dialogue_next", KEY_SPACE)
+	_ensure_key_action(&"dialogue_skip", KEY_CTRL)
+	_ensure_key_action(&"dialogue_auto", KEY_T)
+	_ensure_key_action(&"dialogue_history", KEY_L)
+	_ensure_key_action(&"phone", KEY_TAB)
+	_ensure_key_action(&"inventory", KEY_I)
 
 
 func _ensure_key_action(action: StringName, key: Key) -> void:

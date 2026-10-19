@@ -10,6 +10,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | Nền tảng | PC trước, mobile sau |
 | Bối cảnh | Thế giới giả tưởng; màn mở đầu có dòng "Mọi nhân vật, tổ chức, sự kiện đều là hư cấu" |
 | Tông truyện | Bí ẩn / kỳ ảo đô thị nhẹ nhàng, KHÔNG phải game kinh dị: không jumpscare, không máu me, không chết chóc, không ma quỷ đáng sợ |
+| Giọng thoại | Trung tính, câu ngắn, xưng "mình/bạn"; không dùng giọng địa phương. Tham khảo Stardew Valley, Kindergarten, Punch Club: thoại gọn, hệ quả của lựa chọn rõ ràng |
 | Nhân vật chính | Cố định nam |
 | Romance | Không có ở Chapter 1, để chương sau |
 | Nhánh đột nhập | Stealth đơn giản (né tầm nhìn bảo vệ, bị phát hiện thì làm lại đoạn) |
@@ -103,7 +104,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| E1 | Hội thoại có chân dung, lựa chọn rẽ nhánh, mỗi lựa chọn đổi chỉ số/cờ | MVP | [P] |
+| E1 | ✅ Hội thoại có chân dung, lựa chọn rẽ nhánh, mỗi lựa chọn đổi chỉ số/cờ | MVP | [P] |
 | E2 | Lịch trình NPC theo khung giờ | MVP | [ĐX] |
 | E3 | NPC đổi trạng thái theo cốt truyện (Minh: bình thường → thâm quầng → úp mặt vào tường → mất tích) | MVP | [C1] |
 | E4 | Bạn cùng phòng mách mối làm thêm và tin đồn | C1 | [P] |
@@ -153,7 +154,7 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 
 | ID | Tính năng | Ưu tiên | Nguồn |
 |---|---|---|---|
-| H1 | Cờ cốt truyện (ghi nhớ lựa chọn) | MVP | [ĐX] |
+| H1 | ✅ Cờ cốt truyện (ghi nhớ lựa chọn) | MVP | [ĐX] |
 | H2 | Sổ nhiệm vụ | MVP | [ĐX] |
 | H3 | Hội thảo của K. có lịch cố định | C1 | [C1] |
 | H4 | Đồ uống hộp đêm có tác dụng ẩn (trừ Sanity, tăng A8) | C1 | [C1] |
@@ -188,8 +189,8 @@ Tài liệu gốc cho việc lập trình. Mọi tính năng mới phải thêm 
 | J6 | ✅ Input Map: bàn phím + chuột | MVP | [ĐX] |
 | J7 | ✅ Font tiếng Việt đủ dấu | MVP | [ĐX] |
 | J8 | ✅ Thông báo nhỏ (toast) | MVP | [ĐX] |
-| J9 | Tiện ích hội thoại: xem lại lịch sử, tua đoạn đã đọc, tự chạy chữ, chỉnh tốc độ chữ | MVP | [ĐX] |
-| J10 | Đặt tên nhân vật | MVP | [ĐX] |
+| J9 | ✅ Tiện ích hội thoại: xem lại lịch sử, tua đoạn đã đọc, tự chạy chữ, chỉnh tốc độ chữ | MVP | [ĐX] |
+| J10 | ✅ Đặt tên nhân vật | MVP | [ĐX] |
 | J11 | Hướng dẫn chơi (tutorial) | MVP | [ĐX] |
 | J12 | ✅ Menu debug: chỉnh chỉ số, nhảy ngày, bật/tắt cờ | MVP | [ĐX] |
 | J13 | ✅ Dữ liệu tách khỏi code (Godot Resource .tres: vật phẩm, hành động, NPC, sự kiện) | MVP | [ĐX] |

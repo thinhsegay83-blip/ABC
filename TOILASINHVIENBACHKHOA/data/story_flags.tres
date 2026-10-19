@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="StoryFlagRegistry" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/story_flag_registry.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+flags = {
+"ktx_khu": "Khu KTX đã chọn: 1 = Khu A, 2 = Khu B, 0 = chưa chọn (coi như A)",
+"da_gop_quy": "1 = đã góp quỹ phòng",
+"da_dong_hoc_phi": "1 = đã đóng học phí HK1",
+"nhan_viec_to_roi": "Việc phát tờ rơi cho K.: 0 = chưa/từ chối, 1 = đang làm, 2 = đã nghỉ",
+"canh_bao_minh": "1 = đã cảnh báo Minh về K.",
+"minh_trang_thai": "Trạng thái Minh: 1 bình thường, 2 thâm quầng, 3 úp mặt vào tường, 4 mất tích (C1); 0 coi như 1",
+"thoat_cau_thang": "1 = đã thoát dị tượng cầu thang",
+"hoc_phi_tre_han": "1 = đã trễ hạn chính, đang trong thời gian gia hạn",
+"hoc_phi_qua_han": "1 = quá cả hạn gia hạn",
+"lam_them_quan": "1 = được nhận làm thêm ở quán",
+"dinh_lieu_k": "Mức dính líu với K. (A8), 0–100 — ẩn với người chơi",
+"thay_to_roi": "1 = đã thấy tờ rơi Tương Lai Vàng",
+"gap_k": "1 = đã gặp K.",
+"quy_phong": "Số dư quỹ phòng (VND)",
+"nghe_truyen_thuyet": "1 = đã nghe tiền bối kể truyền thuyết cầu thang"
+}

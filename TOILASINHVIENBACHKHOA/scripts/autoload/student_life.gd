@@ -24,7 +24,13 @@ func _ready() -> void:
 	Game.state_replaced.connect(_sync_state)
 	Game.time_changed.connect(_on_time_changed)
 	Game.new_day.connect(_on_new_day)
+	_register_dialogue_hooks()
 	_sync_state()
+
+
+func _exit_tree() -> void:
+	for variable: String in ["item.", "class_now", "shifts_today"]:
+		DialogueCondition.unregister_variable(variable)
 
 
 func has_game() -> bool:
@@ -64,6 +70,49 @@ func pay_tuition() -> Dictionary:
 
 
 # --- Nội bộ ---------------------------------------------------------------
+
+## Lệnh + biến điều kiện của bước 4 cho hội thoại/sự kiện.
+func _register_dialogue_hooks() -> void:
+	DialogueSystem.register_command("action", func(args: PackedStringArray, _state: GameState) -> void:
+		if args.is_empty():
+			return
+		var params: Dictionary = {}
+		if args.size() >= 2:
+			params = {"subject": args[1], "npc": args[1]}
+		perform_action(args[0], params)
+	)
+	DialogueSystem.register_command("give", func(args: PackedStringArray, state: GameState) -> void:
+		if args.is_empty():
+			return
+		var amount: int = args[1].to_int() if args.size() >= 2 else 1
+		state.life.inventory.add(args[0], amount)
+		var item: ItemData = catalog.get_item(args[0])
+		Toast.show_message("Nhận được: %s" % (item.display_name if item != null else args[0]))
+	)
+	DialogueSystem.register_command("take", func(args: PackedStringArray, state: GameState) -> void:
+		if not args.is_empty():
+			state.life.inventory.remove(args[0], args[1].to_int() if args.size() >= 2 else 1)
+	)
+	DialogueSystem.register_command("pay_tuition", func(_args: PackedStringArray, _state: GameState) -> void:
+		pay_tuition()
+	)
+	DialogueSystem.register_command("pass_slots", func(args: PackedStringArray, _state: GameState) -> void:
+		var count: int = args[0].to_int() if not args.is_empty() else 1
+		for _i in count:
+			Game.advance_time()
+	)
+	DialogueCondition.register_variable("item.", func(variable: String, state: GameState) -> int:
+		return state.life.inventory.count(variable.substr(5))
+	)
+	DialogueCondition.register_variable("class_now", func(_variable: String, state: GameState) -> int:
+		if sim.state != state:
+			return 0
+		return 0 if sim.class_now().is_empty() else 1
+	)
+	DialogueCondition.register_variable("shifts_today", func(_variable: String, state: GameState) -> int:
+		return state.life.shifts_today
+	)
+
 
 ## Theo kịp Game.state (ván mới, tải game, về menu chính).
 func _sync_state() -> void:

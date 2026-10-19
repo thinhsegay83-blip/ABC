@@ -21,9 +21,6 @@ var advance_slot: Callable
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 var _collapsing: bool = false
-var _requires_regex: RegEx = RegEx.create_from_string(
-	"^flag\\.([A-Za-z0-9_]+)\\s*(==|!=|>=|<=|>|<)\\s*(-?\\d+)$"
-)
 
 
 func _init(life_catalog: LifeCatalog, advancer: Callable) -> void:
@@ -451,31 +448,15 @@ func default_study_subject() -> String:
 	return best
 
 
-## Điều kiện dạng "flag.ten == 1" (bản rút gọn; bước 3 thay bằng DialogueCondition).
+## Điều kiện cú pháp hội thoại (DialogueCondition), vd. "flag.lam_them_quan == 1 and week >= 3".
 func eval_requires(expr: String) -> bool:
-	var text: String = expr.strip_edges()
-	if text.is_empty():
+	if expr.strip_edges().is_empty():
 		return true
-	var match_result: RegExMatch = _requires_regex.search(text)
-	if match_result == null:
-		push_warning("LifeSim: không hiểu điều kiện '%s'" % text)
-		return false
-	var value: int = state.flags.get_flag(match_result.get_string(1)) if state != null else 0
-	var target: int = match_result.get_string(3).to_int()
-	match match_result.get_string(2):
-		"==":
-			return value == target
-		"!=":
-			return value != target
-		">=":
-			return value >= target
-		"<=":
-			return value <= target
-		">":
-			return value > target
-		"<":
-			return value < target
-	return false
+	var errors: PackedStringArray = PackedStringArray()
+	var ok: bool = DialogueCondition.evaluate(expr, state, errors)
+	for error: String in errors:
+		push_warning("LifeSim: %s" % error)
+	return ok
 
 
 # --- Nội bộ ---------------------------------------------------------------

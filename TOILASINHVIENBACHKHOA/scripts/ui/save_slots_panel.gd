@@ -89,7 +89,7 @@ func _update_button_texts() -> void:
 		button.text = _format_slot_text(slot, info)
 
 
-## "Ô 1 — Ngày 3 (Tuần 1, Chiều) · Khó · 13.850.000 đ · 18/10/2026 21:30" hoặc "Ô 2 — Trống".
+## "Ô 1 — Phong — Ngày 3 (Tuần 1, Chiều) · Khó · 13.850.000 đ · 18/10/2026 21:30" hoặc "Ô 2 — Trống".
 func _format_slot_text(slot: int, info: Dictionary) -> String:
 	var slot_title: String = _slot_title(slot)
 	if not bool(info.get("exists", false)):
@@ -98,6 +98,9 @@ func _format_slot_text(slot: int, info: Dictionary) -> String:
 		return "%s — %s" % [slot_title, OVERWRITE_HINT]
 
 	var parts: PackedStringArray = PackedStringArray()
+	var player_name: String = str(info.get("player_name", ""))
+	if not player_name.is_empty():
+		slot_title = "%s — %s" % [slot_title, player_name]
 	parts.append(
 		"%s — Ngày %d (Tuần %d, %s)"
 		% [

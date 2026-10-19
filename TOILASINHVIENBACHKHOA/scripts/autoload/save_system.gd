@@ -71,6 +71,7 @@ func get_slot_info(slot: int) -> Dictionary:
 		"money": 0,
 		"saved_at": 0.0,
 		"saved_at_text": "",
+		"player_name": "",
 	}
 	if not has_save(slot):
 		return info
@@ -90,6 +91,7 @@ func get_slot_info(slot: int) -> Dictionary:
 	info["money"] = state.stats.get_money()
 	info["saved_at"] = saved_at
 	info["saved_at_text"] = _format_timestamp(saved_at)
+	info["player_name"] = state.player_name
 	return info
 
 

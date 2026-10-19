@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PlayerDefaults" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/player_defaults.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+default_name = "Phong"
+random_names = Array[String](["Phong", "Huy", "Nam", "Tùng", "Đức Anh", "Khang", "Bảo", "Long", "Quân", "Thịnh"])

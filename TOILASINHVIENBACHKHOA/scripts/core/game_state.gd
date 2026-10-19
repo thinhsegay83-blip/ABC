@@ -16,6 +16,8 @@ var flags: FlagStore
 ## Đời sinh viên (bước 4): TKB, điểm danh, túi đồ, sổ thu chi…
 var life: LifeState
 var difficulty_id: String = DEFAULT_DIFFICULTY_ID
+## Tên nhân vật (J10). Save cũ thiếu → "" → nơi dùng thay bằng tên mặc định.
+var player_name: String = ""
 var decay_multiplier: float = 1.0
 var wage_multiplier: float = 1.0
 
@@ -67,6 +69,7 @@ func advance_time(decay: TimeDecayConfig) -> void:
 func to_dict() -> Dictionary:
 	return {
 		"difficulty_id": difficulty_id,
+		"player_name": player_name,
 		"decay_multiplier": decay_multiplier,
 		"wage_multiplier": wage_multiplier,
 		"stats": stats.to_dict(),
@@ -80,6 +83,8 @@ func to_dict() -> Dictionary:
 func from_dict(data: Dictionary) -> void:
 	var id_value: Variant = data.get("difficulty_id", difficulty_id)
 	difficulty_id = str(id_value) if id_value != null else DEFAULT_DIFFICULTY_ID
+	var name_value: Variant = data.get("player_name", "")
+	player_name = name_value if name_value is String else ""
 	decay_multiplier = _to_float(data.get("decay_multiplier", decay_multiplier), 1.0)
 	wage_multiplier = _to_float(data.get("wage_multiplier", wage_multiplier), 1.0)
 	stats.from_dict(_get_dict(data, "stats"))

@@ -15,6 +15,8 @@ var _panel: PanelContainer
 var _summary_label: Label
 var _flag_name_edit: LineEdit
 var _flag_value_spin: SpinBox
+var _node_edit: LineEdit
+var _flag_hint: OptionButton
 var _refresh_timer: float = 0.0
 
 
@@ -144,11 +146,24 @@ func _build_ui() -> void:
 		["Mở khóa việc làm thêm", _unlock_job],
 		["Tới ngày 14 — Tối", _goto_day14_evening],
 		["Đóng học phí (debug, cộng đủ tiền)", _debug_pay_tuition],
+		["Nạp lại hội thoại", func() -> void: DialogueSystem.reload_content()],
 	]:
 		var life_button: Button = Button.new()
 		life_button.text = entry[0]
 		life_button.pressed.connect(entry[1])
 		box.add_child(life_button)
+
+	# Chạy thử một node hội thoại bất kỳ.
+	var node_row: HBoxContainer = HBoxContainer.new()
+	_node_edit = LineEdit.new()
+	_node_edit.placeholder_text = "Node hội thoại (vd. minh_chao_hoi)"
+	_node_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	node_row.add_child(_node_edit)
+	var node_button: Button = Button.new()
+	node_button.text = "Mở node"
+	node_button.pressed.connect(_open_node)
+	node_row.add_child(node_button)
+	box.add_child(node_row)
 
 	box.add_child(HSeparator.new())
 
@@ -173,6 +188,16 @@ func _build_ui() -> void:
 	flag_button.pressed.connect(_set_flag)
 	flag_row.add_child(flag_button)
 	box.add_child(flag_row)
+	# Gợi ý tên cờ từ danh mục (H1).
+	_flag_hint = OptionButton.new()
+	_flag_hint.add_item("— chọn cờ trong danh mục —")
+	for flag_name: String in DialogueSystem.flag_registry.names():
+		_flag_hint.add_item(flag_name)
+	_flag_hint.item_selected.connect(func(index: int) -> void:
+		if index > 0:
+			_flag_name_edit.text = _flag_hint.get_item_text(index)
+	)
+	box.add_child(_flag_hint)
 
 	box.add_child(HSeparator.new())
 
@@ -238,6 +263,15 @@ func _jump_one_day() -> void:
 	var clock: GameClock = Game.state.clock
 	clock.set_time(clock.day + 1, GameClock.Slot.MORNING)
 	_refresh()
+
+
+func _open_node() -> void:
+	var node_id: String = _node_edit.text.strip_edges()
+	if node_id.is_empty():
+		return
+	close()
+	if not DialogueSystem.start(node_id):
+		Toast.show_message("Không mở được node '%s' (sai tên hoặc đang có hội thoại)" % node_id)
 
 
 func _unlock_job() -> void:

@@ -12,11 +12,18 @@ const RESOLUTIONS: Array[Vector2i] = [
 ]
 const SECTION_AUDIO: String = "audio"
 const SECTION_DISPLAY: String = "display"
+const SECTION_DIALOGUE: String = "dialogue"
+## Tốc độ chữ (ký tự/giây): Chậm / Vừa / Nhanh / Tức thì (0).
+const TEXT_SPEEDS: Array[int] = [20, 40, 80, 0]
+const TEXT_SPEED_NAMES: Array[String] = ["Chậm", "Vừa", "Nhanh", "Tức thì"]
 
 var music_volume: float = 0.8
 var sfx_volume: float = 0.8
 var fullscreen: bool = false
 var resolution_index: int = 0
+var text_speed: int = 40
+var auto_delay: float = 1.2
+var skip_unread: bool = false
 
 
 func _ready() -> void:
@@ -40,6 +47,9 @@ func load_settings() -> void:
 		0,
 		RESOLUTIONS.size() - 1
 	)
+	text_speed = maxi(0, _read_int(config, SECTION_DIALOGUE, "text_speed", text_speed))
+	auto_delay = clampf(_read_float(config, SECTION_DIALOGUE, "auto_delay", auto_delay), 0.5, 3.0)
+	skip_unread = _read_bool(config, SECTION_DIALOGUE, "skip_unread", skip_unread)
 
 
 func save_settings() -> void:
@@ -48,6 +58,9 @@ func save_settings() -> void:
 	config.set_value(SECTION_AUDIO, "sfx_volume", sfx_volume)
 	config.set_value(SECTION_DISPLAY, "fullscreen", fullscreen)
 	config.set_value(SECTION_DISPLAY, "resolution_index", resolution_index)
+	config.set_value(SECTION_DIALOGUE, "text_speed", text_speed)
+	config.set_value(SECTION_DIALOGUE, "auto_delay", auto_delay)
+	config.set_value(SECTION_DIALOGUE, "skip_unread", skip_unread)
 	var err: Error = config.save(SETTINGS_PATH)
 	if err != OK:
 		push_warning("Settings: không lưu được %s (%s)" % [SETTINGS_PATH, error_string(err)])

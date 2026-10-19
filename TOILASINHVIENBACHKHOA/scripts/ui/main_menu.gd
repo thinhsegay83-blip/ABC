@@ -4,9 +4,12 @@ extends Control
 const NewGameDialogScript = preload("res://scripts/ui/new_game_dialog.gd")
 const SaveSlotsPanelScript = preload("res://scripts/ui/save_slots_panel.gd")
 const SettingsPanelScript = preload("res://scripts/ui/settings_panel.gd")
+const NameDialogScript = preload("res://scripts/ui/name_dialog.gd")
 
 var _starting: bool = false  # đã vào game, đang chờ chuyển scene → khóa menu
 var _last_focused: Button = null
+var _chosen_difficulty: String = ""
+var _name_dialog: NameDialogScript
 
 @onready var _new_game_button: Button = %NewGameButton
 @onready var _continue_button: Button = %ContinueButton
@@ -31,6 +34,11 @@ func _ready() -> void:
 	_save_slots_panel.closed.connect(_on_panel_closed)
 	_settings_panel.closed.connect(_on_panel_closed)
 
+	_name_dialog = NameDialogScript.new()
+	add_child(_name_dialog)
+	_name_dialog.name_confirmed.connect(_on_name_confirmed)
+	_name_dialog.cancelled.connect(_on_name_cancelled)
+
 	_new_game_dialog.hide()
 	_save_slots_panel.hide()
 	_settings_panel.hide()
@@ -45,7 +53,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if _starting:
 		return
-	if _new_game_dialog.visible:
+	if _name_dialog.visible:
+		_name_dialog.close()
+	elif _new_game_dialog.visible:
 		_new_game_dialog.close()
 	elif _save_slots_panel.visible:
 		_save_slots_panel.close()
@@ -88,11 +98,26 @@ func _on_quit_pressed() -> void:
 
 # --- Kết quả từ bảng con ------------------------------------------------------
 
+## Chọn chế độ → hộp đặt tên (J10) → vào game.
 func _on_difficulty_chosen(difficulty_id: String) -> void:
 	if _starting:
 		return
-	Game.new_game(difficulty_id)
+	_chosen_difficulty = difficulty_id
+	_name_dialog.open()
+
+
+func _on_name_confirmed(player_name: String) -> void:
+	if _starting:
+		return
+	Game.new_game(_chosen_difficulty)
+	Game.state.player_name = player_name
 	_go_to_game()
+
+
+## "Quay lại" từ hộp đặt tên → về hộp chọn chế độ.
+func _on_name_cancelled() -> void:
+	if not _starting:
+		_new_game_dialog.open()
 
 
 func _on_load_slot_chosen(slot: int) -> void:

@@ -7,6 +7,12 @@ const TEST_DIR: String = "res://tests/"
 
 
 func _initialize() -> void:
+	# Đợi 1 khung hình để các autoload chạy xong _ready (đăng ký lệnh/biến hội thoại…).
+	_run_all.call_deferred()
+
+
+func _run_all() -> void:
+	await process_frame
 	var passed: int = 0
 	var failed: int = 0
 	for file_name: String in _list_test_files():

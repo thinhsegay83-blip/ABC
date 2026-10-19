@@ -490,3 +490,45 @@ StudentLife:
 
 ### Công cụ
 - `python3 tools/sim_cashflow.py` — mô phỏng dòng tiền 14 ngày cho 3 chế độ (đọc số từ `data/*.tres`).
+
+---
+
+## Bước 3 — Hội thoại (đã làm)
+
+Logic thuần trong `scripts/dialogue/`; autoload `DialogueSystem` (ngay sau `Game`); UI `scripts/ui/dialogue_box.gd` (CanvasLayer 30, node `DialogueBox` cuối `game.tscn`).
+
+Thứ tự autoload hiện tại: `AudioManager, Settings, SaveSystem, Game, DialogueSystem, StudentLife, SceneLoader, Toast, DebugMenu`.
+
+### Định dạng `.dlg` (`content/dialogue/*.dlg`, UTF-8)
+| Dòng | Cú pháp |
+|---|---|
+| Node | `== node_id` (a-z0-9_, duy nhất toàn bộ thư mục) |
+| Metadata | `@khóa giá trị` ngay sau `==` (khóa lặp được → mảng) — `@trigger`, `@when`, `@priority`, `@once`, `@daily` dùng ở bước 5 |
+| Lời thoại | `speaker: chữ` hoặc `speaker (bieu_cam): chữ`; speaker = id trong `data/characters/`, `player`, `narrator` |
+| Lựa chọn | `* chữ -> node_id` (các dòng `*` liền nhau = 1 nhóm) |
+| Lệnh | `~ lệnh tham số…` (cụm có dấu cách đặt trong "…") |
+| Đuôi | `[if đk]` (lời thoại/lựa chọn/lệnh), `[need đk | lý do]` (lựa chọn: hiện mờ kèm lý do) |
+
+Hết node mà không `~ goto`/`~ end` → kết thúc. Thay biến: `{player_name} {money} {day} {week}`.
+
+Lệnh có sẵn: `set add stat money rel goto end toast emit`. Bước 4 thêm: `action <id> [môn/npc]`, `give <item> [n]`, `take <item> [n]`, `pay_tuition`, `pass_slots <n>`. `~ money` đi qua `Economy` (vào sổ thu chi).
+
+Điều kiện: `biến op giá trị` nối `and`/`or` (and ưu tiên). Biến: `flag.x stat.(stamina|hunger|sanity|knowledge) money rel.npc day week weekday slot`; hằng `SANG CHIEU TOI DEM`. Bước 4 thêm: `item.<id>`, `class_now`, `shifts_today`. Bước sau thêm biến bằng `DialogueCondition.register_variable(tên_hoặc_tiền_tố, Callable(variable, state) -> int)` và gỡ khi autoload rời cây.
+
+### API
+```
+DialogueSystem:
+  signal dialogue_started(node_id), dialogue_finished(node_id), dialogue_event(name, args)
+  signal line_shown(line), choices_shown(choices)      # cho UI
+  start(node_id) -> bool, is_active(), has_dialogue(node_id), advance(), choose(index, text)
+  register_command(name, Callable(args: PackedStringArray, state: GameState))
+  reload_content(), get_errors(), get_library() -> DialogueLibrary, get_character(id)
+  var history (200 câu), read_log (user://dialogue_read.cfg), last_started_msec, last_finished_msec
+```
+- Bước 2 nối Interactable: `DialogueSystem.start(node_id)`; khóa di chuyển khi `DialogueSystem.is_active()`; bỏ qua phím E trong ~0,2 s sau `last_finished_msec`.
+- Phím: `dialogue_next` (Space/Enter/E/chuột trái), `dialogue_skip` (giữ Ctrl), `dialogue_auto` (T), `dialogue_history` (L/cuộn lên), `phone` (Tab), `inventory` (I).
+- Cài đặt `[dialogue]` trong `settings.cfg`: `text_speed` (20/40/80/0), `auto_delay` (0,5–3,0), `skip_unread`.
+- Save: `GameState.player_name` (khóa `"player_name"`); thiếu → `PlayerDefaults.name_or_default()`. `SaveSystem.get_slot_info()` có thêm `"player_name"`.
+- Dữ liệu: `CharacterData` (`data/characters/*.tres`, chân dung để trống tới khi có đồ họa), `StoryFlagRegistry` (`data/story_flags.tres`), `PlayerDefaults` (`data/player_defaults.tres`).
+- **Export**: thêm `*.dlg` vào *Export → Resources → Filters to export non-resource files*.
+- Giọng thoại: trung tính, câu ngắn, xưng "mình/bạn" (tham khảo Stardew Valley, Kindergarten, Punch Club).

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/character_data.gd" id="1_cfg"]
+
+[resource]
+script = ExtResource("1_cfg")
+id = "chu_quan"
+display_name = "Chủ quán"
+name_color = Color(0.95, 0.6, 0.45, 1)
