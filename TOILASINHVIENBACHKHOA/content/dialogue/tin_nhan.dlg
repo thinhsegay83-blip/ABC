@@ -16,10 +16,10 @@
 @trigger slot_start
 @when day == 12 and slot == TOI
 @once
-~ message me "Mẹ gửi thêm thùng xốp lên rồi. Có gạo với ít đồ khô. Con nhớ ăn uống cho đủ nha."
+~ message me "Mẹ gửi thêm thùng xốp lên rồi. Có gạo với ít đồ khô. Con nhớ ăn uống cho đủ nhé."
 
 == tn_nhom_lop_ngay_22
 @trigger day_start
 @when day == 22
 @once
-~ message nhom_lop "Có ai thấy mấy tờ rơi vàng trong lớp không? Ai mời đóng phí thì cẩn thận nha mọi người."
+~ message nhom_lop "Có ai thấy mấy tờ rơi vàng trong lớp không? Ai mời đóng phí thì mọi người cẩn thận nhé."

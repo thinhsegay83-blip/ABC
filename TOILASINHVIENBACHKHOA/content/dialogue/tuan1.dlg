@@ -10,7 +10,7 @@
 @required 1
 narrator: Mọi nhân vật, tổ chức, sự kiện trong trò chơi đều là hư cấu.
 narrator: Tháng Chín. Bạn xuống xe buýt với một chiếc vali và một thùng xốp mẹ gói.
-narrator: Trong thùng: gạo, mắm, một hũ thịt kho. Và một mảnh giấy: "Ăn uống đầy đủ nha con."
+narrator: Trong thùng: gạo, một hũ thịt kho. Và một mảnh giấy: "Nhớ ăn uống đầy đủ."
 narrator: Học phí học kỳ này là 16.000.000 đ. Cả nhà gom góp mới được một phần.
 player: Phải cố thôi.
 narrator: Văn phòng Ký túc xá xếp phòng. Bạn được chọn khu.
@@ -39,9 +39,9 @@ narrator: Tiền KTX tháng đầu đã trừ vào tài khoản.
 ~ meet minh
 ~ meet tuan
 ~ meet khoa
-minh (cuoi): Chào bạn! Mình là Minh, giường dưới. Ở Long An lên.
-tuan: Tuấn. Cần Thơ. Nhà mình hay gửi mắm, ăn chung nhé.
-khoa: Khoa. Đắk Lắk.
+minh (cuoi): Chào bạn! Mình là Minh, giường dưới. Học Điện – Điện tử.
+tuan: Tuấn. Cơ khí. Nhà gửi đồ ăn lên thì cả phòng ăn chung.
+khoa: Khoa. Xây dựng.
 player: Mình là {player_name}. Rất vui được ở chung.
 minh: Bàn học có dán thời khóa biểu. Lịch học trong điện thoại cũng có.
 minh: Căng tin hơi đắt. Quán cơm ngoài cổng rẻ hơn.
@@ -102,10 +102,10 @@ narrator: Bạn có tiết lúc này. Vào học thì được điểm danh, b�
 @when flag.sys_me_goi == 0
 @once
 ~ set sys_me_goi 1
-me: Alo, con hả? Ở trên đó quen chưa?
+me: Con à? Lên trường quen chưa?
 player: Dạ, con quen rồi. Phòng có bốn người.
-me: Ừ. Ở nhà vẫn ổn. Ba con vừa nhận thêm việc phụ hồ.
-me: Học phí phải đóng trước hết tuần sau đó con. Hạn cuối tuần 2.
+me: Ừ. Ở nhà vẫn ổn. Cả nhà đều nhận thêm việc.
+me: Học phí phải đóng trước cuối tuần sau. Tức là hết tuần 2.
 me: Nhà gửi được bao nhiêu thì gửi rồi. Phần còn lại…
 * Con sẽ đi làm thêm -> t1_me_lam_them
 * Con lo được, mẹ yên tâm -> t1_me_yen_tam
@@ -115,14 +115,14 @@ me: Làm vừa sức thôi. Đừng bỏ học.
 ~ stat sanity 5
 
 == t1_me_yen_tam
-me: Ừ. Có gì thì gọi mẹ nha.
+me: Ừ. Có gì thì gọi mẹ.
 ~ stat sanity 5
 
 == t1_me_nhan_du_phong
 @trigger day_start
 @when day == 3 and flag.sys_me_goi == 0
 @once
-~ message me "Hôm qua mẹ gọi con không nghe. Học phí hạn cuối tuần sau nha con. Rảnh thì gọi lại mẹ."
+~ message me "Hôm qua mẹ gọi con không nghe. Học phí hạn cuối tuần sau. Rảnh thì gọi lại cho mẹ."
 
 == t1_xin_viec
 @trigger enter_area food_shop

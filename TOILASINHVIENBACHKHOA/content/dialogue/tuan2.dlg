@@ -52,7 +52,7 @@ narrator: Một đàn anh ăn mặc chỉn chu chặn bạn ở hành lang.
 @trigger slot_start
 @when day == 14 and slot == TOI and flag.da_dong_hoc_phi == 0
 @once
-~ message me "Con đóng học phí chưa? Hạn là hết hôm nay đó con."
+~ message me "Con đóng học phí chưa? Hôm nay là hạn cuối rồi."
 
 == t2_tre_han
 @trigger day_start
@@ -65,5 +65,5 @@ narrator: Một đàn anh ăn mặc chỉn chu chặn bạn ở hành lang.
 @trigger day_start
 @when flag.da_dong_hoc_phi == 1
 @once
-~ message me "Đóng học phí rồi hả con? Ba mẹ mừng lắm. Nhớ ăn uống đầy đủ nha."
+~ message me "Con đóng học phí rồi à? Cả nhà mừng lắm. Nhớ ăn uống đầy đủ nhé."
 ~ stat sanity 5

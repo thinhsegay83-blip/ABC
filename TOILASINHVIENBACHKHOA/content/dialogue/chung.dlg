@@ -10,7 +10,7 @@ narrator: Minh không trả lời. Môi vẫn mấp máy theo một nhịp đề
 
 == ban_phong_chao
 narrator: Bạn cùng phòng đang đeo tai nghe, gật đầu chào.
-tuan: Nhà mình mới gửi mắm lên. Ăn cơm thì lấy. [if slot == TOI]
+tuan: Nhà mình mới gửi đồ ăn lên. Đói thì lấy. [if slot == TOI]
 khoa: Cà phê nhà trồng. Muốn uống thì pha. [if slot == DEM]
 
 == chu_quan_chao
@@ -41,7 +41,7 @@ giang_vien: Về ôn lại phần đơn vị đo. Nhiều bạn sai chỗ đó.
 @when slot == TOI and flag.minh_trang_thai <= 1 and flag.da_gop_quy == 1
 @daily
 @priority 1
-minh: Đói quá. Ra ngoài ăn vặt không? Mỗi người chừng 50.000 đ.
+minh: Đói quá. Ra ngoài ăn vặt không? Mỗi người khoảng 50.000 đ.
 * Đi -> minh_di_an [need money >= 50000 | Không đủ tiền]
 * Để hôm khác -> minh_khong_di
 

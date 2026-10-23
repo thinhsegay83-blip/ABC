@@ -26,9 +26,9 @@ player: Lâu rồi. Dạo này bạn lạ lắm.
 
 == t4_canh_bao_noi
 player: CLB đó bắt đóng phí, rồi bảo rủ thêm người mới có tiền. Việc thật đâu có vậy.
-player: Đừng vay tiền để đóng. Nói với ba mẹ, hoặc lên phòng công tác sinh viên hỏi thử.
+player: Đừng vay tiền để đóng. Nói với gia đình, hoặc lên phòng công tác sinh viên hỏi thử.
 minh: …Mình đóng rồi. Hai triệu rưỡi.
-minh: Mình sợ ba mẹ biết.
+minh: Mình sợ nhà biết.
 player: Có gì mình đi cùng bạn.
 ~ set canh_bao_minh 1
 ~ rel minh 5
